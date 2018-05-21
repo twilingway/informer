@@ -368,7 +368,7 @@
             // PingInternetTimer
             // 
             this.PingInternetTimer.Enabled = true;
-            this.PingInternetTimer.Interval = 10000;
+            this.PingInternetTimer.Interval = 1000;
             this.PingInternetTimer.Tag = "internet";
             this.PingInternetTimer.Tick += new System.EventHandler(this.PingTimerTick);
             // 
@@ -390,6 +390,7 @@
             // 
             // FellOffGPUTimer
             // 
+            this.FellOffGPUTimer.Interval = 1000;
             this.FellOffGPUTimer.Tag = "card leave";
             this.FellOffGPUTimer.Tick += new System.EventHandler(this.FellOffTimerTick);
             // 
