@@ -1720,7 +1720,7 @@ namespace Informer
                 bool code2 = client.IsConnected;
                 if (code2 == true)
                 {
-
+                    //пушь
                 }
                 else if(code2 == false)
                 {
