@@ -33,7 +33,7 @@ static class GlobalVars
     public static string card;
     public static string temp;
     public static string fan;
-    public static int mqttcheck;
+    public static int mqttcheck = 0;
     public static int temp_max;
     public static int temp_min;
     public static int time_temp_min;

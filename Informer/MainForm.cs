@@ -45,17 +45,16 @@ namespace Informer
         public MainForm()
         {
 
-           // client = new MqttClient("wb.smart-ul.ru", int.Parse("1883"), false, MqttSslProtocols.None, null, null);
+          
 
             GlobalVars.gpuList = new Dictionary<int, List<string>>();
             
-           // gpusList.AddRange(new int[] {1,2,3 });
+          
 
             if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
             {
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
-//                cbLocalize.SelectedValue = Properties.Settings.Default.Language;
             }
             
 
@@ -79,7 +78,7 @@ namespace Informer
             _error = new LogFile("error");
 
             
-            СheckForPing();
+            //СheckForPing();
             СheckForNewVersion();
             InitFromIni();
             
@@ -107,25 +106,33 @@ namespace Informer
         {
 
             bool code = client.IsConnected;
-//            client.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("DontConnected" + 0));
+            //            client.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("DontConnected" + 0));
 
-  
-            
-          //  MessageBox.Show(this, Convert.ToString(code), "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
 
-            if (code == true)
+
+            //  MessageBox.Show(this, Convert.ToString(code), "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+            try
             {
-              //  System.Threading.Thread.Sleep(200);
-              //  client.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("Connected" + 0));
-                System.Threading.Thread.Sleep(200);
-                client.Disconnect();
-                //  base.OnClosed(e);
+                if (code == true)
+                {
+                    //  System.Threading.Thread.Sleep(200);
+                    //  client.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("Connected" + 0));
+                    System.Threading.Thread.Sleep(200);
+                    client.Disconnect();
+                    //  base.OnClosed(e);
+                }
+                else if (code == false)
+                {
+                    //   MessageBox.Show(this, "Connect Fail", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+
+                }
             }
-            else if(code == false)
+            catch (Exception ex)
             {
-             //   MessageBox.Show(this, "Connect Fail", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                
+                _error.writeLogLine(ex.Message, "error");
             }
+
+         
             
            
             
@@ -1247,7 +1254,7 @@ namespace Informer
 
 
                     //labelTest.Text = "";
-                    
+                    /*
                     int i = 0;
                     foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
                     {
@@ -1259,22 +1266,22 @@ namespace Informer
                             switch (j)
                             {
                                 case 0:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/name", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/name", Encoding.UTF8.GetBytes(p));
                                     break;
                                 case 1:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/temp", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/temp", Encoding.UTF8.GetBytes(p));
                                     break;
                                 case 2:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/core", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/core", Encoding.UTF8.GetBytes(p));
                                     break;
                                 case 3:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/memory", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/memory", Encoding.UTF8.GetBytes(p));
                                     break;
                                 case 4:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/load", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/load", Encoding.UTF8.GetBytes(p));
                                     break;
                                 case 5:
-                                    client.Publish("rig/" + GlobalVars.token + "/gpu" + i + "/fan", Encoding.UTF8.GetBytes(p));
+                                    client.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/fan", Encoding.UTF8.GetBytes(p));
                                     break;
 
 
@@ -1296,9 +1303,9 @@ namespace Informer
                         i++;
                         
                     }
-
+                    */
                     
-
+                    /*
                     GlobalVars.json_send = _http.GetContent(GlobalVars.host +
                         "/api.php?token=" + GlobalVars.token +
                         "&gpu=" + GlobalVars.card +
@@ -1312,7 +1319,9 @@ namespace Informer
                         "&upTime=" + GlobalVars.upTime
                        
                        );
-                    client.Publish("device/" + GlobalVars.token + "/data", Encoding.UTF8.GetBytes("token="+ GlobalVars.token +
+                    */
+
+                    client.Publish("devices/" + GlobalVars.token + "/data", Encoding.UTF8.GetBytes("token="+ GlobalVars.token +
                         "&gpu=" + GlobalVars.card +
                         "&temp=" + GlobalVars.temp +
                         "&fan=" + GlobalVars.fan +
@@ -1329,6 +1338,7 @@ namespace Informer
                 }
                     else if (string.IsNullOrEmpty(GlobalVars.token))
                     {
+                    /*
                         GlobalVars.json_send = _http.GetContent(GlobalVars.host +
                         "/api.php?email=" + GlobalVars.email +
                         "&secret=" + GlobalVars.secret +
@@ -1345,6 +1355,7 @@ namespace Informer
                         "&hash=" + "417");
                         //  _log.writeLogLine("Отправка на сайт БЕЗ токена и получение ответа " + GlobalVars.json_send, "log");
 
+                    */
                     }
                     //GlobalVars.json_send = "{"token":"73b41e62c748693a46d5bd6603dc51a0","settings":{"interval":60},"message":"Use token endpoint"}";
 
@@ -1716,10 +1727,12 @@ namespace Informer
         {
             try
             {
-
+                
                 bool code2 = client.IsConnected;
                 if (code2 == true)
                 {
+                    labelTest.Text = Convert.ToString(code2) + " " + GlobalVars.mqttcheck;
+                    GlobalVars.mqttcheck = 0;
                     //пушь
                 }
                 else if(code2 == false)
@@ -1728,27 +1741,31 @@ namespace Informer
 
                     //byte code = client.Connect(Guid.NewGuid().ToString(), "aleksei", "256eb460f1", false, 3);
                     //byte code = client.Connect(GlobalVars.token, "aleksei", "256eb460f1", false, 3);
-                    byte code = client.Connect(GlobalVars.token,"user","password");
+                    byte code = client.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, false,3);
                     if (code == 0)
                     {
 
                         client.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-                        client.Subscribe(new string[] { "device/" + GlobalVars.token + "/data", "device/" + GlobalVars.token + "/commands" }, new byte[] { 0, 0 });
+                        client.Subscribe(new string[] { "devices/" + GlobalVars.token + "/data", "devices/" + GlobalVars.token + "/commands" }, new byte[] { 0, 0 });
 
-                        // client.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("@" + 0));
                         labelStatusInternetPing.Text = "MQTT ON";
+                        labelTest.Text = Convert.ToString(code2) + Convert.ToString(code);
                     }
 
-                    else labelStatusInternetPing.Text = "MQTT OFF Connect Fail";
-
-                    //MessageBox.Show(this, "Connect Fail", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                    else if (code != 0 && GlobalVars.mqttcheck <=3)
+                    {
+                        labelStatusInternetPing.Text = "MQTT OFF Connect Fail";
+                        GlobalVars.mqttcheck++;
+                        labelTest.Text = Convert.ToString(code2) + " " + Convert.ToString(code) + " " + GlobalVars.mqttcheck;
+                    }
+                    
                 }
             }
 
             catch (Exception)
             {
                 labelStatusInternetPing.Text = "MQTT OFF Wrong Format";
-                //  MessageBox.Show(this, "Wrong Format", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+               
             }
         
 
@@ -1759,9 +1776,6 @@ namespace Informer
 
             MqttConnect();
             
-
-
-
             GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
             //labelTest.Text = GlobalVars.start_timestamp.ToString();
             string email       = tbEmail.Text;
@@ -1857,6 +1871,7 @@ namespace Informer
             if (MessageBox.Show(MyStrings.ExitRequest, MyStrings.ExitTitle, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
             {
                 this.ShowInTaskbar = false;
+                Application.Exit();
                 this.Close();
             }
         }
@@ -2026,34 +2041,37 @@ namespace Informer
 
         public void СheckForMQTT()
         {
-
+            //GlobalVars.mqttcheck = 0;
             try
             {
 
                 bool code = client.IsConnected;
                 GlobalVars.upTime= UpTime.ToString(@"dd\.hh\:mm\:ss");
-           
+
                 if (code == true)
                 {
                     //  System.Threading.Thread.Sleep(200);
-                    GlobalVars.mqttcheck++;
-                    
-                    
-                   client.Publish("device/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("OK"));
-                   client.Publish("device/" + GlobalVars.token + "/UpTime", Encoding.UTF8.GetBytes(""+ GlobalVars.upTime));
+
+
+
+                    client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("OK"));
+                    client.Publish("devices/" + GlobalVars.token + "/UpTime", Encoding.UTF8.GetBytes("" + GlobalVars.upTime));
 
 
                     //    System.Threading.Thread.Sleep(200);
                     //   client.Disconnect();
                     //  base.OnClosed(e);
-                  //  labelStatusInternetPing.Text = "MQTT ON: " + UpTime.ToString(@"dd\.hh\:mm\:ss");
+                    //  labelStatusInternetPing.Text = "MQTT ON: " + UpTime.ToString(@"dd\.hh\:mm\:ss");
                 }
                 else if (code == false)
                 {
-                  //  labelStatusInternetPing.Text = "MQTT OFF";
+                    //  labelStatusInternetPing.Text = "MQTT OFF";
                     MqttConnect();
-                    client.Publish("device/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("Reconnected"));
-                    client.Publish("device/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("ON"));
+                    if (client.IsConnected == true) {
+                        labelTest.Text = "GOOD";
+                    client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("Reconnected"));
+                    client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("ON"));
+                        }
                     // MessageBox.Show(this, "Connect Fail", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
 
                 }
@@ -2067,6 +2085,7 @@ namespace Informer
             }
 
         }
+        /*
         public void СheckForPing()
         {
             try
@@ -2109,12 +2128,13 @@ namespace Informer
             }
 
         }
-        
+        */
 
-            private void PingTimerTick(object sender, EventArgs e)
+      private void PingTimerTick(object sender, EventArgs e)
           {
            
             СheckForMQTT();
+
           }
 
         private void InternetInactiveTimerTick(object sender, EventArgs e)
@@ -2203,15 +2223,7 @@ namespace Informer
                 {
                     if (!GlobalVars.rebootLoadGPU)
                     {
-                  //      if (GlobalVars.InternetIsActive)
-                  //      {
-                            Reboot(msg, bat);
-                  //          GlobalVars.rebootLoadGPU = true;
-                  //      }
-                  //      else
-                  //      {
-                  //          GlobalVars.timer_load_gpu = -100;
-                  //      }
+                       Reboot(msg, bat);
                     }
                 }
                 GlobalVars.timer_load_gpu = GlobalVars.timer_load_gpu - 1;
@@ -2261,21 +2273,46 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
-            Properties.Settings.Default.Language = cbLocalize.SelectedValue.ToString();
-            Properties.Settings.Default.Save();
-            this.ShowInTaskbar = false;
-            // e.Cancel = true;
-            //  this.Hide();
+
+            bool code = client.IsConnected;
+
+            try
+            {
+                if (code == true)
+                {
+
+                    System.Threading.Thread.Sleep(200);
+                    client.Disconnect();
+                    Properties.Settings.Default.Language = cbLocalize.SelectedValue.ToString();
+                    Properties.Settings.Default.Save();
+                    this.ShowInTaskbar = false;
+                    Application.Exit();
+
+
+                }
+                else if (code == false)
+                {
+                    Properties.Settings.Default.Language = cbLocalize.SelectedValue.ToString();
+                    Properties.Settings.Default.Save();
+                    this.ShowInTaskbar = false;
+                    Application.Exit();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                _error.writeLogLine(ex.Message, "error");
+            }
         }
+
+          
+        
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Minimized)
                 Hide();
-           // notifyIcon1.BalloonTipTitle = "Программа была спрятана";
-           // notifyIcon1.BalloonTipText = "Обратите внимание что программа была спрятана в трей и продолжит свою работу.";
-           // notifyIcon1.ShowBalloonTip(5000);
+          
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -2323,24 +2360,16 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
         void Receive(string message, string topic)
         {
 
-            if (topic == "Pi/LEDStatus2")
+            if (topic == "devices/" +GlobalVars.token+ "/commands")
             {
 
                 string status = message;
                 //byte status = byte.Parse(message);
-             //   LEDControl2(status);
-                return;
+                //LEDControl2(status);
+                MessageBox.Show(this, status, "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                //return;
             }
-            if (topic == "Pi/Sensor/T2")
-            {
-            //    lblTemp.Text = message;
-             //   temperature.Value = byte.Parse(message);
-            }
-            if (topic == "Pi/Sensor/H2")
-            {
-            //    lblHumi.Text = message;
-            //    humidity.Value = byte.Parse(message);
-            }
+            
 
 
         }
@@ -2349,12 +2378,12 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
         void LEDControl2(string status)
         {
 
-            if (status == "sensor1=1")
+            if (status == "command=reboot")
             {
               //  labelTest.Text = status;
                 //   LED1.Image = Properties.Resources.Light_On_48px;
             }
-            else if (status != "sensor1=1")
+            else if (status == "command=1")
             {
                 //  labelTest.Text = status;
                 //  labelTest.Text = status;
