@@ -21,9 +21,7 @@ using System.Net.NetworkInformation;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Net.Security;
-//using MetroFramework;
-//using MetroFramework;
-//using MetroFramework;
+
 
 namespace Informer
 {
@@ -44,8 +42,6 @@ namespace Informer
       
         public MainForm()
         {
-
-          
 
             GlobalVars.gpuList = new Dictionary<int, List<string>>();
             
@@ -1305,7 +1301,7 @@ namespace Informer
                     }
                     */
                     
-                    /*
+                    
                     GlobalVars.json_send = _http.GetContent(GlobalVars.host +
                         "/api.php?token=" + GlobalVars.token +
                         "&gpu=" + GlobalVars.card +
@@ -1319,7 +1315,7 @@ namespace Informer
                         "&upTime=" + GlobalVars.upTime
                        
                        );
-                    */
+                    
 
                     client.Publish("devices/" + GlobalVars.token + "/data", Encoding.UTF8.GetBytes("token="+ GlobalVars.token +
                         "&gpu=" + GlobalVars.card +
@@ -1330,7 +1326,8 @@ namespace Informer
                         "&load=" + GlobalVars.load +
                         "&clock=" + GlobalVars.clock +
                         "&mem=" + GlobalVars.mem +
-                        "&upTime=" + GlobalVars.upTime));
+                        "&upTime=" + GlobalVars.upTime
+                                                ));
                     //  _log.writeLogLine("Отправка на сайт С токеном и получение ответа " + GlobalVars.json_send, "log");
 
 
@@ -1367,8 +1364,10 @@ namespace Informer
 
                         //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
                         var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                        int test = response.settings.interval;
+                   // MessageBox.Show(this, GlobalVars.json_send, "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                    int test = response.settings.interval;
                         string test2 = test.ToString();
+
                         // _log.writeLogLine("Интервал " + test2, "log");
 
                         SendDataTimer.Interval = response.settings.interval * 1000;
@@ -2050,18 +2049,11 @@ namespace Informer
 
                 if (code == true)
                 {
-                    //  System.Threading.Thread.Sleep(200);
-
-
-
+                    labelStatusInternetPing.Text = "MQTT OFF";
                     client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("OK"));
                     client.Publish("devices/" + GlobalVars.token + "/UpTime", Encoding.UTF8.GetBytes("" + GlobalVars.upTime));
 
 
-                    //    System.Threading.Thread.Sleep(200);
-                    //   client.Disconnect();
-                    //  base.OnClosed(e);
-                    //  labelStatusInternetPing.Text = "MQTT ON: " + UpTime.ToString(@"dd\.hh\:mm\:ss");
                 }
                 else if (code == false)
                 {
@@ -2072,7 +2064,7 @@ namespace Informer
                     client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("Reconnected"));
                     client.Publish("devices/" + GlobalVars.token + "/MQTT_PING", Encoding.UTF8.GetBytes("ON"));
                         }
-                    // MessageBox.Show(this, "Connect Fail", "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
+                  
 
                 }
 
@@ -2305,8 +2297,6 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
             }
         }
 
-          
-        
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
@@ -2332,18 +2322,13 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
             cbLocalize.DisplayMember = "NativeName";
             cbLocalize.ValueMember = "Name";
 
-
             
             if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
             {
                 cbLocalize.SelectedValue = Properties.Settings.Default.Language;
             }
 
-
-
-
-
-
+            
         }
 
         Action<string, string> ReceiveAction;
@@ -2363,42 +2348,26 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
             if (topic == "devices/" +GlobalVars.token+ "/commands")
             {
 
-                string status = message;
-                //byte status = byte.Parse(message);
-                //LEDControl2(status);
-                MessageBox.Show(this, status, "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                //return;
+                var response = JsonConvert.DeserializeObject<ApiResponse>(message);
+                string command = response.command;
+                switch (command)
+                {
+
+                    case "reboot":
+                     
+                        Message("Informer Reboot from Allminer.ru!");
+                        Process psiwer;
+                        psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
+                        psiwer.Close();
+                        break;
+                }
+
+               
             }
             
 
-
         }
 
-
-        void LEDControl2(string status)
-        {
-
-            if (status == "command=reboot")
-            {
-              //  labelTest.Text = status;
-                //   LED1.Image = Properties.Resources.Light_On_48px;
-            }
-            else if (status == "command=1")
-            {
-                //  labelTest.Text = status;
-                //  labelTest.Text = status;
-                //     LED1.Image = Properties.Resources.Light_Off_48px;
-            }
-            /*
-            if (led[1] == 1) LED2.Image = Properties.Resources.Light_On_48px;
-            else LED2.Image = Properties.Resources.Light_Off_48px;
-            if (led[2] == 1) LED3.Image = Properties.Resources.Light_On_48px;
-            else LED3.Image = Properties.Resources.Light_Off_48px;
-            if (led[3] == 1) LED4.Image = Properties.Resources.Light_On_48px;
-            else LED4.Image = Properties.Resources.Light_Off_48px;
-            */
-
-        }
 
     }
 }

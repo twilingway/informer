@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Net;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
+using System.Globalization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 /// <summary>
 /// Класс представляет собой описание ответа от allminer.ru
@@ -26,13 +28,17 @@ namespace Informer
         /// <summary>
         /// Настройки Informer-а хранящиеся на сервере
         /// </summary>
-        // public Settings settings { get; set; }
-        //public RootObject root { get; set; }
+     
         public string token { get; set; }
         public Settings settings { get; set; }
-        //public string name { get; set; }
+      
         public string message { get; set; }
 
+      //  [JsonProperty("params")]
+        public Params Params { get; set; }
+
+      //  [JsonProperty("commands")]
+        public string command { get; set; }
     }
 
     public class Settings
@@ -46,8 +52,45 @@ namespace Informer
         /// </summary>
 
     }
+    /*
+    public partial class MqttGetSettings
+    {
+        [JsonProperty("params")]
+        public Params Params { get; set; }
 
+        [JsonProperty("commands")]
+        public string Commands { get; set; }
+    }
+    */
+    
+    public partial class Params
+    {
+        public int interval { get; set; }
+        public string name { get; set; }
+    }
+    /*
+    public partial class MqttGetSettings
+    {
+        public static MqttGetSettings FromJson(string json) => JsonConvert.DeserializeObject<MqttGetSettings>(json, Informer.Converter.Settings);
+    }
 
+    public static class Serialize
+    {
+        public static string ToJson(this MqttGetSettings self) => JsonConvert.SerializeObject(self, Informer.Converter.Settings);
+    }
 
+    internal static class Converter
+    {
+        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
+        {
+            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
+            DateParseHandling = DateParseHandling.None,
+            Converters = {
+                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
+            },
+        };
+    }
+
+    */
 }
 
