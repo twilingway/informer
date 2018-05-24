@@ -62,12 +62,56 @@ namespace Informer
         public string Commands { get; set; }
     }
     */
-    
+
     public partial class Params
     {
-        public int interval { get; set; }
-        public string name { get; set; }
+        public Timers timers { get; set; }
+        public Reboots reboots { get; set; }
+        public Data_ranges data_ranges { get; set; }
     }
+
+    public class Timers
+    {
+
+        public int temp_min { get; set; }
+        public int temp_max { get; set; }
+        public int fan_min { get; set; }
+        public int interval { get; set; }
+        public int fan_max { get; set; }
+        public int load_min { get; set; }
+        public int load_max { get; set; }
+        public int clock_min { get; set; }
+        public int clock_max { get; set; }
+        public int mem_min { get; set; }
+        public int mem_max { get; set; }
+        public int lost_gpu { get; set; }
+        public int lost_inet { get; set; }
+        
+    }
+
+    public class Reboots
+    {
+
+        public bool temp { get; set; }
+        public bool fan { get; set; }
+        public bool interval { get; set; }
+        public bool load { get; set; }
+        public bool clock { get; set; }
+        public bool mem { get; set; }
+        public bool lost_gpu { get; set; }
+        public bool lost_inet { get; set; }
+
+    }
+
+    public class Data_ranges
+    {
+      
+
+
+    }
+
+
+
     /*
     public partial class MqttGetSettings
     {

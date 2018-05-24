@@ -27,9 +27,6 @@ static class GlobalVars
     public static string json_send;
     public static string mqttsetparams;
     public static string versions;
-   // public static string stat;
-   // public static string pool;
-   // public static string hash;
     public static string wallet;
     public static string card;
     public static string temp;
@@ -37,8 +34,6 @@ static class GlobalVars
     public static int mqttcheck = 0;
     public static int temp_max;
     public static int temp_min;
-    public static int time_temp_min;
-    public static int time_temp_max;
     public static int time_start;
     public static int start_timestamp;
     public static int timeOnline = -1;
@@ -75,17 +70,26 @@ static class GlobalVars
     public static int timer_inet = -100;
     public static int timer_t_card = -100;
     public static int timer_load_gpu = -100;
+    public static int time_temp_min;
+    public static int time_temp_max;
     public static int time_fan_min;
     public static int time_fan_max;
-    public static int time_clock;
-    public static int time_memory;
+    public static int time_load_GPU_min;
+    public static int time_load_GPU_max;
+    public static int time_clock_min;
+    public static int time_clock_max;
+    public static int time_mem_min;
+    public static int time_mem_max;
+    public static int time_lost_gpu;
+    public static int time_lost_inet;
+    public static int time_count_GPU;
     public static int core_clock;
     public static int memory;
     public static int count_GPU;
-    public static int time_count_GPU;
-    public static int time_internet;
+    
+    
     public static int load_GPU;
-    public static int time_load_GPU;
+    
     public static string clock;
     public static string mem;
 

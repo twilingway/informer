@@ -222,11 +222,11 @@ namespace Informer
 
             string reboot_clock   = _manager.GetPrivateString("main", "reboot_clock");
             string clock = _manager.GetPrivateString("main", "clock");
-            string time_clock = _manager.GetPrivateString("main", "time_clock");
+            string time_clock_min = _manager.GetPrivateString("main", "time_clock_min");
 
             string reboot_memory  = _manager.GetPrivateString("main", "reboot_memory");
             string memory = _manager.GetPrivateString("main", "memory");
-            string time_memory = _manager.GetPrivateString("main", "time_memory");
+            string time_mem_min = _manager.GetPrivateString("main", "time_mem_min");
 
             string reboot_GPU = _manager.GetPrivateString("main", "reboot_GPU");
             string count_GPU = _manager.GetPrivateString("main", "count_GPU");
@@ -234,10 +234,10 @@ namespace Informer
 
             string reboot_load_GPU = _manager.GetPrivateString("main", "reboot_load_GPU");
             string load_GPU = _manager.GetPrivateString("main", "load_GPU");
-            string time_load_GPU = _manager.GetPrivateString("main", "time_load_GPU");
+            string time_load_GPU_min = _manager.GetPrivateString("main", "time_load_GPU_min");
             
             string reboot_internet = _manager.GetPrivateString("main", "reboot_internet");
-            string time_internet = _manager.GetPrivateString("main", "time_internet");
+            string time_lost_inet = _manager.GetPrivateString("main", "time_lost_inet");
 
             string time_start        = _manager.GetPrivateString("main", "time_start");
 
@@ -402,12 +402,12 @@ namespace Informer
             }
             GlobalVars.core_clock = Convert.ToInt32(clock);
             //время перезагрузки
-            if (string.IsNullOrEmpty(time_clock))
+            if (string.IsNullOrEmpty(time_clock_min))
             {
-                time_clock = "295";
-                _manager.WritePrivateString("main", "time_clock", time_clock);
+                time_clock_min = "300";
+                _manager.WritePrivateString("main", "time_clock", time_clock_min);
             }
-            GlobalVars.time_clock = Convert.ToInt32(time_clock);
+            GlobalVars.time_clock_min = Convert.ToInt32(time_clock_min);
             //****Частота Ядра - КОНЕЦ
 
 //----------------------------****************----------------------------
@@ -428,12 +428,12 @@ namespace Informer
             }
             GlobalVars.memory = Convert.ToInt32(memory);
             //время перезагрузки
-            if (string.IsNullOrEmpty(time_memory))
+            if (string.IsNullOrEmpty(time_mem_min))
             {
-                time_memory = "301";
-                _manager.WritePrivateString("main", "time_memory", time_memory);
+                time_mem_min = "300";
+                _manager.WritePrivateString("main", "time_mem_min", time_mem_min);
             }
-            GlobalVars.time_memory = Convert.ToInt32(time_memory);
+            GlobalVars.time_mem_min = Convert.ToInt32(time_mem_min);
             //****Частоты памяти - КОНЕЦ
 
  //----------------------------****************----------------------------
@@ -478,12 +478,12 @@ namespace Informer
             }
             GlobalVars.load_GPU = Convert.ToInt32(load_GPU);
             //время перезагрузки
-            if (string.IsNullOrEmpty(time_load_GPU))
+            if (string.IsNullOrEmpty(time_load_GPU_min))
             {
-                time_load_GPU = "180";
-                _manager.WritePrivateString("main", "time_load_GPU", time_load_GPU);
+                time_load_GPU_min = "0";
+                _manager.WritePrivateString("main", "time_load_GPU_min", time_load_GPU_min);
             }
-            GlobalVars.time_load_GPU = Convert.ToInt32(time_load_GPU);
+            GlobalVars.time_load_GPU_min = Convert.ToInt32(time_load_GPU_min);
 
 
             //****Загрузка GPU - КОНЕЦ
@@ -498,11 +498,11 @@ namespace Informer
             }
             GlobalVars.reboot_internet = reboot_internet;//yt nen dsasds ignore line)
                 // время перезагрузки
-            if (string.IsNullOrEmpty(time_internet)) {
-                time_internet = "299";
-                _manager.WritePrivateString("main", "time_internet", time_internet);
+            if (string.IsNullOrEmpty(time_lost_inet)) {
+                time_lost_inet = "300";
+                _manager.WritePrivateString("main", "time_lost_inet", time_lost_inet);
             }
-            GlobalVars.time_internet = Convert.ToInt32(time_internet);
+            GlobalVars.time_lost_inet = Convert.ToInt32(time_lost_inet);
             //****НЕТУ ИНТЕРНЕТА КОНЕЦ
 
 
@@ -1991,7 +1991,7 @@ namespace Informer
             const string bat = "reboot_clock.bat";
             if (GlobalVars.timer_clock < 0)
             {
-                GlobalVars.timer_clock = GlobalVars.time_clock;
+                GlobalVars.timer_clock = GlobalVars.time_clock_min;
             }
             if (GlobalVars.timer_clock == 0)
             {
@@ -2017,7 +2017,7 @@ namespace Informer
             const string bat = "reboot_memory.bat";
             if (GlobalVars.timer_memory < 0)
             {
-                GlobalVars.timer_memory = GlobalVars.time_memory;
+                GlobalVars.timer_memory = GlobalVars.time_mem_min;
             }
             if (GlobalVars.timer_memory == 0)
             {
@@ -2138,7 +2138,7 @@ namespace Informer
             {
                 if (GlobalVars.timer_inet < 0)
                 {
-                    GlobalVars.timer_inet = GlobalVars.time_internet;
+                    GlobalVars.timer_inet = GlobalVars.time_lost_inet;
                 }
                 if (GlobalVars.timer_inet == 0)
                 {
@@ -2209,7 +2209,7 @@ namespace Informer
             {
                 if (GlobalVars.timer_load_gpu < 0)
                 {
-                    GlobalVars.timer_load_gpu = GlobalVars.time_load_GPU;
+                    GlobalVars.timer_load_gpu = GlobalVars.time_load_GPU_min;
                 }
                 if (GlobalVars.timer_load_gpu == 0)
                 {
@@ -2360,6 +2360,62 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
                         psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
                         psiwer.Close();
                         break;
+
+                    case "settings":
+                        try
+                        {
+
+
+                            
+                            GlobalVars.time_temp_min = response.Params.timers.temp_min;
+                            _manager.WritePrivateString("main",nameof(GlobalVars.time_temp_min), Convert.ToString(response.Params.timers.temp_min));
+
+                            GlobalVars.time_temp_max = response.Params.timers.temp_max;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_temp_max), Convert.ToString(response.Params.timers.temp_max));
+
+                            GlobalVars.time_fan_min = response.Params.timers.fan_min;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_fan_min), Convert.ToString(response.Params.timers.fan_min));
+
+                            GlobalVars.time_fan_max = response.Params.timers.fan_max;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_fan_max), Convert.ToString(response.Params.timers.fan_max));
+
+                            GlobalVars.time_load_GPU_min = response.Params.timers.load_min;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_min), Convert.ToString(response.Params.timers.load_min));
+
+                            GlobalVars.time_load_GPU_max = response.Params.timers.load_max;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+
+                            GlobalVars.time_clock_min = response.Params.timers.clock_min;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_clock_min), Convert.ToString(response.Params.timers.clock_min));
+
+
+                            GlobalVars.time_clock_max = response.Params.timers.clock_max;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+
+                            GlobalVars.time_mem_min = response.Params.timers.mem_min;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+
+                            GlobalVars.time_lost_gpu = response.Params.timers.lost_gpu;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+
+                            GlobalVars.time_lost_inet = response.Params.timers.lost_inet;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            _error.writeLogLine(ex.Message, "error_settings");
+                            MessageBox.Show("Значения не могут быть пустыми");
+                        }
+
+
+
+
+
+                        Message("settings saved from Allminer.ru!");
+                        break;
+
                 }
 
                

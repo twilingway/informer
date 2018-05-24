@@ -81,12 +81,12 @@ namespace Informer
                 manager.WritePrivateString("main", "clock", tbClockMin.Text);
                 GlobalVars.core_clock = Convert.ToInt32(tbClockMin.Text);
                 manager.WritePrivateString("main", "time_clock", tbClockMinSec.Text);
-                GlobalVars.time_clock = Convert.ToInt32(tbClockMinSec.Text);
+                GlobalVars.time_clock_min = Convert.ToInt32(tbClockMinSec.Text);
 
                 manager.WritePrivateString("main", "memory", tbMemoryMin.Text);
                 GlobalVars.memory = Convert.ToInt32(tbMemoryMin.Text);
                 manager.WritePrivateString("main", "time_memory", tbMemoryMinSec.Text);
-                GlobalVars.time_memory = Convert.ToInt32(tbMemoryMinSec.Text);
+                GlobalVars.time_mem_min = Convert.ToInt32(tbMemoryMinSec.Text);
 
                 manager.WritePrivateString("main", "count_GPU", tbCountGPU.Text);
                 GlobalVars.count_GPU = Convert.ToInt32(tbCountGPU.Text);
@@ -96,10 +96,10 @@ namespace Informer
                 manager.WritePrivateString("main", "load_GPU", tbLoadGPU.Text);
                 GlobalVars.load_GPU = Convert.ToInt32(tbLoadGPU.Text);
                 manager.WritePrivateString("main", "time_load_GPU", tbLoadGPUSec.Text);
-                GlobalVars.time_load_GPU = Convert.ToInt32(tbLoadGPUSec.Text);
+                GlobalVars.time_load_GPU_min = Convert.ToInt32(tbLoadGPUSec.Text);
 
                 manager.WritePrivateString("main", "time_internet", tbInternetOffSec.Text);
-                GlobalVars.time_internet = Convert.ToInt32(tbInternetOffSec.Text);
+                GlobalVars.time_lost_inet = Convert.ToInt32(tbInternetOffSec.Text);
 
                 manager.WritePrivateString("main", "time_start", combTimeStart.Text);
                 GlobalVars.time_start = Convert.ToInt32(combTimeStart.Text);
