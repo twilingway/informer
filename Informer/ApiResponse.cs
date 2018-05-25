@@ -28,7 +28,7 @@ namespace Informer
         /// <summary>
         /// Настройки Informer-а хранящиеся на сервере
         /// </summary>
-     
+
         public string token { get; set; }
         public Settings settings { get; set; }
       
@@ -40,6 +40,9 @@ namespace Informer
       //  [JsonProperty("commands")]
         public string command { get; set; }
     }
+
+
+
 
     public class Settings
     {
@@ -68,6 +71,9 @@ namespace Informer
         public Timers timers { get; set; }
         public Reboots reboots { get; set; }
         public Data_ranges data_ranges { get; set; }
+        public string name { get; set; }
+        public int interval { get; set; }
+
     }
 
     public class Timers
@@ -92,49 +98,31 @@ namespace Informer
     public class Reboots
     {
 
-        public bool temp { get; set; }
-        public bool fan { get; set; }
-        public bool interval { get; set; }
-        public bool load { get; set; }
-        public bool clock { get; set; }
-        public bool mem { get; set; }
+        public bool temp_min { get; set; }
+        public bool temp_max { get; set; }
+        public bool fan_min { get; set; }
+        public bool fan_max { get; set; }
+        public bool load_min { get; set; }
+        public bool load_max { get; set; }
+        public bool clock_min { get; set; }
+        public bool clock_max { get; set; }
+        public bool mem_min { get; set; }
+        public bool mem_max { get; set; }
         public bool lost_gpu { get; set; }
         public bool lost_inet { get; set; }
 
+       
     }
 
     public class Data_ranges
     {
-      
-
+        public int[] Temp { get; set; }
+        public int[] Fan { get; set; }
+        public int[] Load { get; set; }
+        public int[] Clock { get; set; }
+        public int[] Mem { get; set; }
 
     }
 
-
-
-    /*
-    public partial class MqttGetSettings
-    {
-        public static MqttGetSettings FromJson(string json) => JsonConvert.DeserializeObject<MqttGetSettings>(json, Informer.Converter.Settings);
-    }
-
-    public static class Serialize
-    {
-        public static string ToJson(this MqttGetSettings self) => JsonConvert.SerializeObject(self, Informer.Converter.Settings);
-    }
-
-    internal static class Converter
-    {
-        public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings
-        {
-            MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
-            DateParseHandling = DateParseHandling.None,
-            Converters = {
-                new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
-            },
-        };
-    }
-
-    */
 }
 

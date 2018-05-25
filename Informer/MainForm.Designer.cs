@@ -42,7 +42,7 @@
             this.labelTimeWork = new System.Windows.Forms.Label();
             this.linkLabelUpdate = new System.Windows.Forms.LinkLabel();
             this.GetTempretureTimer = new System.Windows.Forms.Timer(this.components);
-            this.timer2 = new System.Windows.Forms.Timer(this.components);
+            this.NextAutoStart = new System.Windows.Forms.Timer(this.components);
             this.AutoStartTimer = new System.Windows.Forms.Timer(this.components);
             this.CheckNewVersionTimer = new System.Windows.Forms.Timer(this.components);
             this.TimeWorkTimer = new System.Windows.Forms.Timer(this.components);
@@ -78,7 +78,6 @@
             this.labelCounterClock = new System.Windows.Forms.Label();
             this.labelStatusMemory = new System.Windows.Forms.Label();
             this.labelCounterMemory = new System.Windows.Forms.Label();
-            this.PingInternetTimer = new System.Windows.Forms.Timer(this.components);
             this.labelInternetPing = new System.Windows.Forms.Label();
             this.labelStatusInternetPing = new System.Windows.Forms.Label();
             this.DontHaveInternetTimer = new System.Windows.Forms.Timer(this.components);
@@ -116,7 +115,6 @@
             // 
             resources.ApplyResources(this.tbRigName, "tbRigName");
             this.tbRigName.Name = "tbRigName";
-            this.tbRigName.TextChanged += new System.EventHandler(this.tbRigName_TextChanged);
             // 
             // labelEmail
             // 
@@ -170,11 +168,11 @@
             this.GetTempretureTimer.Tag = "get temp";
             this.GetTempretureTimer.Tick += new System.EventHandler(this.GetTempretureTimerTick);
             // 
-            // timer2
+            // NextAutoStart
             // 
-            this.timer2.Interval = 300000;
-            this.timer2.Tag = "active 1 timer";
-            this.timer2.Tick += new System.EventHandler(this.timer2_Tick);
+            this.NextAutoStart.Interval = 300000;
+            this.NextAutoStart.Tag = "active 1 timer";
+            this.NextAutoStart.Tick += new System.EventHandler(this.NextAutoStart_Tick);
             // 
             // AutoStartTimer
             // 
@@ -364,13 +362,6 @@
             // 
             resources.ApplyResources(this.labelCounterMemory, "labelCounterMemory");
             this.labelCounterMemory.Name = "labelCounterMemory";
-            // 
-            // PingInternetTimer
-            // 
-            this.PingInternetTimer.Enabled = true;
-            this.PingInternetTimer.Interval = 5000;
-            this.PingInternetTimer.Tag = "internet";
-            this.PingInternetTimer.Tick += new System.EventHandler(this.PingTimerTick);
             // 
             // labelInternetPing
             // 
@@ -564,7 +555,7 @@
         private System.Windows.Forms.Label labelTimeWork;
         private System.Windows.Forms.LinkLabel linkLabelUpdate;
         private System.Windows.Forms.Timer GetTempretureTimer;
-        private System.Windows.Forms.Timer timer2;
+        private System.Windows.Forms.Timer NextAutoStart;
         private System.Windows.Forms.Timer AutoStartTimer;
         private System.Windows.Forms.Timer CheckNewVersionTimer;
         private System.Windows.Forms.Timer TimeWorkTimer;
@@ -600,7 +591,6 @@
         private System.Windows.Forms.Label labelCounterClock;
         private System.Windows.Forms.Label labelStatusMemory;
         private System.Windows.Forms.Label labelCounterMemory;
-        private System.Windows.Forms.Timer PingInternetTimer;
         private System.Windows.Forms.Label labelInternetPing;
         private System.Windows.Forms.Label labelStatusInternetPing;
         private System.Windows.Forms.Timer DontHaveInternetTimer;

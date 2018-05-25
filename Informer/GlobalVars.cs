@@ -15,6 +15,8 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
+using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Messages;
 static class GlobalVars
 {
     public static string host = "http://www.allminer.ru";
@@ -25,15 +27,17 @@ static class GlobalVars
     public static string token;
     public static string upTime;
     public static string json_send;
-    public static string mqttsetparams;
+    //public static string mqttsetparams;
     public static string versions;
     public static string wallet;
     public static string card;
     public static string temp;
     public static string fan;
     public static int mqttcheck = 0;
-    public static int temp_max;
-    public static int temp_min;
+
+    
+    
+
     public static int time_start;
     public static int start_timestamp;
     public static int timeOnline = -1;
@@ -51,8 +55,7 @@ static class GlobalVars
     public static string reboot_temp_min;
     public static string load;
     public static int counts;
-    public static int fan_max;
-    public static int fan_min;
+    
     public static string reboot_max_fan;
     public static string reboot_min_fan;
     public static string reboot_clock;
@@ -70,6 +73,7 @@ static class GlobalVars
     public static int timer_inet = -100;
     public static int timer_t_card = -100;
     public static int timer_load_gpu = -100;
+
     public static int time_temp_min;
     public static int time_temp_max;
     public static int time_fan_min;
@@ -82,13 +86,41 @@ static class GlobalVars
     public static int time_mem_max;
     public static int time_lost_gpu;
     public static int time_lost_inet;
+
+    public static bool reboots_temp_min;
+    public static bool reboots_temp_max;
+    public static bool reboots_fan_min;
+    public static bool reboots_fan_max;
+    public static bool reboots_load_min;
+    public static bool reboots_load_max;
+    public static bool reboots_clock_min;
+    public static bool reboots_clock_max;
+    public static bool reboots_mem_min;
+    public static bool reboots_mem_max;
+    public static bool reboots_lost_gpu;
+    public static bool reboots_lost_inet;
+
+
+    public static int temp_max;
+    public static int temp_min;
+    public static int mem_min;
+    public static int mem_max;
+    public static int load_GPU_min;
+    public static int load_GPU_max;
+    public static int fan_min;
+    public static int fan_max;
+    public static int clock_min;
+    public static int clock_max;
+
+
+
     public static int time_count_GPU;
-    public static int core_clock;
-    public static int memory;
+    
+    
     public static int count_GPU;
     
     
-    public static int load_GPU;
+    
     
     public static string clock;
     public static string mem;
@@ -106,6 +138,7 @@ static class GlobalVars
     public static bool InternetIsActive = false;
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
     public static Dictionary<int, List<string>> gpuList;
+    public static MqttClient mqttClient;
 
     //public static bool nice;
     //итд

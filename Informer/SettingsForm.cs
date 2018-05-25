@@ -79,12 +79,12 @@ namespace Informer
                 GlobalVars.reload_time_min_file = Convert.ToInt32(tbReloadFileSec.Text);
 
                 manager.WritePrivateString("main", "clock", tbClockMin.Text);
-                GlobalVars.core_clock = Convert.ToInt32(tbClockMin.Text);
+                GlobalVars.clock_min = Convert.ToInt32(tbClockMin.Text);
                 manager.WritePrivateString("main", "time_clock", tbClockMinSec.Text);
                 GlobalVars.time_clock_min = Convert.ToInt32(tbClockMinSec.Text);
 
                 manager.WritePrivateString("main", "memory", tbMemoryMin.Text);
-                GlobalVars.memory = Convert.ToInt32(tbMemoryMin.Text);
+                GlobalVars.mem_min = Convert.ToInt32(tbMemoryMin.Text);
                 manager.WritePrivateString("main", "time_memory", tbMemoryMinSec.Text);
                 GlobalVars.time_mem_min = Convert.ToInt32(tbMemoryMinSec.Text);
 
@@ -94,7 +94,7 @@ namespace Informer
                 GlobalVars.time_count_GPU = Convert.ToInt32(tbCountGPUSec.Text);
 
                 manager.WritePrivateString("main", "load_GPU", tbLoadGPU.Text);
-                GlobalVars.load_GPU = Convert.ToInt32(tbLoadGPU.Text);
+                GlobalVars.load_GPU_min = Convert.ToInt32(tbLoadGPU.Text);
                 manager.WritePrivateString("main", "time_load_GPU", tbLoadGPUSec.Text);
                 GlobalVars.time_load_GPU_min = Convert.ToInt32(tbLoadGPUSec.Text);
 
