@@ -97,6 +97,24 @@ namespace Informer {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Authorized Failed.
+        /// </summary>
+        internal static string labelInformationAuthorizationFailed {
+            get {
+                return ResourceManager.GetString("labelInformationAuthorizationFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Authorized.
+        /// </summary>
+        internal static string labelInformationAuthorizationOK {
+            get {
+                return ResourceManager.GetString("labelInformationAuthorizationOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Остановлен.
         /// </summary>
         internal static string labelInformationStop {

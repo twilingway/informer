@@ -159,4 +159,10 @@
   <data name="labelStatusTempMin" xml:space="preserve">
     <value>Холодный</value>
   </data>
+  <data name="labelInformationAuthorizationFailed" xml:space="preserve">
+    <value>Authorized Failed</value>
+  </data>
+  <data name="labelInformationAuthorizationOK" xml:space="preserve">
+    <value>Authorized</value>
+  </data>
 </root>

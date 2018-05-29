@@ -71,7 +71,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("Kill launcher: " + ex.Message, "error");
             }
             _pc = new Computer();
             
@@ -91,10 +91,121 @@ namespace Informer
             InitFromIni();
             
             f2 = new SettingsForm();
-                  
+           
         }
 
-        
+        //Инициализация компонентов
+
+        public void InitFromIni()
+        {
+            GlobalVars.time_start = 60;
+            //string worker;
+            GlobalVars.versions = _manager.GetPrivateString("main", "version");
+            GlobalVars.token = _manager.GetPrivateString("main", "token");
+            GlobalVars.name = _manager.GetPrivateString("main", "name");
+
+            try
+            {
+                GlobalVars.time_temp_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_temp_min"));
+                GlobalVars.time_temp_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_temp_max"));
+
+                GlobalVars.time_mem_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_mem_min"));
+                GlobalVars.time_mem_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_mem_max"));
+
+                GlobalVars.time_lost_inet = Convert.ToInt32(_manager.GetPrivateString("main", "time_lost_inet"));
+                GlobalVars.time_lost_gpu = Convert.ToInt32(_manager.GetPrivateString("main", "time_lost_gpu"));
+
+                GlobalVars.time_load_GPU_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_load_GPU_min"));
+                GlobalVars.time_load_GPU_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_load_GPU_max"));
+
+                GlobalVars.time_fan_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_fan_min"));
+                GlobalVars.time_fan_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_fan_max"));
+
+                GlobalVars.time_clock_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_clock_min"));
+                GlobalVars.time_clock_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_clock_max"));
+
+                GlobalVars.reboots_temp_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_temp_min"));
+                GlobalVars.reboots_temp_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_temp_max"));
+
+                GlobalVars.reboots_fan_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_fan_min"));
+                GlobalVars.reboots_fan_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_fan_max"));
+
+                GlobalVars.reboots_load_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_load_min"));
+                GlobalVars.reboots_load_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_load_max"));
+
+                GlobalVars.reboots_clock_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_clock_min"));
+                GlobalVars.reboots_clock_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_clock_max"));
+
+                GlobalVars.reboots_mem_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_mem_min"));
+                GlobalVars.reboots_mem_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_mem_max"));
+
+                GlobalVars.reboots_lost_gpu = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_lost_gpu"));
+                GlobalVars.reboots_lost_inet = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_lost_inet"));
+
+
+                GlobalVars.temp_min = Convert.ToInt32(_manager.GetPrivateString("main", "temp_min"));
+                GlobalVars.temp_max = Convert.ToInt32(_manager.GetPrivateString("main", "temp_max"));
+
+                GlobalVars.mem_min = Convert.ToInt32(_manager.GetPrivateString("main", "mem_min"));
+                GlobalVars.mem_max = Convert.ToInt32(_manager.GetPrivateString("main", "mem_max"));
+
+                GlobalVars.load_GPU_min = Convert.ToInt32(_manager.GetPrivateString("main", "load_GPU_min"));
+                GlobalVars.load_GPU_max = Convert.ToInt32(_manager.GetPrivateString("main", "load_GPU_max"));
+
+                GlobalVars.fan_min = Convert.ToInt32(_manager.GetPrivateString("main", "fan_min"));
+                GlobalVars.fan_max = Convert.ToInt32(_manager.GetPrivateString("main", "fan_max"));
+
+                GlobalVars.clock_min = Convert.ToInt32(_manager.GetPrivateString("main", "mem_min"));
+                GlobalVars.clock_max = Convert.ToInt32(_manager.GetPrivateString("main", "mem_max"));
+
+
+                GlobalVars.time_start = Convert.ToInt32(_manager.GetPrivateString("main", "time_start"));
+
+                //fsdf
+
+
+            }
+            catch (Exception e) {
+
+                _error.writeLogLine("InitFromIni: " + e.Message, "error");
+            }
+            
+
+            //----------------------------****************----------------------------
+
+           bool start = false;
+           
+           if (!string.IsNullOrEmpty(GlobalVars.token))
+            {
+                start = true;
+                tbEmail.ReadOnly = true;
+                tbSecret.ReadOnly = true;
+                tbRigName.ReadOnly = true;
+                tbToken.ReadOnly = true;
+                tbRigName.Text = GlobalVars.name;
+                tbToken.Text = GlobalVars.token;
+            }
+
+            if (string.IsNullOrEmpty(GlobalVars.name) && string.IsNullOrEmpty(GlobalVars.token))
+            {
+                start = false;
+                tbRigName.ReadOnly = true;
+
+            }
+
+
+            if (start)
+            {
+                NextAutoStart.Interval = GlobalVars.time_start * 1000;
+                NextAutoStart.Enabled = true;
+                AutoStartTimer.Enabled = true;
+                TimeWorkTimer.Enabled = true;
+            }
+
+
+        }
+
+
 
         public TimeSpan UpTime
         {
@@ -109,7 +220,70 @@ namespace Informer
             }
         }
 
-       private void MqttStop() {
+
+        private void MqttConnect()
+
+        {
+            //GlobalVars.mqttClient.Settings.AttemptsOnRetry = 1;
+
+            GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
+            
+            bool test = GlobalVars.mqttClient.IsConnected;
+
+            /*
+            try
+            {
+                try { GlobalVars.mqttClient.Disconnect(); }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex);
+                    _error.writeLogLine("MqttDisconnect() " + ex.Message, "error");
+
+                }
+
+                GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
+
+                if (GlobalVars.mqttClient.IsConnected)
+                {
+                    
+
+                    GlobalVars.mqttClient.Subscribe(new string[] { "devices/" + GlobalVars.token + "/commands" }, new byte[] { 0 });
+
+                    InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
+                    InformationLabel.ForeColor = Color.Green;
+
+                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+
+
+                }
+                else if(!GlobalVars.mqttClient.IsConnected)
+                {
+                    InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                    InformationLabel.ForeColor = Color.Red;
+                    MqttStop();
+                   
+                }
+
+            }
+
+            catch (Exception ex)
+            {
+                
+                labelStatusInternetPing.Text = "Connect Fail";
+                InformationLabel.ForeColor = Color.Red;
+                
+                _error.writeLogLine("MqttConnect " + ex.Message, "error");
+
+                MqttStop();
+                Debug.WriteLine("MqttCOnnect: " + ex);
+            }
+
+            */
+
+        }
+
+
+        private void MqttStop() {
             try
             {
                 //GlobalVars.mqttClientUnsubscribe(["sdfs",]);
@@ -122,9 +296,11 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("MqttStop: " + ex.Message, "error");
             }
         }
+
+
 
         private void BtStopClick(object sender, EventArgs e)
         {
@@ -139,7 +315,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("BtnStop: " + ex.Message, "error");
             }
 
             GetTempretureTimer.Enabled = false;
@@ -183,401 +359,6 @@ namespace Informer
 
         }
 
- public void InitFromIni()
-        {
-           
-            string email          = _manager.GetPrivateString("main", "email");
-            string secret         = _manager.GetPrivateString("main", "secret");
-            
-            string name = _manager.GetPrivateString("main", "name");
-            string worker;
-            if (string.IsNullOrEmpty(name))
-            {
-                worker = _manager.GetPrivateString("main", "worker");
-                name = worker;
-            }
-            string token          = _manager.GetPrivateString("main", "token");
-            string version        = _manager.GetPrivateString("main", "version");
-           
-
-            string reboot_temp_max     = _manager.GetPrivateString("main", "reboot_temp_max");
-            string temp_max = _manager.GetPrivateString("main", "temp_max");
-            string time_temp_max = _manager.GetPrivateString("main", "time_temp_max");
-
-            string reboot_temp_min = _manager.GetPrivateString("main", "reboot_temp_min");
-            string temp_min = _manager.GetPrivateString("main", "temp_min");
-            string time_temp_min = _manager.GetPrivateString("main", "time_temp_min");
-
-            string reboot_max_fan = _manager.GetPrivateString("main", "reboot_max_fan");
-            string fan_max = _manager.GetPrivateString("main", "fan_max");
-            string time_fan_max = _manager.GetPrivateString("main", "time_fan_max");
-
-            string reboot_min_fan = _manager.GetPrivateString("main", "reboot_min_fan");
-            string fan_min = _manager.GetPrivateString("main", "fan_min");
-            string time_fan_min = _manager.GetPrivateString("main", "time_fan_min");
-
-            string reload_file = _manager.GetPrivateString("main", "reload_file");
-            string reload_temp_min_file = _manager.GetPrivateString("main", "reload_temp_min_file");
-            string reload_time_min_file = _manager.GetPrivateString("main", "reload_time_min_file");
-            string dir = _manager.GetPrivateString("main", "dir");
-            string filename = _manager.GetPrivateString("main", "filename");
-            string path = _manager.GetPrivateString("main", "path");
-            string dir2 = _manager.GetPrivateString("main", "dir2");
-            string filename2 = _manager.GetPrivateString("main", "filename2");
-            string path2 = _manager.GetPrivateString("main", "path2");
-
-            string reboot_clock   = _manager.GetPrivateString("main", "reboot_clock");
-            string clock = _manager.GetPrivateString("main", "clock");
-            string time_clock_min = _manager.GetPrivateString("main", "time_clock_min");
-
-            string reboot_memory  = _manager.GetPrivateString("main", "reboot_memory");
-            string memory = _manager.GetPrivateString("main", "memory");
-            string time_mem_min = _manager.GetPrivateString("main", "time_mem_min");
-
-            string reboot_GPU = _manager.GetPrivateString("main", "reboot_GPU");
-            string count_GPU = _manager.GetPrivateString("main", "count_GPU");
-            string time_count_GPU = _manager.GetPrivateString("main", "time_count_GPU");
-
-            string reboot_load_GPU = _manager.GetPrivateString("main", "reboot_load_GPU");
-            string load_GPU = _manager.GetPrivateString("main", "load_GPU");
-            string time_load_GPU_min = _manager.GetPrivateString("main", "time_load_GPU_min");
-            
-            string reboot_internet = _manager.GetPrivateString("main", "reboot_internet");
-            string time_lost_inet = _manager.GetPrivateString("main", "time_lost_inet");
-
-            string time_start        = _manager.GetPrivateString("main", "time_start");
-
-            string stat = _manager.GetPrivateString("main", "stat");
-            string pool = _manager.GetPrivateString("main", "pool");
-            string wallet = _manager.GetPrivateString("main", "wallet");
-
-            //****Перезагрузка температура максимум - НАЧАЛО
-            //проверка секбокса
-            if (string.IsNullOrEmpty(reboot_temp_max))
-            {
-                reboot_temp_max = "0";
-                _manager.WritePrivateString("main", "reboot_temp_max", reboot_temp_max);
-            }
-            GlobalVars.reboot_temp_max = reboot_temp_max;
-
-            //температура максимум
-            if (string.IsNullOrEmpty(temp_max))
-            {
-                temp_max = "91";
-                _manager.WritePrivateString("main", "temp_max", temp_max);
-            }
-            GlobalVars.temp_max = Convert.ToInt32(temp_max);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_temp_max))
-            {
-                time_temp_max = "306";
-                _manager.WritePrivateString("main", "time_temp_max", time_temp_max);
-            }
-            GlobalVars.time_temp_max = Convert.ToInt32(time_temp_max);
-            //****Перезагрузка температура максимум - КОНЕЦ
-
- //----------------------------****************----------------------------
-
-            //****Перезагрузка температура минимум - НАЧАЛО
-            if (string.IsNullOrEmpty(reboot_temp_min))
-            //проверка чекбокса
-            {
-                reboot_temp_min = "0";
-                _manager.WritePrivateString("main", "reboot_temp_min", reboot_temp_min);
-            }
-            GlobalVars.reboot_temp_min = reboot_temp_min;
-            //температура минимум
-            if (string.IsNullOrEmpty(temp_min))
-            {
-                temp_min = "41";
-                _manager.WritePrivateString("main", "temp_min", temp_min);
-            }
-            GlobalVars.temp_min = Convert.ToInt32(temp_min);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_temp_min))
-            {
-                time_temp_min = "305";
-                _manager.WritePrivateString("main", "time_temp_min", time_temp_min);
-            }
-            GlobalVars.time_temp_min = Convert.ToInt32(time_temp_min);
-            //****Перезагрузка температура минимум - КОНЕЦ
-
-//----------------------------****************----------------------------
-
-            //****Максимальные обороты НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_max_fan))
-            {
-                reboot_max_fan = "0";
-                _manager.WritePrivateString("main", "reboot_max_fan", reboot_max_fan);
-            }
-            GlobalVars.reboot_max_fan = reboot_max_fan;
-            //обороты в %
-            if (string.IsNullOrEmpty(fan_max))
-            {
-                fan_max = "100";
-                _manager.WritePrivateString("main", "fan_max", fan_max);
-            }
-            GlobalVars.fan_max = Convert.ToInt32(fan_max);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_fan_max))
-            {
-                time_fan_max = "298";
-                _manager.WritePrivateString("main", "time_fan_max", time_fan_max);
-            }
-            GlobalVars.time_fan_max = Convert.ToInt32(time_fan_max);
-
-            //****Максимальные обороты - КОНЕЦ 
-
-//----------------------------****************----------------------------
-
-            //****Минимальные Обороты - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_min_fan))
-            {
-                reboot_min_fan = "0";
-                _manager.WritePrivateString("main", "reboot_min_fan", reboot_min_fan);
-            }
-            GlobalVars.reboot_min_fan = reboot_min_fan;
-
-            //обороты в %
-            if (string.IsNullOrEmpty(fan_min))
-            {
-                fan_min = "10";
-                _manager.WritePrivateString("main", "fan_min", fan_min);
-            }
-            GlobalVars.fan_min = Convert.ToInt32(fan_min);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_fan_min))
-            {
-                time_fan_min = "297";
-                _manager.WritePrivateString("main", "time_fan_min", time_fan_min);
-            }
-            GlobalVars.time_fan_min = Convert.ToInt32(time_fan_min);
-            //****Минимальные Обороты - КОНЕЦ
-
-//----------------------------****************----------------------------
-
-            //**Перезагрузка файла -- НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reload_file))
-            {
-                reload_file = "0";
-                _manager.WritePrivateString("main", "reload_file", reload_file);
-            }
-            GlobalVars.reload_file = reload_file;
-            //температура минимум
-            if (string.IsNullOrEmpty(reload_temp_min_file))
-            {
-                reload_temp_min_file = "40";
-                _manager.WritePrivateString("main", "reload_temp_min_file", reload_temp_min_file);
-            }
-            GlobalVars.reload_temp_min_file = Convert.ToInt32(reload_temp_min_file);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(reload_time_min_file))
-            {
-                reload_time_min_file = "303";
-                _manager.WritePrivateString("main", "reload_time_min_file", reload_time_min_file);
-            }
-            GlobalVars.reload_time_min_file = Convert.ToInt32(reload_time_min_file);
-
-            GlobalVars.dir = dir;
-            GlobalVars.filename = filename;
-            GlobalVars.pathreload = path;
-
-            GlobalVars.dir2 = dir2;
-            GlobalVars.filename2 = filename2;
-            GlobalVars.pathreload2 = path2;
-
-            //**Перезагрузка файла -- КОНЕЦ
-            //----------------------------****************----------------------------
-
-            //****Частота Ядра - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_clock))
-            {
-                reboot_clock = "0";
-                _manager.WritePrivateString("main", "reboot_clock", reboot_clock);
-            }
-            GlobalVars.reboot_clock = reboot_clock;
-            //частота ядра
-            if (string.IsNullOrEmpty(clock))
-            {
-                clock = "500";
-                _manager.WritePrivateString("main", "clock", clock);
-            }
-            GlobalVars.clock_min = Convert.ToInt32(clock);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_clock_min))
-            {
-                time_clock_min = "300";
-                _manager.WritePrivateString("main", "time_clock", time_clock_min);
-            }
-            GlobalVars.time_clock_min = Convert.ToInt32(time_clock_min);
-            //****Частота Ядра - КОНЕЦ
-
-//----------------------------****************----------------------------
-
-            //****Частоты памяти - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_memory))
-            {
-                reboot_memory = "0";
-                _manager.WritePrivateString("main", "reboot_memory", reboot_memory);
-            }
-            GlobalVars.reboot_memory = reboot_memory;
-            //частота
-            if (string.IsNullOrEmpty(memory))
-            {
-                memory = "499";
-                _manager.WritePrivateString("main", "memory", memory);
-            }
-            GlobalVars.mem_min = Convert.ToInt32(memory);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_mem_min))
-            {
-                time_mem_min = "300";
-                _manager.WritePrivateString("main", "time_mem_min", time_mem_min);
-            }
-            GlobalVars.time_mem_min = Convert.ToInt32(time_mem_min);
-            //****Частоты памяти - КОНЕЦ
-
- //----------------------------****************----------------------------
-
-
-            //****Отвалом Карты - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_GPU)) {
-                reboot_GPU = "0";
-                _manager.WritePrivateString("main", "reboot_card", reboot_GPU);
-            }
-            GlobalVars.reboot_GPU = reboot_GPU;
-                //колличество карт
-            if (string.IsNullOrEmpty(count_GPU)) {
-                count_GPU = "1";
-                _manager.WritePrivateString("main", "count_GPU", count_GPU);
-            }
-            GlobalVars.count_GPU = Convert.ToInt32(count_GPU);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_count_GPU)) {
-                time_count_GPU = "300";
-                _manager.WritePrivateString("main", "time_count_GPU", time_count_GPU);
-            }
-            GlobalVars.time_count_GPU = Convert.ToInt32(time_count_GPU);
-            //****Отвалом Карты - КОНЕЦ
-
-            //----------------------------****************----------------------------
-
-            //****Загрузка GPU - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_load_GPU))
-            {
-                reboot_load_GPU = "0";
-                _manager.WritePrivateString("main", "reboot_load_GPU", reboot_load_GPU);
-            }
-            GlobalVars.reboot_load_GPU = reboot_load_GPU;
-            //загрузка GPU в процентах
-            if (string.IsNullOrEmpty(load_GPU))
-            {
-                load_GPU = "80";
-                _manager.WritePrivateString("main", "load_GPU", load_GPU);
-            }
-            GlobalVars.load_GPU_min = Convert.ToInt32(load_GPU);
-            //время перезагрузки
-            if (string.IsNullOrEmpty(time_load_GPU_min))
-            {
-                time_load_GPU_min = "0";
-                _manager.WritePrivateString("main", "time_load_GPU_min", time_load_GPU_min);
-            }
-            GlobalVars.time_load_GPU_min = Convert.ToInt32(time_load_GPU_min);
-
-
-            //****Загрузка GPU - КОНЕЦ
-
-            //----------------------------****************----------------------------
-
-            //****НЕТУ ИНТЕРНЕТА - НАЧАЛО
-            //проверка чекбокса
-            if (string.IsNullOrEmpty(reboot_internet)) {
-                reboot_internet = "0";
-                _manager.WritePrivateString("main", "reboot_internet", reboot_internet);
-            }
-            GlobalVars.reboot_internet = reboot_internet;//yt nen dsasds ignore line)
-                // время перезагрузки
-            if (string.IsNullOrEmpty(time_lost_inet)) {
-                time_lost_inet = "300";
-                _manager.WritePrivateString("main", "time_lost_inet", time_lost_inet);
-            }
-            GlobalVars.time_lost_inet = Convert.ToInt32(time_lost_inet);
-            //****НЕТУ ИНТЕРНЕТА КОНЕЦ
-
-
-//----------------------------****************----------------------------
-
-            //****Запуска программы через - НАЧАЛО
-            if (string.IsNullOrEmpty(time_start))
-            {
-                time_start = "60";
-                _manager.WritePrivateString("main", "time_start", time_start);
-            }
-            GlobalVars.time_start = Convert.ToInt32(time_start);
-
-            //****Запуска программы через - КОНЕЦ
-
-//----------------------------****************----------------------------
-
-            bool start = false;
-            GlobalVars.email = email;
-            GlobalVars.name = name;
-            GlobalVars.secret = secret;
-            GlobalVars.token = token;
-            GlobalVars.versions = version;
-
-    
-            if (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(secret) && !string.IsNullOrEmpty(name) && string.IsNullOrEmpty(token))
-            {
-                tbEmail.Text = GlobalVars.email;
-                tbSecret.Text = GlobalVars.secret;
-                tbRigName.Text = GlobalVars.name;
-                tbEmail.ReadOnly = true;
-                tbSecret.ReadOnly = true;
-                tbRigName.ReadOnly = true;
-                start = true;
-                
-            }
-
-            if (!string.IsNullOrEmpty(token))
-            {
-                start = true;
-                tbEmail.ReadOnly = true;
-                tbSecret.ReadOnly = true;
-                tbRigName.ReadOnly = true;
-                tbToken.ReadOnly = true;
-                tbRigName.Text = name;
-                tbToken.Text = token;
-            }
-
-            if ((string.IsNullOrEmpty(email) || string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(name)) && string.IsNullOrEmpty(token))
-            {
-                start = false;
-                tbEmail.ReadOnly = true;
-                tbSecret.ReadOnly = true;
-                tbRigName.ReadOnly = true;
-                
-            }
-            
-                        
-            if (start)
-            {
-                NextAutoStart.Interval = GlobalVars.time_start * 1000;
-                NextAutoStart.Enabled = true;
-                AutoStartTimer.Enabled = true;
-                TimeWorkTimer.Enabled = true;
-            }
-           
-
-        }
-
         private void GetTempretureTimerTick(object sender, EventArgs e)
         {
             try
@@ -593,7 +374,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-               _error.writeLogLine(ex.Message + "timer GetTempretureTimerTick", "error");
+               _error.writeLogLine("GetTempTimer: " + ex.Message, "error");
             }
         }
 
@@ -1216,7 +997,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message + "get parameters sensors", "error");
+                _error.writeLogLine("Get sensors: " + ex.Message, "error");
             }
         }
         public void SendData()
@@ -1386,7 +1167,7 @@ namespace Informer
                 catch (Exception ex)
                 {
 
-                    _error.writeLogLine(ex.Message + "function send() Send to site " + GlobalVars.json_send, "error");
+                    _error.writeLogLine("Send data: " + ex.Message + GlobalVars.json_send, "error");
 
                 }
                                    
@@ -1422,14 +1203,14 @@ namespace Informer
                         }
                         catch (Exception ex)
                         {
-                            _error.writeLogLine(ex.Message, "error");
+                            _error.writeLogLine("Start launcher " + ex.Message, "error");
                         }
                     }
 
                 }
                 catch (Exception ex)
                 {
-                    _error.writeLogLine(ex.Message, "error");
+                    _error.writeLogLine("CheckNewVersion " + ex.Message, "error");
                 }
 
             }
@@ -1495,7 +1276,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("Reboot: " + ex.Message, "error");
             }
         }
 
@@ -1517,7 +1298,7 @@ namespace Informer
 
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("Send Message: " + ex.Message, "error");
             }
 
 
@@ -1563,9 +1344,7 @@ namespace Informer
                 Process.Start(rpsi);/**/
 
                 string pack = _http.GetContent(GlobalVars.host + 
-                    "/api.php?email=" + GlobalVars.email +
-                    "&secret=" + GlobalVars.secret +
-                    "&worker=" + GlobalVars.name + 
+                    "/api.php?&worker=" + GlobalVars.name + 
                     "&gpu=" + GlobalVars.card + 
                     "&temp=" + GlobalVars.temp + 
                     "&fan=" + GlobalVars.fan + 
@@ -1576,7 +1355,7 @@ namespace Informer
             }
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("Reload: " + ex.Message, "error");
             }
             }
         public void GetPoolInfo(string pool)
@@ -1668,42 +1447,6 @@ namespace Informer
 
 
 
-        private void MqttConnect()
-
-        {
-            
-            try
-            {
-                try { GlobalVars.mqttClient.Disconnect(); }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    _error.writeLogLine(ex.Message, "error");
-                  
-                }
-                
-              //  GlobalVars.mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-                
-                GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
-                GlobalVars.mqttClient.Subscribe(new string[] { "devices/" + GlobalVars.token + "/commands"}, new byte[] {0});
-
-
-                labelStatusInternetPing.Text = "MQTT ON";
-                
-            }
-
-            catch (Exception ex)
-            {
-            labelStatusInternetPing.Text = "MQTT OFF Connect Fail";
-                        GlobalVars.mqttcheck++;
-            _error.writeLogLine(ex.Message, "error");
-
-              
-                Debug.WriteLine(ex);
-            }
-        
-
-        }
 
 
 
@@ -1721,15 +1464,14 @@ namespace Informer
             else if (code == false)
             {
                 MqttConnect();
-                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+               
             }
             
             Debug.WriteLine("1");
 
             GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-            //labelTest.Text = GlobalVars.start_timestamp.ToString();
-            string email       = tbEmail.Text;
-            string secret      = tbSecret.Text;
+          /*
+
             string name = tbRigName.Text;
             string token = tbToken.Text;
 
@@ -1749,7 +1491,8 @@ namespace Informer
                
                 _log.writeLogLine("Informer is started ", "log");
                 Message("Informer Started!");
-                SendData();
+
+                //SendData();
 
                 GlobalVars.timeOnline = 0;
                // InformationLabel.Text = "Запущен";
@@ -1762,7 +1505,7 @@ namespace Informer
             }
             else {
 
-                if (string.IsNullOrEmpty(token) && (!string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(secret) && !string.IsNullOrEmpty(name)))
+                if (string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(name)))
                 {
 
 
@@ -1805,7 +1548,7 @@ namespace Informer
 
             }
               
-            InitFromIni();
+          */
         }
 
         private void BtnOpenSettingsFormClick(object sender, EventArgs e)
@@ -2244,7 +1987,7 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
             
             catch (Exception ex)
             {
-                _error.writeLogLine(ex.Message, "error");
+                _error.writeLogLine("MainFormClosing:" + ex.Message, "error");
             }
         }
 
@@ -2430,14 +2173,21 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
                             _manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
                             tbRigName.Text = GlobalVars.name;
 
-                            //SendDataTimer.Interval = response.Params.interval * 1000;
-                            SendDataTimer.Interval = 2 * 1000;
+                            GlobalVars.time_start = response.Params.interval;
+                            _manager.WritePrivateString("main", nameof(GlobalVars.time_start), Convert.ToString(response.Params.interval));
+
+
+                            SendDataTimer.Interval = response.Params.interval * 1000;
+
+                            
+                            
+                            //SendDataTimer.Interval = 2 * 1000;
 
 
                         }
                         catch (Exception ex)
                         {
-                            _error.writeLogLine(ex.Message, "error_settings");
+                            _error.writeLogLine("Receive:" + ex.Message, "error_settings");
                         
                         }
 

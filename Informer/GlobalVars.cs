@@ -20,9 +20,9 @@ using uPLibrary.Networking.M2Mqtt.Messages;
 static class GlobalVars
 {
     public static string host = "http://www.allminer.ru";
-    public static string email;
-    public static string secret;
-   // public static string worker;
+  
+   
+ 
     public static string name;
     public static string token;
     public static string upTime;
