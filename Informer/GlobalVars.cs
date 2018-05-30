@@ -25,6 +25,7 @@ static class GlobalVars
  
     public static string name;
     public static string token;
+    public static Boolean token_status;
     public static string upTime;
     public static string json_send;
     //public static string mqttsetparams;

@@ -21,6 +21,7 @@ using System.Net.NetworkInformation;
 using uPLibrary.Networking.M2Mqtt;
 using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Net.Security;
+using MQTTnet;
 
 
 namespace Informer
@@ -39,10 +40,13 @@ namespace Informer
 
         //static MqttClient client = new MqttClient("allminer.ru", int.Parse("1883"), false, MqttSslProtocols.None, null, null);
 
-
+        
 
         public MainForm()
         {
+
+            var factory = new MqttFactory();
+            var mqttClient = factory.CreateMqttClient();
 
             GlobalVars.gpuList = new Dictionary<int, List<string>>();
            
@@ -224,28 +228,15 @@ namespace Informer
         private void MqttConnect()
 
         {
-            //GlobalVars.mqttClient.Settings.AttemptsOnRetry = 1;
-
-            GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
-            
-            bool test = GlobalVars.mqttClient.IsConnected;
-
-            /*
-            try
-            {
-                try { GlobalVars.mqttClient.Disconnect(); }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                    _error.writeLogLine("MqttDisconnect() " + ex.Message, "error");
-
-                }
-
-                GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
-
-                if (GlobalVars.mqttClient.IsConnected)
-                {
                     
+           try
+            {
+             
+                byte connect = GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
+
+                if (GlobalVars.mqttClient.IsConnected && connect == 0)
+                {
+
 
                     GlobalVars.mqttClient.Subscribe(new string[] { "devices/" + GlobalVars.token + "/commands" }, new byte[] { 0 });
 
@@ -253,17 +244,20 @@ namespace Informer
                     InformationLabel.ForeColor = Color.Green;
 
                     GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+                    GlobalVars.token_status = true;
 
 
                 }
-                else if(!GlobalVars.mqttClient.IsConnected)
+
+                else if (connect != 0)
                 {
+
                     InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
                     InformationLabel.ForeColor = Color.Red;
+                    GlobalVars.token_status = false;
                     MqttStop();
-                   
                 }
-
+      
             }
 
             catch (Exception ex)
@@ -278,25 +272,30 @@ namespace Informer
                 Debug.WriteLine("MqttCOnnect: " + ex);
             }
 
-            */
+            
 
         }
 
 
         private void MqttStop() {
-            try
-            {
-                //GlobalVars.mqttClientUnsubscribe(["sdfs",]);
-                GlobalVars.mqttClient.Unsubscribe(new string[] { "devices/" + GlobalVars.token + "/commands" });
-                GlobalVars.mqttClient.Disconnect();
-                GlobalVars.mqttClient = null;
-                
-                    
 
-            }
-            catch (Exception ex)
+            if (GlobalVars.mqttClient.IsConnected)
             {
-                _error.writeLogLine("MqttStop: " + ex.Message, "error");
+                try
+                {
+                    //GlobalVars.mqttClientUnsubscribe(["sdfs",]);
+                    GlobalVars.mqttClient.Unsubscribe(new string[] { "devices/" + GlobalVars.token + "/commands" });
+                    GlobalVars.mqttClient.Disconnect();
+                   
+                    // GlobalVars.mqttClient = null;
+
+
+
+                }
+                catch (Exception ex)
+                {
+                    _error.writeLogLine("MqttStop: " + ex.Message, "error");
+                }
             }
         }
 
@@ -305,23 +304,19 @@ namespace Informer
         private void BtStopClick(object sender, EventArgs e)
         {
 
-            try
+            if (GlobalVars.token_status)
             {
-                //GlobalVars.mqttClientUnsubscribe(["sdfs",]);
-                GlobalVars.mqttClient.Unsubscribe(new string[] { "devices/" + GlobalVars.token + "/commands" });
-                GlobalVars.mqttClient.Disconnect();
-               // base.OnClosed(e);
+                MqttStop();
 
-            }
-            catch (Exception ex)
-            {
-                _error.writeLogLine("BtnStop: " + ex.Message, "error");
+                _log.writeLogLine("Informer stopped", "log");
+                Message("Informer Stopped!");
+
             }
 
             GetTempretureTimer.Enabled = false;
             AutoStartTimer.Enabled = false;
             AutoStartTimer.Stop();
-           // PingInternetTimer.Stop();
+            // PingInternetTimer.Stop();
             NextAutoStart.Stop();
             btStop.Visible = false;
             btStart.Enabled = true;
@@ -346,16 +341,7 @@ namespace Informer
             GlobalVars.timer_t_card = -100;
             GlobalVars.timer_load_gpu = -100;
             GlobalVars.timer_inet = -100;
-            _log.writeLogLine("Informer stopped","log");
-            if (string.IsNullOrEmpty(GlobalVars.token))
-            {
-              //  tbEmail.ReadOnly = false;
-              //  tbSecret.ReadOnly = false;
-              //  tbRigName.ReadOnly = false;
-            }
             tbToken.ReadOnly = false;
-                  
-            Message("Informer Stopped!");
 
         }
 
@@ -1453,63 +1439,86 @@ namespace Informer
         private void BtStartClick(object sender, EventArgs e)
         {
             
-            bool code = GlobalVars.mqttClient.IsConnected;
-            if (code == true)
-            {
-                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
-                //labelTest.Text = Convert.ToString(code2) + " " + GlobalVars.mqttcheck;
-                //GlobalVars.mqttcheck = 0;
-                //пушь
-            }
-            else if (code == false)
-            {
-                MqttConnect();
-               
-            }
-            
-            Debug.WriteLine("1");
 
             GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-          /*
+          
 
-            string name = tbRigName.Text;
-            string token = tbToken.Text;
+           // string name = tbRigName.Text;
+            //string token = tbToken.Text;
 
-            if (!string.IsNullOrEmpty(token))
+            if (!string.IsNullOrEmpty(tbToken.Text))
             {
-                _manager.WritePrivateString("main", "token", token);
-                GetTempretureTimer.Enabled = true;
-               // PingInternetTimer.Start();
-                SendDataTimer.Enabled = true;
-                btStart.Enabled = false;
-                btStop.Visible = true;
-                AutoStartTimer.Enabled = false;
 
-                GlobalVars.token = token;
-                GlobalVars.name = name;
-                gpu_temp();
-               
-                _log.writeLogLine("Informer is started ", "log");
-                Message("Informer Started!");
 
-                //SendData();
+                if (GlobalVars.mqttClient.IsConnected)
+                {
+                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
 
-                GlobalVars.timeOnline = 0;
-               // InformationLabel.Text = "Запущен";
-               // InformationLabel.ForeColor = Color.Green;
-                tbEmail.ReadOnly = true;
-                tbSecret.ReadOnly = true;
-                tbRigName.ReadOnly = true;
-                tbToken.ReadOnly = true;
+
+                }
+                else if (!GlobalVars.mqttClient.IsConnected)
+                {
+
+                    MqttConnect();
+
+
+                    if (GlobalVars.mqttClient.IsConnected)
+                    {
+
+                        _log.writeLogLine("Informer is started ", "log");
+                        Message("Informer Started!");
+                        _manager.WritePrivateString("main", "token", tbToken.Text);
+                        GetTempretureTimer.Enabled = true;
+                        // PingInternetTimer.Start();
+                        SendDataTimer.Enabled = true;
+                        btStart.Enabled = false;
+                        btStop.Visible = true;
+                        AutoStartTimer.Enabled = false;
+                        GlobalVars.token = tbToken.Text;
+                        GlobalVars.name = tbRigName.Text;
+                        gpu_temp();
+                        //SendData();
+                        GlobalVars.timeOnline = 0;
+                        //InformationLabel.Text = "Запущен";
+                        //InformationLabel.ForeColor = Color.Green;
+                        tbToken.ReadOnly = true;
+
+                    }
+                    else {
+
+                        _log.writeLogLine("Informer is started ", "log");
+                        GetTempretureTimer.Enabled = true;
+                        // PingInternetTimer.Start();
+                        SendDataTimer.Enabled = false;
+                        btStart.Enabled = false;
+                        btStop.Visible = true;
+                        AutoStartTimer.Enabled = false;
+                        GlobalVars.token = tbToken.Text;
+                        GlobalVars.name = tbRigName.Text;
+                        gpu_temp();
+                        //SendData();
+                        GlobalVars.timeOnline = 0;
+                        //InformationLabel.Text = "Запущен";
+                        //InformationLabel.ForeColor = Color.Green;
+                        tbToken.ReadOnly = true;
+                    }
+
+
+
+                }
+
+
+
+                
                 
             }
             else {
-
-                if (string.IsNullOrEmpty(token) && !string.IsNullOrEmpty(name)))
+                /*
+                if (string.IsNullOrEmpty(tbToken.Text))
                 {
 
 
-                    _manager.WritePrivateString("main", "token", token);
+                    _manager.WritePrivateString("main", "token", tbToken.Text);
                     GetTempretureTimer.Enabled = true;
 
                     SendDataTimer.Enabled = true;
@@ -1517,8 +1526,8 @@ namespace Informer
                     btStop.Visible = true;
                     AutoStartTimer.Enabled = false;
 
-                    GlobalVars.token = token;
-                    GlobalVars.name = name;
+                    GlobalVars.token = tbToken.Text;
+                    GlobalVars.name = tbRigName.Text;
                     gpu_temp();
 
 
@@ -1541,14 +1550,14 @@ namespace Informer
                 
                 else
                 {
-                    MessageBox.Show("Enter the token!");
+                   
 
                 }
-
-
+                */
+             MessageBox.Show("Enter the token!");
             }
               
-          */
+          
         }
 
         private void BtnOpenSettingsFormClick(object sender, EventArgs e)
