@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
+//using uPLibrary.Networking.M2Mqtt;
+//using uPLibrary.Networking.M2Mqtt.Messages;
 
 namespace Informer
 {

@@ -15,8 +15,10 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
-using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
+using MQTTnet.Client;
+using MQTTnet;
+//using uPLibrary.Networking.M2Mqtt;
+//using uPLibrary.Networking.M2Mqtt.Messages;
 static class GlobalVars
 {
     public static string host = "http://www.allminer.ru";
@@ -139,7 +141,14 @@ static class GlobalVars
     public static bool InternetIsActive = false;
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
     public static Dictionary<int, List<string>> gpuList;
-    public static MqttClient mqttClient;
+    //public static MqttClient mqttClient;
+    public static string fullPath = Application.StartupPath.ToString();
+    public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
+    public static IMqttClientOptions options;
+    public static MqttFactory factory = new MqttFactory();
+    public static IMqttClient mqttClient;
+
+
 
     //public static bool nice;
     //итд

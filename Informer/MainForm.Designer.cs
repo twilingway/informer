@@ -257,7 +257,7 @@
             // 
             // SendDataTimer
             // 
-            this.SendDataTimer.Interval = 60000;
+            this.SendDataTimer.Interval = 1000;
             this.SendDataTimer.Tag = "send sait";
             this.SendDataTimer.Tick += new System.EventHandler(this.SendDataTimerTick);
             // 

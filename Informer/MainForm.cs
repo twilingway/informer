@@ -18,11 +18,18 @@ using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.NetworkInformation;
-using uPLibrary.Networking.M2Mqtt;
-using uPLibrary.Networking.M2Mqtt.Messages;
 using System.Net.Security;
 using MQTTnet;
-
+using MQTTnet.Client;
+using MQTTnet.Diagnostics;
+using MQTTnet.Exceptions;
+//using MQTTnet.Extensions.Rpc;
+using MQTTnet.Implementations;
+using MQTTnet.ManagedClient;
+using MQTTnet.Protocol;
+using MQTTnet.Server;
+using MqttClientConnectedEventArgs = MQTTnet.Client.MqttClientConnectedEventArgs;
+using MqttClientDisconnectedEventArgs = MQTTnet.Client.MqttClientDisconnectedEventArgs;
 
 namespace Informer
 {
@@ -32,40 +39,41 @@ namespace Informer
 
         private Computer _pc;
         private static Http _http = new Http();
-        private LogFile _log,_error;
-        private INIManager _manager;
+        private LogFile _log, _error;
+        //private INIManager GlobalVars._manager;
         List<String> gpusList = new List<string>();
 
         private Form f2;
 
         //static MqttClient client = new MqttClient("allminer.ru", int.Parse("1883"), false, MqttSslProtocols.None, null, null);
 
-        
+
 
         public MainForm()
         {
 
-            var factory = new MqttFactory();
-            var mqttClient = factory.CreateMqttClient();
+
+
+
 
             GlobalVars.gpuList = new Dictionary<int, List<string>>();
-           
+
             if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
             {
                 System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
             }
 
-            
+
             InitializeComponent();
 
-            GlobalVars.mqttClient = new MqttClient("allminer.ru", int.Parse("1883"), false, MqttSslProtocols.None, null, null);
-            GlobalVars.mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
-            GlobalVars.mqttClient.ProtocolVersion = MqttProtocolVersion.Version_3_1;
+            //  GlobalVars.mqttClient = new MqttClient("allminer.ru", int.Parse("1883"), false, MqttSslProtocols.None, null, null);
+            //  GlobalVars.mqttClient.MqttMsgPublishReceived += client_MqttMsgPublishReceived;
+            //  GlobalVars.mqttClient.ProtocolVersion = MqttProtocolVersion.Version_3_1;
 
-            string fullPath = Application.StartupPath.ToString();
-            _manager = new INIManager(fullPath + "\\my.ini");
-            _manager.WritePrivateString("main", "version", "1.3.9");
+            //string fullPath = Application.StartupPath.ToString();
+            //GlobalVars.GlobalVars._manager = new INIManager(fullPath + "\\my.ini");
+            GlobalVars._manager.WritePrivateString("main", "version", "1.3.9");
 
             try
             {
@@ -78,24 +86,42 @@ namespace Informer
                 _error.writeLogLine("Kill launcher: " + ex.Message, "error");
             }
             _pc = new Computer();
-            
+
             _pc.CPUEnabled = true;
             //_pc.Open();
             _pc.GPUEnabled = true;
-           
+
             _pc.Open();
 
 
             _log = new LogFile("log");
             _error = new LogFile("error");
 
-            
+
             //СheckForPing();
             СheckForNewVersion();
             InitFromIni();
-            
+
             f2 = new SettingsForm();
-           
+
+
+
+            // Create TCP based options using the builder.
+            GlobalVars.options = new MqttClientOptionsBuilder()
+            //var options = 
+                .WithClientId(GlobalVars.token)
+                .WithTcpServer("allminer.ru", 1883)
+                .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
+                .WithCredentials(GlobalVars.token, GlobalVars.token)
+                //.WithTls()
+                .WithCleanSession(true)
+                .Build();
+
+            // Create a new MQTT client.
+            // GlobalVars.factory = new MqttFactory();
+            GlobalVars.mqttClient = GlobalVars.factory.CreateMqttClient();
+            // var receive = new Receive();
+
         }
 
         //Инициализация компонентов
@@ -104,66 +130,66 @@ namespace Informer
         {
             GlobalVars.time_start = 60;
             //string worker;
-            GlobalVars.versions = _manager.GetPrivateString("main", "version");
-            GlobalVars.token = _manager.GetPrivateString("main", "token");
-            GlobalVars.name = _manager.GetPrivateString("main", "name");
+            GlobalVars.versions = GlobalVars._manager.GetPrivateString("main", "version");
+            GlobalVars.token = GlobalVars._manager.GetPrivateString("main", "token");
+            GlobalVars.name = GlobalVars._manager.GetPrivateString("main", "name");
 
             try
             {
-                GlobalVars.time_temp_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_temp_min"));
-                GlobalVars.time_temp_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_temp_max"));
+                GlobalVars.time_temp_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_temp_min"));
+                GlobalVars.time_temp_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_temp_max"));
 
-                GlobalVars.time_mem_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_mem_min"));
-                GlobalVars.time_mem_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_mem_max"));
+                GlobalVars.time_mem_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_mem_min"));
+                GlobalVars.time_mem_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_mem_max"));
 
-                GlobalVars.time_lost_inet = Convert.ToInt32(_manager.GetPrivateString("main", "time_lost_inet"));
-                GlobalVars.time_lost_gpu = Convert.ToInt32(_manager.GetPrivateString("main", "time_lost_gpu"));
+                GlobalVars.time_lost_inet = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_lost_inet"));
+                GlobalVars.time_lost_gpu = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_lost_gpu"));
 
-                GlobalVars.time_load_GPU_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_load_GPU_min"));
-                GlobalVars.time_load_GPU_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_load_GPU_max"));
+                GlobalVars.time_load_GPU_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_load_GPU_min"));
+                GlobalVars.time_load_GPU_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_load_GPU_max"));
 
-                GlobalVars.time_fan_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_fan_min"));
-                GlobalVars.time_fan_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_fan_max"));
+                GlobalVars.time_fan_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_fan_min"));
+                GlobalVars.time_fan_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_fan_max"));
 
-                GlobalVars.time_clock_min = Convert.ToInt32(_manager.GetPrivateString("main", "time_clock_min"));
-                GlobalVars.time_clock_max = Convert.ToInt32(_manager.GetPrivateString("main", "time_clock_max"));
+                GlobalVars.time_clock_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_clock_min"));
+                GlobalVars.time_clock_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_clock_max"));
 
-                GlobalVars.reboots_temp_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_temp_min"));
-                GlobalVars.reboots_temp_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_temp_max"));
+                GlobalVars.reboots_temp_min = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_temp_min"));
+                GlobalVars.reboots_temp_max = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_temp_max"));
 
-                GlobalVars.reboots_fan_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_fan_min"));
-                GlobalVars.reboots_fan_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_fan_max"));
+                GlobalVars.reboots_fan_min = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_fan_min"));
+                GlobalVars.reboots_fan_max = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_fan_max"));
 
-                GlobalVars.reboots_load_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_load_min"));
-                GlobalVars.reboots_load_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_load_max"));
+                GlobalVars.reboots_load_min = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_load_min"));
+                GlobalVars.reboots_load_max = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_load_max"));
 
-                GlobalVars.reboots_clock_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_clock_min"));
-                GlobalVars.reboots_clock_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_clock_max"));
+                GlobalVars.reboots_clock_min = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_clock_min"));
+                GlobalVars.reboots_clock_max = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_clock_max"));
 
-                GlobalVars.reboots_mem_min = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_mem_min"));
-                GlobalVars.reboots_mem_max = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_mem_max"));
+                GlobalVars.reboots_mem_min = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_mem_min"));
+                GlobalVars.reboots_mem_max = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_mem_max"));
 
-                GlobalVars.reboots_lost_gpu = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_lost_gpu"));
-                GlobalVars.reboots_lost_inet = Convert.ToBoolean(_manager.GetPrivateString("main", "reboots_lost_inet"));
-
-
-                GlobalVars.temp_min = Convert.ToInt32(_manager.GetPrivateString("main", "temp_min"));
-                GlobalVars.temp_max = Convert.ToInt32(_manager.GetPrivateString("main", "temp_max"));
-
-                GlobalVars.mem_min = Convert.ToInt32(_manager.GetPrivateString("main", "mem_min"));
-                GlobalVars.mem_max = Convert.ToInt32(_manager.GetPrivateString("main", "mem_max"));
-
-                GlobalVars.load_GPU_min = Convert.ToInt32(_manager.GetPrivateString("main", "load_GPU_min"));
-                GlobalVars.load_GPU_max = Convert.ToInt32(_manager.GetPrivateString("main", "load_GPU_max"));
-
-                GlobalVars.fan_min = Convert.ToInt32(_manager.GetPrivateString("main", "fan_min"));
-                GlobalVars.fan_max = Convert.ToInt32(_manager.GetPrivateString("main", "fan_max"));
-
-                GlobalVars.clock_min = Convert.ToInt32(_manager.GetPrivateString("main", "mem_min"));
-                GlobalVars.clock_max = Convert.ToInt32(_manager.GetPrivateString("main", "mem_max"));
+                GlobalVars.reboots_lost_gpu = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_lost_gpu"));
+                GlobalVars.reboots_lost_inet = Convert.ToBoolean(GlobalVars._manager.GetPrivateString("main", "reboots_lost_inet"));
 
 
-                GlobalVars.time_start = Convert.ToInt32(_manager.GetPrivateString("main", "time_start"));
+                GlobalVars.temp_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "temp_min"));
+                GlobalVars.temp_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "temp_max"));
+
+                GlobalVars.mem_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "mem_min"));
+                GlobalVars.mem_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "mem_max"));
+
+                GlobalVars.load_GPU_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "load_GPU_min"));
+                GlobalVars.load_GPU_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "load_GPU_max"));
+
+                GlobalVars.fan_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "fan_min"));
+                GlobalVars.fan_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "fan_max"));
+
+                GlobalVars.clock_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "mem_min"));
+                GlobalVars.clock_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "mem_max"));
+
+
+                GlobalVars.time_start = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_start"));
 
                 //fsdf
 
@@ -173,13 +199,13 @@ namespace Informer
 
                 _error.writeLogLine("InitFromIni: " + e.Message, "error");
             }
-            
+
 
             //----------------------------****************----------------------------
 
-           bool start = false;
-           
-           if (!string.IsNullOrEmpty(GlobalVars.token))
+            bool start = false;
+
+            if (!string.IsNullOrEmpty(GlobalVars.token))
             {
                 start = true;
                 tbEmail.ReadOnly = true;
@@ -211,7 +237,7 @@ namespace Informer
 
 
 
-        public TimeSpan UpTime
+        public static TimeSpan UpTime
         {
             get
             {
@@ -225,60 +251,122 @@ namespace Informer
         }
 
 
-        private void MqttConnect()
+        public static async Task MqttConnect()
 
         {
-                    
-           try
+            if (!GlobalVars.mqttClient.IsConnected)
             {
-             
-                byte connect = GlobalVars.mqttClient.Connect(GlobalVars.token, GlobalVars.token, GlobalVars.token, true, 90);
-
-                if (GlobalVars.mqttClient.IsConnected && connect == 0)
+                try
                 {
 
+                    GlobalVars.mqttClient.ApplicationMessageReceived += (s, e) =>
+                    {
+                        Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
+                        Debug.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
+                        Debug.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+                        Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
+                        Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
 
-                    GlobalVars.mqttClient.Subscribe(new string[] { "devices/" + GlobalVars.token + "/commands" }, new byte[] { 0 });
+                        CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
 
-                    InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
-                    InformationLabel.ForeColor = Color.Green;
+                    // Debug.WriteLine();
+                };
 
-                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
-                    GlobalVars.token_status = true;
+
+                    GlobalVars.mqttClient.Connected += async (s, e) =>
+                    {
+                        await GlobalVars.mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
+                    };
+
+                    /*
+                    mqttClient.Disconnected += async (s, e) =>
+                    {
+                        Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
+                        await Task.Delay(TimeSpan.FromSeconds(5));
+
+                        try
+                        {
+                            await mqttClient.ConnectAsync(options);
+                        }
+                        catch
+                        {
+                            Debug.WriteLine("### RECONNECTING FAILED ###");
+                        }
+                    };
+                    */
+
+
+
+                    try
+                    {
+                        await GlobalVars.mqttClient.ConnectAsync(GlobalVars.options);
+
+                        if (GlobalVars.mqttClient.IsConnected)
+                        {
+                            Debug.WriteLine("IsConnected: " );
+                          //  GlobalVars.token_status = true;
+                            SendData();
+
+                            
+                        }
+                        
+                        // InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                        // InformationLabel.ForeColor = Color.Red;
+
+
+                        try
+                        {
+                            var message = new MqttApplicationMessageBuilder()
+                            .WithTopic("devices/" + GlobalVars.token + "/init")
+                            .WithPayload("1")
+                            .WithExactlyOnceQoS()
+                            .WithRetainFlag()
+                            .Build();
+
+                            await GlobalVars.mqttClient.PublishAsync(message);
+
+                        }
+                        catch (Exception e)
+                        {
+                            Debug.WriteLine("PublishFailed: " + e);
+
+                        }
+
+                    }
+
+                    catch (MQTTnet.Adapter.MqttConnectingFailedException e)
+                    {
+
+                        Debug.WriteLine("AuthorizationFailed: " + e);
+                        //InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                        //InformationLabel.ForeColor = Color.Red;
+                        GlobalVars.token_status = false;
+
+                    }
+                    catch (Exception e)
+                    {
+
+                        Debug.WriteLine("MqttConnectError: " + e);
+                    }
+
 
 
                 }
 
-                else if (connect != 0)
+                catch (Exception e)
                 {
 
-                    InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-                    InformationLabel.ForeColor = Color.Red;
-                    GlobalVars.token_status = false;
-                    MqttStop();
+
                 }
-      
             }
-
-            catch (Exception ex)
-            {
-                
-                labelStatusInternetPing.Text = "Connect Fail";
-                InformationLabel.ForeColor = Color.Red;
-                
-                _error.writeLogLine("MqttConnect " + ex.Message, "error");
-
-                MqttStop();
-                Debug.WriteLine("MqttCOnnect: " + ex);
-            }
-
-            
+           
 
         }
 
 
         private void MqttStop() {
 
+            /*
             if (GlobalVars.mqttClient.IsConnected)
             {
                 try
@@ -297,6 +385,8 @@ namespace Informer
                     _error.writeLogLine("MqttStop: " + ex.Message, "error");
                 }
             }
+
+            */
         }
 
 
@@ -306,7 +396,7 @@ namespace Informer
 
             if (GlobalVars.token_status)
             {
-                MqttStop();
+                //  MqttStop();
 
                 _log.writeLogLine("Informer stopped", "log");
                 Message("Informer Stopped!");
@@ -355,12 +445,12 @@ namespace Informer
                 btStop.Visible = true;
                 gpu_temp();
 
-                            
-                
+
+
             }
             catch (Exception ex)
             {
-               _error.writeLogLine("GetTempTimer: " + ex.Message, "error");
+                _error.writeLogLine("GetTempTimer: " + ex.Message, "error");
             }
         }
 
@@ -382,19 +472,19 @@ namespace Informer
             //labelTest.Text = GlobalVars.start_timestamp.ToString();
             gpu_temp();
             Message("Informer Started!");
-            try
-            {
-                MqttConnect();
-                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
-            }
-            catch {
-                
-            }
+            //try
+            // {
+            MqttConnect();
+            //   GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+            // }
+            // catch {
+
+            // }
             SendData();
-            
+
             Hide();
-            
-            
+
+
         }
 
         private void AutoStart_Tick(object sender, EventArgs e)
@@ -409,13 +499,13 @@ namespace Informer
 
             }
             else {
-               
+
                 NextAutoStart.Start();
                 AutoStartTimer.Start();
                 GlobalVars.time_start = GlobalVars.time_start - 1;
-                btStart.Text = MyStrings.btStart +"(" + GlobalVars.time_start.ToString() + ")";
+                btStart.Text = MyStrings.btStart + "(" + GlobalVars.time_start.ToString() + ")";
             }
-            
+
         }
 
         public void gpu_temp()
@@ -455,9 +545,9 @@ namespace Informer
                 GlobalVars.gpuList.Clear();
                 foreach (var hard in _pc.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
                 {
-                    
+
                     hard.Update();
-                                     
+
 
                     if (hard.HardwareType == HardwareType.GpuAti || hard.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
                     {
@@ -465,127 +555,127 @@ namespace Informer
                         GlobalVars.counts = GlobalVars.counts + 1;
                         GlobalVars.card += hard.Name + ",";
                         gpusList.Add(hard.Name);
-                        
+
                         foreach (var sensor in hard.Sensors)//ИДЕМ по сенсорам
                         {
 
-                            
-                                if (sensor.SensorType == SensorType.Clock)
-                                {//ЧАСТОТЫ
+
+                            if (sensor.SensorType == SensorType.Clock)
+                            {//ЧАСТОТЫ
 
 
-                                
+
                                 if (sensor.Name == "GPU Core")//ЯДРО
-                                    {
+                                {
 
-                                        GlobalVars.clock += sensor.Value.GetValueOrDefault() + ";";
-                                        clockk1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                    GlobalVars.clock += sensor.Value.GetValueOrDefault() + ";";
+                                    clockk1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
 
                                     gpusList.Add(Convert.ToString(clockk1));
 
                                     if (clockmin > clockk1)
-                                        {
-                                            clockmin = clockk1;
-                                        }
+                                    {
+                                        clockmin = clockk1;
+                                    }
 
 
                                 }
 
 
 
-                                    if (hard.HardwareType == HardwareType.GpuAti)
+                                if (hard.HardwareType == HardwareType.GpuAti)
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
                                     {
-                                        if (sensor.Name == "GPU Memory")//ПАМЯТЬ
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                        if (memorymin > mem1)
                                         {
-                                            GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
-                                            mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                            if (memorymin > mem1)
-                                            {
-                                                memorymin = mem1;
-                                            }
+                                            memorymin = mem1;
+                                        }
                                         gpusList.Add(Convert.ToString(mem1));
 
                                     }
 
-                                    }
-                                    else if (hard.HardwareType == HardwareType.GpuNvidia)
+                                }
+                                else if (hard.HardwareType == HardwareType.GpuNvidia)
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
                                     {
-                                        if (sensor.Name == "GPU Memory")//ПАМЯТЬ
-                                        {
-                                            GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
-                                            mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        mem1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                         gpusList.Add(Convert.ToString(mem1));
                                         if (memorymin > mem1)
-                                            {
-                                                memorymin = mem1;
-                                            }
+                                        {
+                                            memorymin = mem1;
                                         }
                                     }
-                                    else
-                                    {
-                                      
-                                    }
-
-
-
                                 }
-                                else if (sensor.SensorType == SensorType.Temperature)//Температура
+                                else
                                 {
 
-                              
+                                }
+
+
+
+                            }
+                            else if (sensor.SensorType == SensorType.Temperature)//Температура
+                            {
+
+
                                 GlobalVars.temp += sensor.Value.GetValueOrDefault() + ",";
                                 temp1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                 gpusList.Add(Convert.ToString(temp1));
-                              
-                                if (tempmin > temp1)
-                                    {
-                                        tempmin = temp1;
-                                    }
-                                    if (tempmax < temp1)
-                                    {
-                                        tempmax = temp1;
-                                    }
-                                }
-                                else if (sensor.SensorType == SensorType.Control)// FAN
-                                {
 
-                                    GlobalVars.fan += sensor.Value.GetValueOrDefault() + ",";
-                                    fan1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                if (tempmin > temp1)
+                                {
+                                    tempmin = temp1;
+                                }
+                                if (tempmax < temp1)
+                                {
+                                    tempmax = temp1;
+                                }
+                            }
+                            else if (sensor.SensorType == SensorType.Control)// FAN
+                            {
+
+                                GlobalVars.fan += sensor.Value.GetValueOrDefault() + ",";
+                                fan1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                 gpusList.Add(Convert.ToString(fan1));
                                 if (fanmin > fan1)
-                                    {
-                                        fanmin = fan1;
-                                    }
-                                    if (fanmax < fan1)
-                                    {
-                                        fanmax = fan1;
-                                    }
-
+                                {
+                                    fanmin = fan1;
+                                }
+                                if (fanmax < fan1)
+                                {
+                                    fanmax = fan1;
                                 }
 
+                            }
 
-                                else if (sensor.SensorType == SensorType.Load)//LOAD
+
+                            else if (sensor.SensorType == SensorType.Load)//LOAD
+                            {
+                                if (sensor.Name == "GPU Core")
                                 {
-                                    if (sensor.Name == "GPU Core")
-                                    {
-                                        GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
-                                        load1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                    GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
+                                    load1 = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                                     gpusList.Add(Convert.ToString(load1));
 
 
                                     if (loadmin > load1)
-                                        {
-                                            loadmin = load1;
-                                        }
-                                    }
-                                    else if (sensor.Name == "GPU Memory Controller")
                                     {
-                                       
+                                        loadmin = load1;
                                     }
+                                }
+                                else if (sensor.Name == "GPU Memory Controller")
+                                {
 
                                 }
 
-                                                    
+                            }
+
+
 
 
                             //Проверки на перезагрузку
@@ -688,7 +778,7 @@ namespace Informer
                             {
                                 if (memorymin < GlobalVars.mem_min)
                                 {
-                                   m_count = 1;
+                                    m_count = 1;
                                 }
                                 else
                                 {
@@ -700,7 +790,7 @@ namespace Informer
                         GlobalVars.gpuList.Add(GlobalVars.counts, gpusList);
                     }
 
-                   
+
                 }
 
                 //ПРОВЕРКА
@@ -749,7 +839,7 @@ namespace Informer
                     }
                     else
                     {
-                       
+
                         GlobalVars.timer_t_min = -100;
                         labelStatusTempMin.Text = "OK";
                         labelStatusTempMin.ForeColor = Color.Green;
@@ -797,7 +887,7 @@ namespace Informer
                     if (r_count > 0)
                     {
                         ReloadMinerTimer.Enabled = true;
-                      
+
                         labelStatusReloadFile.Text = MyStrings.labelStatusTempMin;
                         labelStatusReloadFile.ForeColor = Color.Red;
                         labelCounterReloadFile.Text = GlobalVars.timer_r_min.ToString();
@@ -809,7 +899,7 @@ namespace Informer
                         ReloadMinerTimer.Enabled = false;
                         GlobalVars.timer_r_min = -100;
                         labelStatusReloadFile.Text = "ОК";
-                        labelStatusReloadFile.ForeColor= Color.Green;
+                        labelStatusReloadFile.ForeColor = Color.Green;
                         labelCounterReloadFile.Text = "";
                     }
 
@@ -986,73 +1076,74 @@ namespace Informer
                 _error.writeLogLine("Get sensors: " + ex.Message, "error");
             }
         }
-        public void SendData()
+
+        //public void SendData()
+        public static async Task SendData()
         {
+           
 
-            
             try
+            {
+
+                GlobalVars.upTime = UpTime.ToString(@"dd\.hh\:mm\:ss");
+
+
+                //labelTest.Text = "";
+                /*
+                int i = 0;
+                foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
                 {
-
-                    if (!string.IsNullOrEmpty(GlobalVars.token))
+                    labelTest.Text = "";
+                    int j = 0;
+                    foreach (String p in keyValue.Value)
                     {
 
-                    GlobalVars.upTime = UpTime.ToString(@"dd\.hh\:mm\:ss");
-
-                    //labelTest.Text = "";
-                    /*
-                    int i = 0;
-                    foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
-                    {
-                        labelTest.Text = "";
-                        int j = 0;
-                        foreach (String p in keyValue.Value)
+                        switch (j)
                         {
-                            
-                            switch (j)
-                            {
-                                case 0:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/name", Encoding.UTF8.GetBytes(p));
-                                    break;
-                                case 1:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/temp", Encoding.UTF8.GetBytes(p));
-                                    break;
-                                case 2:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/core", Encoding.UTF8.GetBytes(p));
-                                    break;
-                                case 3:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/memory", Encoding.UTF8.GetBytes(p));
-                                    break;
-                                case 4:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/load", Encoding.UTF8.GetBytes(p));
-                                    break;
-                                case 5:
-                                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpu" + i + "/fan", Encoding.UTF8.GetBytes(p));
-                                    break;
+                            case 0:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/name", Encoding.UTF8.GetBytes(p));
+                                break;
+                            case 1:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/temp", Encoding.UTF8.GetBytes(p));
+                                break;
+                            case 2:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/core", Encoding.UTF8.GetBytes(p));
+                                break;
+                            case 3:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/memory", Encoding.UTF8.GetBytes(p));
+                                break;
+                            case 4:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/load", Encoding.UTF8.GetBytes(p));
+                                break;
+                            case 5:
+                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/fan", Encoding.UTF8.GetBytes(p));
+                               // GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/common/uptime/" + i + "/fan", Encoding.UTF8.GetBytes(p));
+                                break;
 
 
-
-
-                            }
-                            
-                            // Console.WriteLine(p.Name);
-                            labelTest.Text += " " + p;
-                            j++;
 
 
                         }
-                       
 
-                         //   GlobalVars.mqttClient.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("SEND: " + labelTest.Text));
-                        
-                        labelTest.Text = labelTest.Text + "\n";
-                        i++;
-                        
+                        // Console.WriteLine(p.Name);
+                        labelTest.Text += " " + p;
+                        j++;
+
+
                     }
-                    */
 
-                    /*
-                    GlobalVars.json_send = _http.GetContent(GlobalVars.host +
-                        "/api.php?token=" + GlobalVars.token +
+
+                     //   GlobalVars.mqttClient.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("SEND: " + labelTest.Text));
+
+                    labelTest.Text = labelTest.Text + "\n";
+                    i++;
+
+                }
+                */
+
+                var send_data = new MqttApplicationMessageBuilder()
+                     .WithTopic("devices/" + GlobalVars.token + "/data")
+                     .WithPayload("token=" + GlobalVars.token +
                         "&gpu=" + GlobalVars.card +
                         "&temp=" + GlobalVars.temp +
                         "&fan=" + GlobalVars.fan +
@@ -1061,105 +1152,26 @@ namespace Informer
                         "&load=" + GlobalVars.load +
                         "&clock=" + GlobalVars.clock +
                         "&mem=" + GlobalVars.mem +
-                        "&upTime=" + GlobalVars.upTime
-                       
-                       );
-                    */
+                        "&upTime=" + GlobalVars.upTime)
+                    .WithExactlyOnceQoS()
+                    .WithRetainFlag()
+                    .Build();
 
-                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/data", Encoding.UTF8.GetBytes("token="+ GlobalVars.token +
-                        "&gpu=" + GlobalVars.card +
-                        "&temp=" + GlobalVars.temp +
-                        "&fan=" + GlobalVars.fan +
-                        "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
-                        "&v=" + GlobalVars.versions +
-                        "&load=" + GlobalVars.load +
-                        "&clock=" + GlobalVars.clock +
-                        "&mem=" + GlobalVars.mem +
-                        "&upTime=" + GlobalVars.upTime
-                                                ));
-                   
+                 await   GlobalVars.mqttClient.PublishAsync(send_data);
 
+                
 
+            }
+            catch (Exception ex)
+            {
+                 
+                Debug.WriteLine("Send data: " + ex.Message + GlobalVars.json_send);
 
-                }
-                   
-                   
-                    /*
+            }
 
-
-                    if (!string.IsNullOrWhiteSpace(GlobalVars.json_send))
-                    {
-
-
-                        //var interval = JsonConvert.DeserializeObject<ApiResponse>(File.ReadAllText("json.json"));
-                        var response = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                   // MessageBox.Show(this, GlobalVars.json_send, "Message", MessageBoxButtons.OK, MessageBoxIcon.Question);
-                      int test = response.settings.interval;
-                        string test2 = test.ToString();
-
-                        // _log.writeLogLine("Интервал " + test2, "log");
-
-                        SendDataTimer.Interval = response.settings.interval * 1000;
-
-
-
-
-                        if (GlobalVars.token != response.token && !string.IsNullOrEmpty(response?.token))
-                        {
-
-                            // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
-                            //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                            GlobalVars.token = response.token;
-                            _manager.WritePrivateString("main", "token", GlobalVars.token);
-                            tbToken.Text = GlobalVars.token;
-
-                        }
-
-                        if (GlobalVars.name != response.settings.name && !string.IsNullOrEmpty(response.settings?.name))
-                        {
-
-                            // _log.writeLogLine("Токен получен " + GlobalVars.json_send, "log");
-                            //  var token = JsonConvert.DeserializeObject<ApiResponse>(GlobalVars.json_send);
-                            GlobalVars.name = response.settings.name;
-                            _manager.WritePrivateString("main", "name", GlobalVars.name);
-                            tbRigName.Text = GlobalVars.name;
-
-                        }
-
-                        InformationLabel.Text = "Authorization OK";
-                        InformationLabel.ForeColor = Color.Green;
-                       
-                    }
-                    else
-                    {
-                        if (GlobalVars.InternetIsActive == true)
-                        {
-
-                         
-                            InformationLabel.Text = "Authorization failed";
-                            InformationLabel.ForeColor = Color.Red;
-
-                        }
-
-                    }
-
-                    */
-
-
-
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    _error.writeLogLine("Send data: " + ex.Message + GlobalVars.json_send, "error");
-
-                }
-                                   
         }
 
-        
+    
         
 
 
@@ -1169,7 +1181,7 @@ namespace Informer
             {
                 try
                 {
-                    string v = _manager.GetPrivateString("main", "version");
+                    string v = GlobalVars._manager.GetPrivateString("main", "version");
                     string pack = _http.GetContent(GlobalVars.host + "/api/?method=version");
                     VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
                     string ver = m.version;
@@ -1270,6 +1282,8 @@ namespace Informer
         //send event message
         public void Message(string msg)
         {
+            
+            
             try
             {
                 _http.GetContent(
@@ -1438,87 +1452,81 @@ namespace Informer
 
         private void BtStartClick(object sender, EventArgs e)
         {
+
+
             
 
-            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-          
 
-           // string name = tbRigName.Text;
+
+            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+
+
+            // string name = tbRigName.Text;
             //string token = tbToken.Text;
 
             if (!string.IsNullOrEmpty(tbToken.Text))
             {
 
-
-                if (GlobalVars.mqttClient.IsConnected)
-                {
-                    GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+                MqttConnect();
 
 
-                }
-                else if (!GlobalVars.mqttClient.IsConnected)
-                {
-
-                    MqttConnect();
-
-
-                    if (GlobalVars.mqttClient.IsConnected)
-                    {
-
-                        _log.writeLogLine("Informer is started ", "log");
-                        Message("Informer Started!");
-                        _manager.WritePrivateString("main", "token", tbToken.Text);
-                        GetTempretureTimer.Enabled = true;
-                        // PingInternetTimer.Start();
-                        SendDataTimer.Enabled = true;
-                        btStart.Enabled = false;
-                        btStop.Visible = true;
-                        AutoStartTimer.Enabled = false;
-                        GlobalVars.token = tbToken.Text;
-                        GlobalVars.name = tbRigName.Text;
-                        gpu_temp();
-                        //SendData();
-                        GlobalVars.timeOnline = 0;
-                        //InformationLabel.Text = "Запущен";
-                        //InformationLabel.ForeColor = Color.Green;
-                        tbToken.ReadOnly = true;
-
-                    }
-                    else {
-
-                        _log.writeLogLine("Informer is started ", "log");
-                        GetTempretureTimer.Enabled = true;
-                        // PingInternetTimer.Start();
-                        SendDataTimer.Enabled = false;
-                        btStart.Enabled = false;
-                        btStop.Visible = true;
-                        AutoStartTimer.Enabled = false;
-                        GlobalVars.token = tbToken.Text;
-                        GlobalVars.name = tbRigName.Text;
-                        gpu_temp();
-                        //SendData();
-                        GlobalVars.timeOnline = 0;
-                        //InformationLabel.Text = "Запущен";
-                        //InformationLabel.ForeColor = Color.Green;
-                        tbToken.ReadOnly = true;
-                    }
-
-
+                    _log.writeLogLine("Informer is started ", "log");
+                    Message("Informer Started!");
+                    GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
+                    GetTempretureTimer.Enabled = true;
+                    // PingInternetTimer.Start();
+                    SendDataTimer.Enabled = true;
+                    btStart.Enabled = false;
+                    btStop.Visible = true;
+                    AutoStartTimer.Enabled = false;
+                    GlobalVars.token = tbToken.Text;
+                    GlobalVars.name = tbRigName.Text;
+                    gpu_temp();
+                  //  SendData();
+                    GlobalVars.timeOnline = 0;
+                    //InformationLabel.Text = "Запущен";
+                    //InformationLabel.ForeColor = Color.Green;
+                    tbToken.ReadOnly = true;
 
                 }
+            /*
+                else
+                {
+
+                    _log.writeLogLine("Informer is started ", "log");
+                    GetTempretureTimer.Enabled = true;
+                    // PingInternetTimer.Start();
+                    SendDataTimer.Enabled = false;
+                    btStart.Enabled = false;
+                    btStop.Visible = true;
+                    AutoStartTimer.Enabled = false;
+                    GlobalVars.token = tbToken.Text;
+                    GlobalVars.name = tbRigName.Text;
+                    gpu_temp();
+                    SendData();
+                    GlobalVars.timeOnline = 0;
+                    //InformationLabel.Text = "Запущен";
+                    //InformationLabel.ForeColor = Color.Green;
+                    tbToken.ReadOnly = true;
+                }
+
+            */
+
+            
 
 
 
-                
-                
-            }
-            else {
+
+
+
+            else
+            {
                 /*
                 if (string.IsNullOrEmpty(tbToken.Text))
                 {
 
 
-                    _manager.WritePrivateString("main", "token", tbToken.Text);
+                    GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
                     GetTempretureTimer.Enabled = true;
 
                     SendDataTimer.Enabled = true;
@@ -1554,7 +1562,7 @@ namespace Informer
 
                 }
                 */
-             MessageBox.Show("Enter the token!");
+                MessageBox.Show("Enter the token!");
             }
               
           
@@ -1681,7 +1689,7 @@ namespace Informer
 
         private void SendDataTimerTick(object sender, EventArgs e)
         {
-            СheckForMQTT();
+            //СheckForMQTT();
             SendData();
             
         }
@@ -1948,7 +1956,7 @@ namespace Informer
 private void tbRigName_TextChanged(object sender, EventArgs e)
 {
    GlobalVars.name = tbRigName.Text;
-   _manager.WritePrivateString("main", "name", GlobalVars.name);
+   GlobalVars._manager.WritePrivateString("main", "name", GlobalVars.name);
 }
 
 */
@@ -1956,7 +1964,7 @@ private void tbRigName_TextChanged(object sender, EventArgs e)
 private void tbSecret_TextChanged(object sender, EventArgs e)
 {
    GlobalVars.secret = tbSecret.Text;
-   _manager.WritePrivateString("main", "secret", GlobalVars.secret);
+   GlobalVars._manager.WritePrivateString("main", "secret", GlobalVars.secret);
 }
 
     */
@@ -1964,7 +1972,7 @@ private void tbSecret_TextChanged(object sender, EventArgs e)
 private void tbEmail_TextChanged(object sender, EventArgs e)
 {
    GlobalVars.email = tbEmail.Text;
-   _manager.WritePrivateString("main", "email", GlobalVars.email);
+   GlobalVars._manager.WritePrivateString("main", "email", GlobalVars.email);
 }
 
     */
@@ -1972,7 +1980,7 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
         private void tbToken_TextChanged(object sender, EventArgs e)
         {
             GlobalVars.token = tbToken.Text;
-            _manager.WritePrivateString("main", "token", GlobalVars.token);
+            GlobalVars._manager.WritePrivateString("main", "token", GlobalVars.token);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -2033,183 +2041,182 @@ private void tbEmail_TextChanged(object sender, EventArgs e)
 
             
         }
+       
 
-        Action<string, string> ReceiveAction;
-        void client_MqttMsgPublishReceived(object sender, MqttMsgPublishEventArgs e)
-        {
-            ReceiveAction = Receive;
-            try
-            {
-                this.BeginInvoke(ReceiveAction, Encoding.UTF8.GetString(e.Message), e.Topic);
-            }
-            catch { };
-        }
 
-        void Receive(string message, string topic)
+/*
+
+    //async Task
+    public void ReceiveOld(string payload, string topic)
+    {
+
+        if (topic == "devices/" +GlobalVars.token+ "/commands")
         {
 
-            if (topic == "devices/" +GlobalVars.token+ "/commands")
+           // Debug.WriteLine(message);
+            var response = JsonConvert.DeserializeObject<ApiResponse>(payload);
+            string command = response.command;
+            switch (command)
             {
 
-                Debug.WriteLine(message);
-                var response = JsonConvert.DeserializeObject<ApiResponse>(message);
-                string command = response.command;
-                switch (command)
-                {
+                case "reboot":
 
-                    case "reboot":
-                     
-                        Message("Informer Reboot from Allminer.ru!");
-                        Process psiwer;
-                        psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
-                        psiwer.Close();
-                        break;
+                    Message("Informer Reboot from Allminer.ru!");
+                    Process psiwer;
+                    psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
+                    psiwer.Close();
+                    break;
 
-                    case "settings":
-                        try
-                        {
-                            //write timers to ini
-                            GlobalVars.time_temp_min = response.Params.timers.temp_min;
-                            _manager.WritePrivateString("main",nameof(GlobalVars.time_temp_min), Convert.ToString(response.Params.timers.temp_min));
+                case "settings":
+                    try
+                    {
+                        //write timers to ini
+                        GlobalVars.time_temp_min = response.Params.timers.temp_min;
+                        GlobalVars._manager.WritePrivateString("main",nameof(GlobalVars.time_temp_min), Convert.ToString(response.Params.timers.temp_min));
 
-                            GlobalVars.time_temp_max = response.Params.timers.temp_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_temp_max), Convert.ToString(response.Params.timers.temp_max));
+                        GlobalVars.time_temp_max = response.Params.timers.temp_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_temp_max), Convert.ToString(response.Params.timers.temp_max));
 
-                            GlobalVars.time_fan_min = response.Params.timers.fan_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_fan_min), Convert.ToString(response.Params.timers.fan_min));
+                        GlobalVars.time_fan_min = response.Params.timers.fan_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_fan_min), Convert.ToString(response.Params.timers.fan_min));
 
-                            GlobalVars.time_fan_max = response.Params.timers.fan_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_fan_max), Convert.ToString(response.Params.timers.fan_max));
+                        GlobalVars.time_fan_max = response.Params.timers.fan_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_fan_max), Convert.ToString(response.Params.timers.fan_max));
 
-                            GlobalVars.time_load_GPU_min = response.Params.timers.load_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_min), Convert.ToString(response.Params.timers.load_min));
+                        GlobalVars.time_load_GPU_min = response.Params.timers.load_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_min), Convert.ToString(response.Params.timers.load_min));
 
-                            GlobalVars.time_load_GPU_max = response.Params.timers.load_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
+                        GlobalVars.time_load_GPU_max = response.Params.timers.load_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_load_GPU_max), Convert.ToString(response.Params.timers.load_max));
 
-                            GlobalVars.time_clock_min = response.Params.timers.clock_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_clock_min), Convert.ToString(response.Params.timers.clock_min));
+                        GlobalVars.time_clock_min = response.Params.timers.clock_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_clock_min), Convert.ToString(response.Params.timers.clock_min));
 
 
-                            GlobalVars.time_clock_max = response.Params.timers.clock_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_clock_max), Convert.ToString(response.Params.timers.clock_max));
+                        GlobalVars.time_clock_max = response.Params.timers.clock_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_clock_max), Convert.ToString(response.Params.timers.clock_max));
 
-                            GlobalVars.time_mem_min = response.Params.timers.mem_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_mem_min), Convert.ToString(response.Params.timers.mem_min));
+                        GlobalVars.time_mem_min = response.Params.timers.mem_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_mem_min), Convert.ToString(response.Params.timers.mem_min));
 
-                            GlobalVars.time_mem_max = response.Params.timers.mem_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_mem_max), Convert.ToString(response.Params.timers.mem_max));
+                        GlobalVars.time_mem_max = response.Params.timers.mem_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_mem_max), Convert.ToString(response.Params.timers.mem_max));
 
-                            GlobalVars.time_lost_gpu = response.Params.timers.lost_gpu;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_lost_gpu), Convert.ToString(response.Params.timers.lost_gpu));
+                        GlobalVars.time_lost_gpu = response.Params.timers.lost_gpu;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_lost_gpu), Convert.ToString(response.Params.timers.lost_gpu));
 
-                            GlobalVars.time_lost_inet = response.Params.timers.lost_inet;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_lost_inet), Convert.ToString(response.Params.timers.lost_inet));
+                        GlobalVars.time_lost_inet = response.Params.timers.lost_inet;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_lost_inet), Convert.ToString(response.Params.timers.lost_inet));
 
-                            //write reboots flag to ini
+                        //write reboots flag to ini
 
-                            GlobalVars.reboots_temp_min = response.Params.reboots.temp_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_temp_min), Convert.ToString(response.Params.reboots.temp_min));
+                        GlobalVars.reboots_temp_min = response.Params.reboots.temp_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_temp_min), Convert.ToString(response.Params.reboots.temp_min));
 
-                            GlobalVars.reboots_temp_max = response.Params.reboots.temp_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_temp_max), Convert.ToString(response.Params.reboots.temp_max));
+                        GlobalVars.reboots_temp_max = response.Params.reboots.temp_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_temp_max), Convert.ToString(response.Params.reboots.temp_max));
 
-                            GlobalVars.reboots_fan_min = response.Params.reboots.fan_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_fan_min), Convert.ToString(response.Params.reboots.fan_min));
+                        GlobalVars.reboots_fan_min = response.Params.reboots.fan_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_fan_min), Convert.ToString(response.Params.reboots.fan_min));
 
-                            GlobalVars.reboots_fan_max = response.Params.reboots.fan_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_fan_max), Convert.ToString(response.Params.reboots.fan_max));
+                        GlobalVars.reboots_fan_max = response.Params.reboots.fan_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_fan_max), Convert.ToString(response.Params.reboots.fan_max));
 
-                            GlobalVars.reboots_load_min = response.Params.reboots.load_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_load_min), Convert.ToString(response.Params.reboots.load_min));
+                        GlobalVars.reboots_load_min = response.Params.reboots.load_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_load_min), Convert.ToString(response.Params.reboots.load_min));
 
-                            GlobalVars.reboots_load_max = response.Params.reboots.load_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_load_max), Convert.ToString(response.Params.reboots.load_max));
+                        GlobalVars.reboots_load_max = response.Params.reboots.load_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_load_max), Convert.ToString(response.Params.reboots.load_max));
 
-                            GlobalVars.reboots_clock_min = response.Params.reboots.clock_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_clock_min), Convert.ToString(response.Params.reboots.clock_min));
+                        GlobalVars.reboots_clock_min = response.Params.reboots.clock_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_clock_min), Convert.ToString(response.Params.reboots.clock_min));
 
-                            GlobalVars.reboots_clock_max = response.Params.reboots.clock_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_clock_max), Convert.ToString(response.Params.reboots.clock_max));
+                        GlobalVars.reboots_clock_max = response.Params.reboots.clock_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_clock_max), Convert.ToString(response.Params.reboots.clock_max));
 
-                            GlobalVars.reboots_mem_min = response.Params.reboots.mem_min;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_mem_min), Convert.ToString(response.Params.reboots.mem_min));
+                        GlobalVars.reboots_mem_min = response.Params.reboots.mem_min;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_mem_min), Convert.ToString(response.Params.reboots.mem_min));
 
-                            GlobalVars.reboots_mem_max = response.Params.reboots.mem_max;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_mem_max), Convert.ToString(response.Params.reboots.mem_max));
+                        GlobalVars.reboots_mem_max = response.Params.reboots.mem_max;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_mem_max), Convert.ToString(response.Params.reboots.mem_max));
 
-                            GlobalVars.reboots_lost_gpu = response.Params.reboots.lost_gpu;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_lost_gpu), Convert.ToString(response.Params.reboots.lost_gpu));
+                        GlobalVars.reboots_lost_gpu = response.Params.reboots.lost_gpu;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_lost_gpu), Convert.ToString(response.Params.reboots.lost_gpu));
 
-                            GlobalVars.reboots_lost_inet = response.Params.reboots.lost_inet;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.reboots_lost_inet), Convert.ToString(response.Params.reboots.lost_inet));
+                        GlobalVars.reboots_lost_inet = response.Params.reboots.lost_inet;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.reboots_lost_inet), Convert.ToString(response.Params.reboots.lost_inet));
 
-                            //write data_ranges to ini
+                        //write data_ranges to ini
 
-                            GlobalVars.temp_min = response.Params.data_ranges.Temp[0];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.temp_min), Convert.ToString(response.Params.data_ranges.Temp[0]));
+                        GlobalVars.temp_min = response.Params.data_ranges.Temp[0];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.temp_min), Convert.ToString(response.Params.data_ranges.Temp[0]));
 
-                            GlobalVars.temp_max = response.Params.data_ranges.Temp[1];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.temp_max), Convert.ToString(response.Params.data_ranges.Temp[1]));
+                        GlobalVars.temp_max = response.Params.data_ranges.Temp[1];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.temp_max), Convert.ToString(response.Params.data_ranges.Temp[1]));
 
-                            GlobalVars.mem_min = response.Params.data_ranges.Mem[0];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.mem_min), Convert.ToString(response.Params.data_ranges.Mem[0]));
+                        GlobalVars.mem_min = response.Params.data_ranges.Mem[0];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.mem_min), Convert.ToString(response.Params.data_ranges.Mem[0]));
 
-                            GlobalVars.mem_max = response.Params.data_ranges.Mem[1];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.mem_max), Convert.ToString(response.Params.data_ranges.Mem[1]));
+                        GlobalVars.mem_max = response.Params.data_ranges.Mem[1];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.mem_max), Convert.ToString(response.Params.data_ranges.Mem[1]));
 
-                            GlobalVars.load_GPU_min = response.Params.data_ranges.Load[0];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.load_GPU_min), Convert.ToString(response.Params.data_ranges.Load[0]));
+                        GlobalVars.load_GPU_min = response.Params.data_ranges.Load[0];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.load_GPU_min), Convert.ToString(response.Params.data_ranges.Load[0]));
 
-                            GlobalVars.load_GPU_max = response.Params.data_ranges.Load[1];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.load_GPU_max), Convert.ToString(response.Params.data_ranges.Load[1]));
-
-
-                            GlobalVars.fan_min = response.Params.data_ranges.Fan[0];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.fan_min), Convert.ToString(response.Params.data_ranges.Fan[0]));
-
-                            GlobalVars.fan_max = response.Params.data_ranges.Fan[1];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.fan_max), Convert.ToString(response.Params.data_ranges.Fan[1]));
+                        GlobalVars.load_GPU_max = response.Params.data_ranges.Load[1];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.load_GPU_max), Convert.ToString(response.Params.data_ranges.Load[1]));
 
 
-                            GlobalVars.clock_min = response.Params.data_ranges.Clock[0];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.clock_min), Convert.ToString(response.Params.data_ranges.Clock[0]));
+                        GlobalVars.fan_min = response.Params.data_ranges.Fan[0];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.fan_min), Convert.ToString(response.Params.data_ranges.Fan[0]));
 
-                            GlobalVars.clock_max = response.Params.data_ranges.Clock[1];
-                            _manager.WritePrivateString("main", nameof(GlobalVars.clock_max), Convert.ToString(response.Params.data_ranges.Clock[1]));
-
-                            GlobalVars.name = response.Params.name;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
-                            tbRigName.Text = GlobalVars.name;
-
-                            GlobalVars.time_start = response.Params.interval;
-                            _manager.WritePrivateString("main", nameof(GlobalVars.time_start), Convert.ToString(response.Params.interval));
+                        GlobalVars.fan_max = response.Params.data_ranges.Fan[1];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.fan_max), Convert.ToString(response.Params.data_ranges.Fan[1]));
 
 
-                            SendDataTimer.Interval = response.Params.interval * 1000;
+                        GlobalVars.clock_min = response.Params.data_ranges.Clock[0];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.clock_min), Convert.ToString(response.Params.data_ranges.Clock[0]));
 
-                            
-                            
-                            //SendDataTimer.Interval = 2 * 1000;
+                        GlobalVars.clock_max = response.Params.data_ranges.Clock[1];
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.clock_max), Convert.ToString(response.Params.data_ranges.Clock[1]));
+
+                        GlobalVars.name = response.Params.name;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
+                        tbRigName.Text = GlobalVars.name;
+
+                        GlobalVars.time_start = response.Params.interval;
+                        GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_start), Convert.ToString(response.Params.interval));
 
 
-                        }
-                        catch (Exception ex)
-                        {
-                            _error.writeLogLine("Receive:" + ex.Message, "error_settings");
-                        
-                        }
+                        SendDataTimer.Interval = response.Params.interval * 1000;
 
-                        break;
 
-                }
 
-               
+                        //SendDataTimer.Interval = 2 * 1000;
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        _error.writeLogLine("Receive:" + ex.Message, "error_settings");
+
+                    }
+
+                    break;
+
             }
-            
+
 
         }
 
-
+    */
     }
+
+
+        
+
 }
+
+
+
+
