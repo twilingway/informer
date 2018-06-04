@@ -149,27 +149,38 @@ namespace Informer
 
                             //tbRigName.Text = GlobalVars.name;
 
-                            GlobalVars.time_start = response.Params.interval;
-                            GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.time_start), Convert.ToString(response.Params.interval));
+                            GlobalVars.autostart = response.Params.timers.autostart;
+                            GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.autostart), Convert.ToString(response.Params.timers.autostart));
+                                                                                  
+                            GlobalVars.interval = response.Params.interval;
 
-
-                            //SendDataTimer.Interval = response.Params.interval * 1000;
-
-
-
-                            //SendDataTimer.Interval = 2 * 1000;
 
 
                         }
                         catch (Exception ex)
                         {
 
-                            //  _error.writeLogLine("Receive:" + ex.Message, "error_settings");
+                         
+                        }
+
+                        break;
+
+
+                    case "interval":
+                        try
+                        {
+                            GlobalVars.interval = response.Params.interval;
+                        }
+                        catch (Exception ex)
+                        {
 
                         }
 
                         break;
-                
+
+
+
+
                 }
 
 

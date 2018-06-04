@@ -36,12 +36,12 @@ static class GlobalVars
     public static string card;
     public static string temp;
     public static string fan;
-    public static int mqttcheck = 0;
+    //public static int mqttcheck = 0;
 
     
     
 
-    public static int time_start;
+    public static int autostart;
     public static int start_timestamp;
     public static int timeOnline = -1;
     public static int reload_temp_min_file;
@@ -89,6 +89,7 @@ static class GlobalVars
     public static int time_mem_max;
     public static int time_lost_gpu;
     public static int time_lost_inet;
+    
 
     public static bool reboots_temp_min;
     public static bool reboots_temp_max;
@@ -115,6 +116,7 @@ static class GlobalVars
     public static int clock_min;
     public static int clock_max;
 
+    public static int interval;
 
 
     public static int time_count_GPU;
@@ -139,6 +141,8 @@ static class GlobalVars
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;
     public static bool InternetIsActive = false;
+    public static bool mqttIsConnect = false;
+
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
     public static Dictionary<int, List<string>> gpuList;
     //public static MqttClient mqttClient;

@@ -102,7 +102,7 @@ namespace Informer
                 GlobalVars.time_lost_inet = Convert.ToInt32(tbInternetOffSec.Text);
 
                 manager.WritePrivateString("main", "time_start", combTimeStart.Text);
-                GlobalVars.time_start = Convert.ToInt32(combTimeStart.Text);
+                GlobalVars.autostart = Convert.ToInt32(combTimeStart.Text);
 
                 
 
@@ -706,7 +706,7 @@ namespace Informer
         private void combTimeStart_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             manager.WritePrivateString("main", "time_start", combTimeStart.GetItemText(combTimeStart.SelectedItem));
-            int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.time_start);
+            int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.autostart);
             ZeroingOut();
            
         }

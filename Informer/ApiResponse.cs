@@ -92,7 +92,8 @@ namespace Informer
         public int mem_max { get; set; }
         public int lost_gpu { get; set; }
         public int lost_inet { get; set; }
-        
+        public int autostart { get; set; }
+
     }
 
     public class Reboots

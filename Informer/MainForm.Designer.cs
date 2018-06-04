@@ -441,10 +441,6 @@
             resources.ApplyResources(this.labelTest, "labelTest");
             this.labelTest.Name = "labelTest";
             // 
-            // GetEWBF_ZcashTimer
-            // 
-            this.GetEWBF_ZcashTimer.Tick += new System.EventHandler(this.GetEWBF_ZcashTimer_Tick);
-            // 
             // labelToken
             // 
             resources.ApplyResources(this.labelToken, "labelToken");
@@ -454,7 +450,6 @@
             // 
             resources.ApplyResources(this.tbToken, "tbToken");
             this.tbToken.Name = "tbToken";
-            this.tbToken.TextChanged += new System.EventHandler(this.tbToken_TextChanged);
             // 
             // btExit
             // 
