@@ -17,6 +17,7 @@ using OpenHardwareMonitor.Hardware;
 using System.IO;
 using MQTTnet.Client;
 using MQTTnet;
+using System.Threading;
 //using uPLibrary.Networking.M2Mqtt;
 //using uPLibrary.Networking.M2Mqtt.Messages;
 static class GlobalVars
@@ -27,12 +28,11 @@ static class GlobalVars
  
     public static string name;
     public static string token;
-    public static Boolean token_status;
     public static string upTime;
-    public static string json_send;
+    //public static string json_send;
     //public static string mqttsetparams;
     public static string versions;
-    public static string wallet;
+    //public static string wallet;
     public static string card;
     public static string temp;
     public static string fan;
@@ -148,9 +148,11 @@ static class GlobalVars
     //public static MqttClient mqttClient;
     public static string fullPath = Application.StartupPath.ToString();
     public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
-    public static IMqttClientOptions options;
+    //public static IMqttClientOptions options;
     public static MqttFactory factory = new MqttFactory();
     public static IMqttClient mqttClient;
+    public static CancellationTokenSource cancelTokenSource;
+    public static bool tokenMqtt = false;
 
 
 

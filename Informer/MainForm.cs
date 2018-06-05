@@ -29,6 +29,7 @@ using MQTTnet.Protocol;
 using MQTTnet.Server;
 using MqttClientConnectedEventArgs = MQTTnet.Client.MqttClientConnectedEventArgs;
 using MqttClientDisconnectedEventArgs = MQTTnet.Client.MqttClientDisconnectedEventArgs;
+using System.Threading;
 
 namespace Informer
 {
@@ -44,10 +45,11 @@ namespace Informer
         private Form f2;
 
         
+        
 
         public MainForm()
         {
-
+            
 
             GlobalVars.gpuList = new Dictionary<int, List<string>>();
 
@@ -59,9 +61,10 @@ namespace Informer
 
 
             InitializeComponent();
-          
 
-          
+
+
+            
             GlobalVars._manager.WritePrivateString("main", "version", "1.3.9");
 
             try
@@ -97,23 +100,6 @@ namespace Informer
             f2 = new SettingsForm();
 
 
-
-            // Create TCP based options using the builder.
-            GlobalVars.options = new MqttClientOptionsBuilder()
-          
-                .WithClientId(GlobalVars.token)
-                .WithTcpServer("allminer.ru", 1883)
-                .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
-                .WithCredentials(GlobalVars.token, GlobalVars.token)
-                //.WithTls()
-                .WithCleanSession(true)
-                .Build();
-
-            // Create a new MQTT client.
-            // GlobalVars.factory = new MqttFactory();
-            GlobalVars.mqttClient = GlobalVars.factory.CreateMqttClient();
-            // var receive = new Receive();
-
             bool start = false;
 
             if (!string.IsNullOrEmpty(GlobalVars.token))
@@ -146,146 +132,183 @@ namespace Informer
 
         }
 
-    
-        public static async Task MqttConnect()
+        /*
+            public static async Task MqttConnect()
 
-        {
-            if (!GlobalVars.mqttClient.IsConnected)
             {
-                try
+
+
+                if (!mqttClient.IsConnected)
                 {
-
-                    GlobalVars.mqttClient.ApplicationMessageReceived += (s, e) =>
-                    {
-                        Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
-                        Debug.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
-                        Debug.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-                        Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
-                        Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
-
-                        CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
-
-                                  };
-
-
-                    GlobalVars.mqttClient.Connected += async (s, e) =>
-                    {
-                        await GlobalVars.mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
-                    };
-
-                     GlobalVars.mqttClient.Disconnected += async (s, e) =>
-                        {
-                            Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
-                            await Task.Delay(TimeSpan.FromSeconds(5));
-
-                            if (GlobalVars.mqttIsConnect)
-                            {
-                                try
-                                {
-                                    await GlobalVars.mqttClient.ConnectAsync(GlobalVars.options);
-                                }
-                                catch
-                                {
-                                    Debug.WriteLine("### RECONNECTING FAILED ###");
-                                }
-                            }
-                        };
-
-                   
-
 
 
                     try
                     {
-                        await GlobalVars.mqttClient.ConnectAsync(GlobalVars.options);
-                       
-                        if (GlobalVars.mqttClient.IsConnected)
-                        {
-                            Debug.WriteLine("IsConnected: " + GlobalVars.mqttClient.IsConnected);
-                            //  GlobalVars.token_status = true;
-                           
-                            SendData();
 
-     
-                        }
-                        
-                        // InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-                        // InformationLabel.ForeColor = Color.Red;
+
+
+                        mqttClient.ApplicationMessageReceived += (s, e) =>
+                        {
+                            Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
+                            Debug.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
+                            Debug.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+                            Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
+                            Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
+
+                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
+
+                                      };
+
+
+
+
+                        mqttClient.Connected += async (s, e) =>
+                        {
+
+                            await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
+                        };
+
+                        mqttClient.Disconnected += async (s, e) =>
+                            {
+                                Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
+                                await Task.Delay(TimeSpan.FromSeconds(5));
+
+                                if (GlobalVars.mqttIsConnect)
+                                {
+                                    try
+                                    {
+                                        await mqttClient.ConnectAsync(GlobalVars.options);
+                                    }
+                                    catch
+                                    {
+                                        Debug.WriteLine("### RECONNECTING FAILED ###");
+                                    }
+                                }
+                            };
+
+
+
 
 
                         try
                         {
-                            var message = new MqttApplicationMessageBuilder()
-                            .WithTopic("devices/" + GlobalVars.token + "/init")
-                            .WithPayload("1")
-                            .WithExactlyOnceQoS()
-                            .WithRetainFlag()
-                            .Build();
+                            await mqttClient.ConnectAsync(GlobalVars.options);
 
-                            await GlobalVars.mqttClient.PublishAsync(message);
+                            if (mqttClient.IsConnected)
+                            {
+                                Debug.WriteLine("IsConnected: " + mqttClient.IsConnected);
+                                //  GlobalVars.token_status = true;
+
+                                SendData();
+
+
+                                try
+                                {
+                                    var message = new MqttApplicationMessageBuilder()
+                                    .WithTopic("devices/" + GlobalVars.token + "/init")
+                                    .WithPayload("1")
+                                    .WithAtMostOnceQoS()
+                                    .WithRetainFlag()
+                                    .Build();
+
+                                    await mqttClient.PublishAsync(message);
+
+                                }
+                                catch (Exception e)
+                                {
+                                    Debug.WriteLine("PublishFailed: " + e);
+
+                                }
+
+
+                            }
+
+                            // InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                            // InformationLabel.ForeColor = Color.Red;
+
+
+
+
+                        }
+
+                        catch (MQTTnet.Adapter.MqttConnectingFailedException e)
+                        {
+
+                            Debug.WriteLine("AuthorizationFailed: " + e);
+                            //InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                            //InformationLabel.ForeColor = Color.Red;
 
                         }
                         catch (Exception e)
                         {
-                            Debug.WriteLine("PublishFailed: " + e);
+                            mqttClient.DisconnectAsync();
 
+                            Debug.WriteLine("MqttConnectError2: " + e);
+                            GlobalVars.mqttIsConnect = false;
                         }
 
-                    }
 
-                    catch (MQTTnet.Adapter.MqttConnectingFailedException e)
-                    {
-
-                        Debug.WriteLine("AuthorizationFailed: " + e);
-                        //InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-                        //InformationLabel.ForeColor = Color.Red;
-                        GlobalVars.token_status = false;
 
                     }
+
                     catch (Exception e)
                     {
+                      //  mqttClient.DisconnectAsync();
+                        Debug.WriteLine("MqttConnectError3: " + e);
 
-                        Debug.WriteLine("MqttConnectError: " + e);
+
                     }
-
-
-
                 }
 
-                catch (Exception e)
-                {
 
-
-                }
             }
-           
 
-        }
-
-
-        
+    */
+        //static async void BtStopClick(object sender, EventArgs e)
         private void BtStopClick(object sender, EventArgs e)
         {
-
-            if (GlobalVars.token_status)
-            {
-               
-                _log.writeLogLine("Informer stopped", "log");
-                Message("Informer Stopped!");
-
-            }
-
-            GlobalVars.mqttIsConnect = false;
-            try
+            if (GlobalVars.mqttClient.IsConnected)
             {
                 GlobalVars.mqttClient.DisconnectAsync();
+            }
+            /*
+            try
+            {
+                MqttConnect.RunAsync(GlobalVars.cancelTokenSource.Token);
+                GlobalVars.cancelTokenSource.Cancel();
+            }
+            catch (OperationCanceledException ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            finally
+            {
+                GlobalVars.cancelTokenSource.Dispose();
+            }
+            */
+            //            MqttConnect.RunAsync(GlobalVars.tokenMqtt);
+
+            _log.writeLogLine("Informer stopped", "log");
+            Message("Informer Stopped!");
+
+            //SendDataTimer.
+            SendDataTimer.Enabled = false;
+            GetTempretureTimer.Enabled = false;
+            GlobalVars.mqttIsConnect = false;
+            
+           // MqttConnect.RunAsync.
+            /*
+           
+            try
+            {
+                mqttClient.DisconnectAsync();
                 Debug.WriteLine("### DISCONNECTED FROM SERVER STOP ###");
             }
             catch(Exception ex) {
                 Debug.WriteLine("### ERROR DISCONNECTED FROM SERVER ### " + ex);
             }
             
-
+            */
 
 
 
@@ -327,8 +350,8 @@ namespace Informer
 
         private void GetTempretureTimerTick(object sender, EventArgs e)
         {
-            
-            if (GlobalVars.mqttClient.IsConnected && GlobalVars.mqttIsConnect == false)
+
+            if (GlobalVars.mqttIsConnect == false)
             {
                 _log.writeLogLine("Informer is started ", "log");
                 Message("Informer Started!");
@@ -348,6 +371,10 @@ namespace Informer
                 //InformationLabel.ForeColor = Color.Green;
                 tbToken.ReadOnly = true;
                 GlobalVars.mqttIsConnect = true;
+            }
+            else if (GlobalVars.mqttIsConnect == false && GetTempretureTimer.Enabled == true)
+            {
+              //  MqttConnect();
             }
 
 
@@ -392,8 +419,9 @@ namespace Informer
            // Message("Informer Started!");
             //try
             // {
-            MqttConnect();
-            //   GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
+            MqttConnect.RunAsync();
+
+            //   mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
             // }
             // catch {
 
@@ -1028,23 +1056,23 @@ namespace Informer
                         switch (j)
                         {
                             case 0:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/name", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/name", Encoding.UTF8.GetBytes(p));
                                 break;
                             case 1:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/temp", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/temp", Encoding.UTF8.GetBytes(p));
                                 break;
                             case 2:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/core", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/core", Encoding.UTF8.GetBytes(p));
                                 break;
                             case 3:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/memory", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/memory", Encoding.UTF8.GetBytes(p));
                                 break;
                             case 4:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/load", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/load", Encoding.UTF8.GetBytes(p));
                                 break;
                             case 5:
-                                GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/fan", Encoding.UTF8.GetBytes(p));
-                               // GlobalVars.mqttClient.Publish("devices/" + GlobalVars.token + "/common/uptime/" + i + "/fan", Encoding.UTF8.GetBytes(p));
+                                mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/fan", Encoding.UTF8.GetBytes(p));
+                               // mqttClient.Publish("devices/" + GlobalVars.token + "/common/uptime/" + i + "/fan", Encoding.UTF8.GetBytes(p));
                                 break;
 
 
@@ -1060,7 +1088,7 @@ namespace Informer
                     }
 
 
-                     //   GlobalVars.mqttClient.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("SEND: " + labelTest.Text));
+                     //   mqttClient.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("SEND: " + labelTest.Text));
 
                     labelTest.Text = labelTest.Text + "\n";
                     i++;
@@ -1068,6 +1096,7 @@ namespace Informer
                 }
                 */
 
+                /*
                 var send_data = new MqttApplicationMessageBuilder()
                      .WithTopic("devices/" + GlobalVars.token + "/data")
                      .WithPayload("token=" + GlobalVars.token +
@@ -1084,21 +1113,21 @@ namespace Informer
                     .WithRetainFlag()
                     .Build();
 
-                await GlobalVars.mqttClient.PublishAsync(send_data);
+                await mqttClient.PublishAsync(send_data);
 
-
+                */
 
             }
             catch (MQTTnet.Exceptions.MqttCommunicationException ex)
             {
                // MqttConnect();
-                Debug.WriteLine("Send data: " + ex.Message + GlobalVars.json_send);
+             //   Debug.WriteLine("Send data: " + ex.Message + GlobalVars.json_send);
 
             }
             catch (Exception ex)
             {
 
-                Debug.WriteLine("Send data: " + ex.Message + GlobalVars.json_send);
+              //  Debug.WriteLine("Send data: " + ex.Message + GlobalVars.json_send);
             }
         }
 
@@ -1298,8 +1327,10 @@ namespace Informer
 
         private void BtStartClick(object sender, EventArgs e)
         {
+            GlobalVars.cancelTokenSource = new CancellationTokenSource();
+            //GlobalVars.tokenMqtt = GlobalVars.cancelTokenSource.Token;
 
-            
+
             GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
 
@@ -1309,7 +1340,7 @@ namespace Informer
             if (!string.IsNullOrEmpty(tbToken.Text))
             {
 
-                MqttConnect();
+                MqttConnect.RunAsync();
                 GetTempretureTimer.Enabled = true;
               
                 }
@@ -1653,8 +1684,7 @@ namespace Informer
           
             try
             {
-               // MqttStop();
-                
+                              
                     Properties.Settings.Default.Language = cbLocalize.SelectedValue.ToString();
                     Properties.Settings.Default.Save();
                     this.ShowInTaskbar = false;

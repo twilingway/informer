@@ -83,6 +83,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MqttConnect.cs" />
     <Compile Include="MyStrings.en-US.Designer.cs">
       <DependentUpon>MyStrings.en-US.resx</DependentUpon>
       <AutoGen>True</AutoGen>
