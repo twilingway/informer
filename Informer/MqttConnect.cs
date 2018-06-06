@@ -15,14 +15,7 @@ namespace Informer
 
         public static async Task RunAsync()
         {
-            //if (tokenMqtt)
-           // {
-            //    GlobalVars.mqttClient.DisconnectAsync();
-
-           // }
-          //  else
-          //  {
-
+          
 
                 var options = new MqttClientOptionsBuilder()
 
@@ -40,43 +33,7 @@ namespace Informer
 
 
 
-             //   CancellationTokenSource cts = new CancellationTokenSource();
-            /*
-                try
-                {
-                    Task t1 = FactorialAsync(cts.Token);
-                    Task t2 = Task.Run(() =>
-                    {
-                        Thread.Sleep(2000);
-                        cts.Cancel(); // отмена асинхронной операции
-                });
-                    await Task.WhenAll(t1, t2);
-                }
-                catch (OperationCanceledException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    cts.Dispose();
-                }
-
-            */
-                /*
-                return Task.Run(() =>
-                {
-                    tokenMqtt.ThrowIfCancellationRequested();
-                }, tokenMqtt);
-
-                */
-                // tokenMqtt.ThrowIfCancellationRequested();
-                /*
-                if (tokenMqtt.IsCancellationRequested)
-                {
-                    Debug.WriteLine("Операция прервана токеном");
-                    return;
-                }
-                */
+            
 
                 try
                 {
@@ -102,15 +59,14 @@ namespace Informer
                         await GlobalVars.mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
                     };
 
-
+                /*
                     GlobalVars.mqttClient.Disconnected += async (s, e) =>
                     {
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
 
                         await Task.Delay(TimeSpan.FromSeconds(5));
 
-                        //if (GlobalVars.mqttIsConnect)
-                        // {
+                       
                         try
                         {
                             await GlobalVars.mqttClient.ConnectAsync(options);
@@ -130,13 +86,14 @@ namespace Informer
                         {
                             Debug.WriteLine("### RECONNECTING FAILED ###");
                         }
-                        //}
+                       
                     };
-
+                    */
 
                     try
                     {
                         await GlobalVars.mqttClient.ConnectAsync(options);
+
 
                         var message = new MqttApplicationMessageBuilder()
                                    .WithTopic("devices/" + GlobalVars.token + "/init")
@@ -150,6 +107,7 @@ namespace Informer
                     catch (Exception exception)
                     {
                         Debug.WriteLine("### CONNECTING FAILED ###" + Environment.NewLine + exception);
+
                     }
 
 

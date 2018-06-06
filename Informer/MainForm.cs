@@ -267,9 +267,17 @@ namespace Informer
         //static async void BtStopClick(object sender, EventArgs e)
         private void BtStopClick(object sender, EventArgs e)
         {
-            if (GlobalVars.mqttClient.IsConnected)
+            try
             {
-                GlobalVars.mqttClient.DisconnectAsync();
+                if (GlobalVars.mqttClient.IsConnected)
+                {
+                    GlobalVars.mqttClient.DisconnectAsync();
+
+                }
+            }
+            catch (Exception ex) {
+
+
             }
             /*
             try
@@ -296,23 +304,8 @@ namespace Informer
             GetTempretureTimer.Enabled = false;
             GlobalVars.mqttIsConnect = false;
             
-           // MqttConnect.RunAsync.
-            /*
+          
            
-            try
-            {
-                mqttClient.DisconnectAsync();
-                Debug.WriteLine("### DISCONNECTED FROM SERVER STOP ###");
-            }
-            catch(Exception ex) {
-                Debug.WriteLine("### ERROR DISCONNECTED FROM SERVER ### " + ex);
-            }
-            
-            */
-
-
-
-            GetTempretureTimer.Enabled = false;
             AutoStartTimer.Enabled = false;
             AutoStartTimer.Stop();
             // PingInternetTimer.Stop();
@@ -350,21 +343,26 @@ namespace Informer
 
         private void GetTempretureTimerTick(object sender, EventArgs e)
         {
+            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
-            if (GlobalVars.mqttIsConnect == false)
+            if (GlobalVars.mqttClient.IsConnected && GlobalVars.mqttIsConnect == false)
             {
                 _log.writeLogLine("Informer is started ", "log");
                 Message("Informer Started!");
+                GlobalVars.token = tbToken.Text;
                 GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
-                GetTempretureTimer.Enabled = true;
-                // PingInternetTimer.Start();
                 SendDataTimer.Enabled = true;
+                gpu_temp();
+
+              
+                // PingInternetTimer.Start();
+
                 btStart.Enabled = false;
                 btStop.Visible = true;
                 AutoStartTimer.Enabled = false;
-                GlobalVars.token = tbToken.Text;
-                GlobalVars.name = tbRigName.Text;
-                gpu_temp();
+                //GlobalVars.token = tbToken.Text;
+                //GlobalVars.name = tbRigName.Text;
+                
                 //  SendData();
                 GlobalVars.timeOnline = 0;
                 //InformationLabel.Text = "Запущен";
@@ -372,11 +370,14 @@ namespace Informer
                 tbToken.ReadOnly = true;
                 GlobalVars.mqttIsConnect = true;
             }
-            else if (GlobalVars.mqttIsConnect == false && GetTempretureTimer.Enabled == true)
+            else if (!GlobalVars.mqttClient.IsConnected)
             {
-              //  MqttConnect();
+
+                MqttConnect.RunAsync();
+                GlobalVars.mqttIsConnect = false;
             }
 
+            
 
             try
             {
@@ -401,8 +402,11 @@ namespace Informer
 
         private void NextAutoStart_Tick(object sender, EventArgs e)
         {
+
+            MqttConnect.RunAsync();
             GetTempretureTimer.Enabled = true;
-            SendDataTimer.Enabled = true;
+
+            //SendDataTimer.Enabled = true;
             AutoStartTimer.Enabled = false;
             btStop.Visible = true;
             btStart.Enabled = false;
@@ -411,23 +415,9 @@ namespace Informer
             tbSecret.ReadOnly = true;
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
-            //InformationLabel.Text = "Запущен";
+            InformationLabel.Text = "Запущен";
             InformationLabel.ForeColor = Color.Green;
-            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
-            //labelTest.Text = GlobalVars.start_timestamp.ToString();
-            //gpu_temp();
-           // Message("Informer Started!");
-            //try
-            // {
-            MqttConnect.RunAsync();
-
-            //   mqttClient.Publish("devices/" + GlobalVars.token + "/init", Encoding.UTF8.GetBytes("1"));
-            // }
-            // catch {
-
-            // }
-            //SendData();
-
+          //  GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
             Hide();
 
 
@@ -1096,7 +1086,7 @@ namespace Informer
                 }
                 */
 
-                /*
+                
                 var send_data = new MqttApplicationMessageBuilder()
                      .WithTopic("devices/" + GlobalVars.token + "/data")
                      .WithPayload("token=" + GlobalVars.token +
@@ -1113,9 +1103,9 @@ namespace Informer
                     .WithRetainFlag()
                     .Build();
 
-                await mqttClient.PublishAsync(send_data);
+                await GlobalVars.mqttClient.PublishAsync(send_data);
 
-                */
+                
 
             }
             catch (MQTTnet.Exceptions.MqttCommunicationException ex)
@@ -1327,7 +1317,7 @@ namespace Informer
 
         private void BtStartClick(object sender, EventArgs e)
         {
-            GlobalVars.cancelTokenSource = new CancellationTokenSource();
+            //GlobalVars.cancelTokenSource = new CancellationTokenSource();
             //GlobalVars.tokenMqtt = GlobalVars.cancelTokenSource.Token;
 
 
@@ -1339,7 +1329,8 @@ namespace Informer
 
             if (!string.IsNullOrEmpty(tbToken.Text))
             {
-
+                GlobalVars.token = tbToken.Text;
+                tbToken.ReadOnly = true;
                 MqttConnect.RunAsync();
                 GetTempretureTimer.Enabled = true;
               
