@@ -360,21 +360,20 @@ namespace Informer
                 btStart.Enabled = false;
                 btStop.Visible = true;
                 AutoStartTimer.Enabled = false;
-                //GlobalVars.token = tbToken.Text;
-                //GlobalVars.name = tbRigName.Text;
-                
-                //  SendData();
+                              
                 GlobalVars.timeOnline = 0;
-                //InformationLabel.Text = "Запущен";
-                //InformationLabel.ForeColor = Color.Green;
                 tbToken.ReadOnly = true;
                 GlobalVars.mqttIsConnect = true;
+                InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
+                InformationLabel.ForeColor = Color.Green;
             }
             else if (!GlobalVars.mqttClient.IsConnected)
             {
-
+                InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                InformationLabel.ForeColor = Color.Red;
                 MqttConnect.RunAsync();
                 GlobalVars.mqttIsConnect = false;
+
             }
 
             
