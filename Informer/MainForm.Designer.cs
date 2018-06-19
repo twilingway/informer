@@ -54,7 +54,7 @@
             this.labelStatusTempMax = new System.Windows.Forms.Label();
             this.labelTimeWork2 = new System.Windows.Forms.Label();
             this.GPUFanMaxTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUFanMinTImer = new System.Windows.Forms.Timer(this.components);
+            this.GPUFanMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelCounterTempMax = new System.Windows.Forms.Label();
             this.labelTempMax = new System.Windows.Forms.Label();
             this.SendDataTimer = new System.Windows.Forms.Timer(this.components);
@@ -227,6 +227,7 @@
             // 
             resources.ApplyResources(this.labelStatusTempMax, "labelStatusTempMax");
             this.labelStatusTempMax.Name = "labelStatusTempMax";
+            this.labelStatusTempMax.Click += new System.EventHandler(this.labelStatusTempMax_Click);
             // 
             // labelTimeWork2
             // 
@@ -239,11 +240,11 @@
             this.GPUFanMaxTimer.Tag = "fan_max";
             this.GPUFanMaxTimer.Tick += new System.EventHandler(this.FanMaxTimerTick);
             // 
-            // GPUFanMinTImer
+            // GPUFanMinTimer
             // 
-            this.GPUFanMinTImer.Interval = 1000;
-            this.GPUFanMinTImer.Tag = "fan_min";
-            this.GPUFanMinTImer.Tick += new System.EventHandler(this.FanMinTimerTick);
+            this.GPUFanMinTimer.Interval = 1000;
+            this.GPUFanMinTimer.Tag = "fan_min";
+            this.GPUFanMinTimer.Tick += new System.EventHandler(this.FanMinTimerTick);
             // 
             // labelCounterTempMax
             // 
@@ -562,7 +563,7 @@
         private System.Windows.Forms.Label labelStatusTempMax;
         private System.Windows.Forms.Label labelTimeWork2;
         private System.Windows.Forms.Timer GPUFanMaxTimer;
-        private System.Windows.Forms.Timer GPUFanMinTImer;
+        private System.Windows.Forms.Timer GPUFanMinTimer;
         private System.Windows.Forms.Label labelCounterTempMax;
         private System.Windows.Forms.Label labelTempMax;
         private System.Windows.Forms.Timer SendDataTimer;

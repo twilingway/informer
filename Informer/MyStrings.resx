@@ -165,4 +165,10 @@
   <data name="labelInformationAuthorizationOK" xml:space="preserve">
     <value>Authorized</value>
   </data>
+  <data name="labelStatusTempOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="labelStatusFanOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

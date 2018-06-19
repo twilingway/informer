@@ -144,7 +144,7 @@ static class GlobalVars
     public static bool mqttIsConnect = false;
 
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
-    public static Dictionary<int, List<string>> gpuList;
+    public static Dictionary<int, List<string>> gpuList = new Dictionary<int, List<string>>();
     //public static MqttClient mqttClient;
     public static string fullPath = Application.StartupPath.ToString();
     public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
@@ -153,8 +153,8 @@ static class GlobalVars
     public static IMqttClient mqttClient;
     public static CancellationTokenSource cancelTokenSource;
     public static bool tokenMqtt = false;
-
-
+    public static Computer _pc = new Computer();
+    public static List<String> gpusList = new List<string>();
 
     //public static bool nice;
     //итд

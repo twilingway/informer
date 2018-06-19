@@ -125,7 +125,7 @@ namespace Informer
 
            // }
         }
-
+        /*
         static Task FactorialAsync(CancellationToken token)
         {
             return Task.Run(() =>
@@ -136,6 +136,7 @@ namespace Informer
                 
             }, token);
         }
+        */
 
     }
 }

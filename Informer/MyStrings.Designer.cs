@@ -151,6 +151,15 @@ namespace Informer {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на OK.
+        /// </summary>
+        internal static string labelStatusFanOK {
+            get {
+                return ResourceManager.GetString("labelStatusFanOK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Не все карты.
         /// </summary>
         internal static string labelStatusFellOffGPU {
@@ -201,6 +210,15 @@ namespace Informer {
         internal static string labelStatusTempMin {
             get {
                 return ResourceManager.GetString("labelStatusTempMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на OK.
+        /// </summary>
+        internal static string labelStatusTempOK {
+            get {
+                return ResourceManager.GetString("labelStatusTempOK", resourceCulture);
             }
         }
     }
