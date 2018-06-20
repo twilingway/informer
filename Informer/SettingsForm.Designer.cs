@@ -216,16 +216,8 @@
             // 
             this.combTimeStart.DisplayMember = "1";
             this.combTimeStart.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combTimeStart.FormattingEnabled = true;
-            this.combTimeStart.Items.AddRange(new object[] {
-            resources.GetString("combTimeStart.Items"),
-            resources.GetString("combTimeStart.Items1"),
-            resources.GetString("combTimeStart.Items2"),
-            resources.GetString("combTimeStart.Items3"),
-            resources.GetString("combTimeStart.Items4"),
-            resources.GetString("combTimeStart.Items5"),
-            resources.GetString("combTimeStart.Items6")});
             resources.ApplyResources(this.combTimeStart, "combTimeStart");
+            this.combTimeStart.FormattingEnabled = true;
             this.combTimeStart.Name = "combTimeStart";
             this.combTimeStart.SelectedIndexChanged += new System.EventHandler(this.combTimeStart_SelectedIndexChanged_1);
             // 
@@ -721,6 +713,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "SettingsForm";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SettingsForm_FormClosed);
+            this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);

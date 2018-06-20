@@ -22,6 +22,7 @@ namespace Informer
 
             try
             {
+              
                 GlobalVars.time_temp_min = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_temp_min"));
                 GlobalVars.time_temp_max = Convert.ToInt32(GlobalVars._manager.GetPrivateString("main", "time_temp_max"));
 
@@ -83,7 +84,7 @@ namespace Informer
             catch (Exception e)
             {
 
-               // _error.writeLogLine("InitFromIni: " + e.Message, "error");
+               Debug.WriteLine("InitFromIni: " + e.Message);
             }
 
         }

@@ -143,6 +143,9 @@
   <data name="&gt;&gt;btSave.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
+  <data name="tbTempMin.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tbTempMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>25, 82</value>
   </data>
@@ -163,6 +166,9 @@
   </data>
   <data name="&gt;&gt;tbTempMin.ZOrder" xml:space="preserve">
     <value>7</value>
+  </data>
+  <data name="tbTempMax.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbTempMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>25, 33</value>
@@ -187,6 +193,9 @@
   </data>
   <data name="cbTempMaxGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="cbTempMaxGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="cbTempMaxGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>25, 6</value>
@@ -446,6 +455,9 @@
   <data name="cbTempMinGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="cbTempMinGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="cbTempMinGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>25, 59</value>
   </data>
@@ -470,26 +482,8 @@
   <data name="&gt;&gt;cbTempMinGPU.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="combTimeStart.Items" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="combTimeStart.Items1" xml:space="preserve">
-    <value>30</value>
-  </data>
-  <data name="combTimeStart.Items2" xml:space="preserve">
-    <value>60</value>
-  </data>
-  <data name="combTimeStart.Items3" xml:space="preserve">
-    <value>120</value>
-  </data>
-  <data name="combTimeStart.Items4" xml:space="preserve">
-    <value>180</value>
-  </data>
-  <data name="combTimeStart.Items5" xml:space="preserve">
-    <value>240</value>
-  </data>
-  <data name="combTimeStart.Items6" xml:space="preserve">
-    <value>300</value>
+  <data name="combTimeStart.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="combTimeStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>183, 5</value>
@@ -565,6 +559,87 @@
   </data>
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="&gt;&gt;tbPath2.Name" xml:space="preserve">
+    <value>tbPath2</value>
+  </data>
+  <data name="&gt;&gt;tbPath2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbPath2.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;tbPath2.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;label8.Name" xml:space="preserve">
+    <value>label8</value>
+  </data>
+  <data name="&gt;&gt;label8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label8.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;label8.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btView2.Name" xml:space="preserve">
+    <value>btView2</value>
+  </data>
+  <data name="&gt;&gt;btView2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btView2.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;btView2.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label5.Name" xml:space="preserve">
+    <value>label5</value>
+  </data>
+  <data name="&gt;&gt;label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;tbReloadFileSec.Name" xml:space="preserve">
+    <value>tbReloadFileSec</value>
+  </data>
+  <data name="&gt;&gt;tbReloadFileSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbReloadFileSec.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;tbReloadFileSec.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 265</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>385, 183</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>39</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>7</value>
   </data>
   <data name="tbPath2.Location" type="System.Drawing.Point, System.Drawing">
     <value>104, 146</value>
@@ -686,36 +761,6 @@
   <data name="&gt;&gt;tbReloadFileSec.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 265</value>
-  </data>
-  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>385, 183</value>
-  </data>
-  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
-    <value>39</value>
-  </data>
-  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
-    <value>panel1</value>
-  </data>
-  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="tbTempMinSec.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 82</value>
-  </data>
-  <data name="tbTempMinSec.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 20</value>
-  </data>
-  <data name="tbTempMinSec.TabIndex" type="System.Int32, mscorlib">
-    <value>37</value>
-  </data>
   <data name="&gt;&gt;tbTempMinSec.Name" xml:space="preserve">
     <value>tbTempMinSec</value>
   </data>
@@ -727,15 +772,6 @@
   </data>
   <data name="&gt;&gt;tbTempMinSec.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="tbTempMaxSec.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 33</value>
-  </data>
-  <data name="tbTempMaxSec.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 20</value>
-  </data>
-  <data name="tbTempMaxSec.TabIndex" type="System.Int32, mscorlib">
-    <value>36</value>
   </data>
   <data name="&gt;&gt;tbTempMaxSec.Name" xml:space="preserve">
     <value>tbTempMaxSec</value>
@@ -770,8 +806,59 @@
   <data name="&gt;&gt;panel2.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
+  <data name="tbTempMinSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbTempMinSec.Location" type="System.Drawing.Point, System.Drawing">
+    <value>79, 82</value>
+  </data>
+  <data name="tbTempMinSec.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 20</value>
+  </data>
+  <data name="tbTempMinSec.TabIndex" type="System.Int32, mscorlib">
+    <value>37</value>
+  </data>
+  <data name="&gt;&gt;tbTempMinSec.Name" xml:space="preserve">
+    <value>tbTempMinSec</value>
+  </data>
+  <data name="&gt;&gt;tbTempMinSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbTempMinSec.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;tbTempMinSec.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbTempMaxSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbTempMaxSec.Location" type="System.Drawing.Point, System.Drawing">
+    <value>79, 33</value>
+  </data>
+  <data name="tbTempMaxSec.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 20</value>
+  </data>
+  <data name="tbTempMaxSec.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="&gt;&gt;tbTempMaxSec.Name" xml:space="preserve">
+    <value>tbTempMaxSec</value>
+  </data>
+  <data name="&gt;&gt;tbTempMaxSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbTempMaxSec.Parent" xml:space="preserve">
+    <value>panel2</value>
+  </data>
+  <data name="&gt;&gt;tbTempMaxSec.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="cbFanMaxGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="cbFanMaxGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="cbFanMaxGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>22, 8</value>
@@ -796,6 +883,9 @@
   </data>
   <data name="&gt;&gt;cbFanMaxGPU.ZOrder" xml:space="preserve">
     <value>7</value>
+  </data>
+  <data name="tbFanMax.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbFanMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>21, 31</value>
@@ -848,6 +938,9 @@
   <data name="cbFanMinGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="cbFanMinGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="cbFanMinGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>21, 57</value>
   </data>
@@ -899,6 +992,9 @@
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="tbFanMin.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tbFanMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>22, 80</value>
   </data>
@@ -920,15 +1016,6 @@
   <data name="&gt;&gt;tbFanMin.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
-  <data name="tbFanMinSec.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 80</value>
-  </data>
-  <data name="tbFanMinSec.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 20</value>
-  </data>
-  <data name="tbFanMinSec.TabIndex" type="System.Int32, mscorlib">
-    <value>50</value>
-  </data>
   <data name="&gt;&gt;tbFanMinSec.Name" xml:space="preserve">
     <value>tbFanMinSec</value>
   </data>
@@ -940,15 +1027,6 @@
   </data>
   <data name="&gt;&gt;tbFanMinSec.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="tbFanMaxSec.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 31</value>
-  </data>
-  <data name="tbFanMaxSec.Size" type="System.Drawing.Size, System.Drawing">
-    <value>47, 20</value>
-  </data>
-  <data name="tbFanMaxSec.TabIndex" type="System.Int32, mscorlib">
-    <value>49</value>
   </data>
   <data name="&gt;&gt;tbFanMaxSec.Name" xml:space="preserve">
     <value>tbFanMaxSec</value>
@@ -983,27 +1061,57 @@
   <data name="&gt;&gt;panel3.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="tbFanMinSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbFanMinSec.Location" type="System.Drawing.Point, System.Drawing">
+    <value>79, 80</value>
+  </data>
+  <data name="tbFanMinSec.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 20</value>
+  </data>
+  <data name="tbFanMinSec.TabIndex" type="System.Int32, mscorlib">
+    <value>50</value>
+  </data>
+  <data name="&gt;&gt;tbFanMinSec.Name" xml:space="preserve">
+    <value>tbFanMinSec</value>
+  </data>
+  <data name="&gt;&gt;tbFanMinSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbFanMinSec.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;tbFanMinSec.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbFanMaxSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbFanMaxSec.Location" type="System.Drawing.Point, System.Drawing">
+    <value>79, 31</value>
+  </data>
+  <data name="tbFanMaxSec.Size" type="System.Drawing.Size, System.Drawing">
+    <value>47, 20</value>
+  </data>
+  <data name="tbFanMaxSec.TabIndex" type="System.Int32, mscorlib">
+    <value>49</value>
+  </data>
+  <data name="&gt;&gt;tbFanMaxSec.Name" xml:space="preserve">
+    <value>tbFanMaxSec</value>
+  </data>
+  <data name="&gt;&gt;tbFanMaxSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbFanMaxSec.Parent" xml:space="preserve">
+    <value>panel3</value>
+  </data>
+  <data name="&gt;&gt;tbFanMaxSec.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <metadata name="openFileDialog2.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>157, 17</value>
   </metadata>
-  <data name="checkBox21.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="checkBox21.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="checkBox21.Location" type="System.Drawing.Point, System.Drawing">
-    <value>25, 33</value>
-  </data>
-  <data name="checkBox21.Size" type="System.Drawing.Size, System.Drawing">
-    <value>208, 17</value>
-  </data>
-  <data name="checkBox21.TabIndex" type="System.Int32, mscorlib">
-    <value>68</value>
-  </data>
-  <data name="checkBox21.Text" xml:space="preserve">
-    <value>Свернуть в трей после автозапуска</value>
-  </data>
   <data name="&gt;&gt;checkBox21.Name" xml:space="preserve">
     <value>checkBox21</value>
   </data>
@@ -1037,8 +1145,41 @@
   <data name="&gt;&gt;panel4.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="checkBox21.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="checkBox21.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="checkBox21.Location" type="System.Drawing.Point, System.Drawing">
+    <value>25, 33</value>
+  </data>
+  <data name="checkBox21.Size" type="System.Drawing.Size, System.Drawing">
+    <value>208, 17</value>
+  </data>
+  <data name="checkBox21.TabIndex" type="System.Int32, mscorlib">
+    <value>68</value>
+  </data>
+  <data name="checkBox21.Text" xml:space="preserve">
+    <value>Свернуть в трей после автозапуска</value>
+  </data>
+  <data name="&gt;&gt;checkBox21.Name" xml:space="preserve">
+    <value>checkBox21</value>
+  </data>
+  <data name="&gt;&gt;checkBox21.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox21.Parent" xml:space="preserve">
+    <value>panel4</value>
+  </data>
+  <data name="&gt;&gt;checkBox21.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="cbClockMinGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="cbClockMinGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="cbClockMinGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>25, 6</value>
@@ -1064,6 +1205,9 @@
   <data name="&gt;&gt;cbClockMinGPU.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
+  <data name="tbClockMin.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tbClockMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>24, 33</value>
   </data>
@@ -1084,6 +1228,9 @@
   </data>
   <data name="&gt;&gt;tbClockMin.ZOrder" xml:space="preserve">
     <value>6</value>
+  </data>
+  <data name="tbClockMinSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbClockMinSec.Location" type="System.Drawing.Point, System.Drawing">
     <value>79, 33</value>
@@ -1136,6 +1283,9 @@
   <data name="cbMemoryMinGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="cbMemoryMinGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="cbMemoryMinGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>24, 59</value>
   </data>
@@ -1160,21 +1310,6 @@
   <data name="&gt;&gt;cbMemoryMinGPU.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="label13.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
-    <value>131, 89</value>
-  </data>
-  <data name="label13.Size" type="System.Drawing.Size, System.Drawing">
-    <value>25, 13</value>
-  </data>
-  <data name="label13.TabIndex" type="System.Int32, mscorlib">
-    <value>58</value>
-  </data>
-  <data name="label13.Text" xml:space="preserve">
-    <value>сек</value>
-  </data>
   <data name="&gt;&gt;label13.Name" xml:space="preserve">
     <value>label13</value>
   </data>
@@ -1187,15 +1322,6 @@
   <data name="&gt;&gt;label13.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tbMemoryMinSec.Location" type="System.Drawing.Point, System.Drawing">
-    <value>79, 82</value>
-  </data>
-  <data name="tbMemoryMinSec.Size" type="System.Drawing.Size, System.Drawing">
-    <value>46, 20</value>
-  </data>
-  <data name="tbMemoryMinSec.TabIndex" type="System.Int32, mscorlib">
-    <value>57</value>
-  </data>
   <data name="&gt;&gt;tbMemoryMinSec.Name" xml:space="preserve">
     <value>tbMemoryMinSec</value>
   </data>
@@ -1207,15 +1333,6 @@
   </data>
   <data name="&gt;&gt;tbMemoryMinSec.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="tbMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>24, 82</value>
-  </data>
-  <data name="tbMemoryMin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 20</value>
-  </data>
-  <data name="tbMemoryMin.TabIndex" type="System.Int32, mscorlib">
-    <value>56</value>
   </data>
   <data name="&gt;&gt;tbMemoryMin.Name" xml:space="preserve">
     <value>tbMemoryMin</value>
@@ -1250,8 +1367,86 @@
   <data name="&gt;&gt;panel5.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="label13.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label13.Location" type="System.Drawing.Point, System.Drawing">
+    <value>131, 89</value>
+  </data>
+  <data name="label13.Size" type="System.Drawing.Size, System.Drawing">
+    <value>25, 13</value>
+  </data>
+  <data name="label13.TabIndex" type="System.Int32, mscorlib">
+    <value>58</value>
+  </data>
+  <data name="label13.Text" xml:space="preserve">
+    <value>сек</value>
+  </data>
+  <data name="&gt;&gt;label13.Name" xml:space="preserve">
+    <value>label13</value>
+  </data>
+  <data name="&gt;&gt;label13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label13.Parent" xml:space="preserve">
+    <value>panel5</value>
+  </data>
+  <data name="&gt;&gt;label13.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tbMemoryMinSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbMemoryMinSec.Location" type="System.Drawing.Point, System.Drawing">
+    <value>79, 82</value>
+  </data>
+  <data name="tbMemoryMinSec.Size" type="System.Drawing.Size, System.Drawing">
+    <value>46, 20</value>
+  </data>
+  <data name="tbMemoryMinSec.TabIndex" type="System.Int32, mscorlib">
+    <value>57</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMinSec.Name" xml:space="preserve">
+    <value>tbMemoryMinSec</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMinSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMinSec.Parent" xml:space="preserve">
+    <value>panel5</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMinSec.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="tbMemoryMin.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
+  <data name="tbMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
+    <value>24, 82</value>
+  </data>
+  <data name="tbMemoryMin.Size" type="System.Drawing.Size, System.Drawing">
+    <value>45, 20</value>
+  </data>
+  <data name="tbMemoryMin.TabIndex" type="System.Int32, mscorlib">
+    <value>56</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMin.Name" xml:space="preserve">
+    <value>tbMemoryMin</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMin.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMin.Parent" xml:space="preserve">
+    <value>panel5</value>
+  </data>
+  <data name="&gt;&gt;tbMemoryMin.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="cbInternetOff.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
+  </data>
+  <data name="cbInternetOff.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="cbInternetOff.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 4</value>
@@ -1276,6 +1471,9 @@
   </data>
   <data name="&gt;&gt;cbInternetOff.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="tbInternetOffSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbInternetOffSec.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 30</value>
@@ -1328,6 +1526,9 @@
   <data name="cbFellOffGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="cbFellOffGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="cbFellOffGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 5</value>
   </data>
@@ -1352,6 +1553,9 @@
   <data name="&gt;&gt;cbFellOffGPU.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
+  <data name="tbCountGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tbCountGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 60</value>
   </data>
@@ -1372,6 +1576,9 @@
   </data>
   <data name="&gt;&gt;tbCountGPU.ZOrder" xml:space="preserve">
     <value>8</value>
+  </data>
+  <data name="tbCountGPUSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbCountGPUSec.Location" type="System.Drawing.Point, System.Drawing">
     <value>79, 60</value>
@@ -1448,6 +1655,87 @@
   <data name="&gt;&gt;label16.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
+  <data name="&gt;&gt;checkBox20.Name" xml:space="preserve">
+    <value>checkBox20</value>
+  </data>
+  <data name="&gt;&gt;checkBox20.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox20.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;checkBox20.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;lbSecGPU.Name" xml:space="preserve">
+    <value>lbSecGPU</value>
+  </data>
+  <data name="&gt;&gt;lbSecGPU.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lbSecGPU.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;lbSecGPU.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPUSec.Name" xml:space="preserve">
+    <value>tbLoadGPUSec</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPUSec.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPUSec.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPUSec.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPU.Name" xml:space="preserve">
+    <value>tbLoadGPU</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPU.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPU.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;tbLoadGPU.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cbLoadGPU.Name" xml:space="preserve">
+    <value>cbLoadGPU</value>
+  </data>
+  <data name="&gt;&gt;cbLoadGPU.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;cbLoadGPU.Parent" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;cbLoadGPU.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="panel6.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 124</value>
+  </data>
+  <data name="panel6.Size" type="System.Drawing.Size, System.Drawing">
+    <value>354, 135</value>
+  </data>
+  <data name="panel6.TabIndex" type="System.Int32, mscorlib">
+    <value>65</value>
+  </data>
+  <data name="&gt;&gt;panel6.Name" xml:space="preserve">
+    <value>panel6</value>
+  </data>
+  <data name="&gt;&gt;panel6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel6.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel6.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
   <data name="checkBox20.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1509,6 +1797,9 @@
   <data name="&gt;&gt;lbSecGPU.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="tbLoadGPUSec.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tbLoadGPUSec.Location" type="System.Drawing.Point, System.Drawing">
     <value>79, 111</value>
   </data>
@@ -1529,6 +1820,9 @@
   </data>
   <data name="&gt;&gt;tbLoadGPUSec.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <data name="tbLoadGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tbLoadGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 111</value>
@@ -1554,6 +1848,9 @@
   <data name="cbLoadGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="cbLoadGPU.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="cbLoadGPU.Location" type="System.Drawing.Point, System.Drawing">
     <value>23, 87</value>
   </data>
@@ -1578,27 +1875,6 @@
   <data name="&gt;&gt;cbLoadGPU.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="panel6.Location" type="System.Drawing.Point, System.Drawing">
-    <value>412, 124</value>
-  </data>
-  <data name="panel6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>354, 135</value>
-  </data>
-  <data name="panel6.TabIndex" type="System.Int32, mscorlib">
-    <value>65</value>
-  </data>
-  <data name="&gt;&gt;panel6.Name" xml:space="preserve">
-    <value>panel6</value>
-  </data>
-  <data name="&gt;&gt;panel6.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel6.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;panel6.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="panel7.Location" type="System.Drawing.Point, System.Drawing">
     <value>412, 268</value>
   </data>
@@ -1619,6 +1895,255 @@
   </data>
   <data name="&gt;&gt;panel7.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="&gt;&gt;checkBox19.Name" xml:space="preserve">
+    <value>checkBox19</value>
+  </data>
+  <data name="&gt;&gt;checkBox19.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox19.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox19.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;checkBox18.Name" xml:space="preserve">
+    <value>checkBox18</value>
+  </data>
+  <data name="&gt;&gt;checkBox18.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox18.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox18.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;checkBox17.Name" xml:space="preserve">
+    <value>checkBox17</value>
+  </data>
+  <data name="&gt;&gt;checkBox17.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox17.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox17.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;checkBox16.Name" xml:space="preserve">
+    <value>checkBox16</value>
+  </data>
+  <data name="&gt;&gt;checkBox16.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox16.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox16.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;checkBox15.Name" xml:space="preserve">
+    <value>checkBox15</value>
+  </data>
+  <data name="&gt;&gt;checkBox15.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox15.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox15.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;checkBox14.Name" xml:space="preserve">
+    <value>checkBox14</value>
+  </data>
+  <data name="&gt;&gt;checkBox14.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox14.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox14.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;checkBox13.Name" xml:space="preserve">
+    <value>checkBox13</value>
+  </data>
+  <data name="&gt;&gt;checkBox13.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox13.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox13.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;checkBox12.Name" xml:space="preserve">
+    <value>checkBox12</value>
+  </data>
+  <data name="&gt;&gt;checkBox12.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox12.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox12.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;checkBox11.Name" xml:space="preserve">
+    <value>checkBox11</value>
+  </data>
+  <data name="&gt;&gt;checkBox11.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox11.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox11.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;checkBox10.Name" xml:space="preserve">
+    <value>checkBox10</value>
+  </data>
+  <data name="&gt;&gt;checkBox10.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox10.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox10.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;checkBox9.Name" xml:space="preserve">
+    <value>checkBox9</value>
+  </data>
+  <data name="&gt;&gt;checkBox9.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox9.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox9.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="&gt;&gt;checkBox8.Name" xml:space="preserve">
+    <value>checkBox8</value>
+  </data>
+  <data name="&gt;&gt;checkBox8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox8.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox8.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="&gt;&gt;checkBox7.Name" xml:space="preserve">
+    <value>checkBox7</value>
+  </data>
+  <data name="&gt;&gt;checkBox7.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox7.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox7.ZOrder" xml:space="preserve">
+    <value>12</value>
+  </data>
+  <data name="&gt;&gt;checkBox6.Name" xml:space="preserve">
+    <value>checkBox6</value>
+  </data>
+  <data name="&gt;&gt;checkBox6.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox6.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox6.ZOrder" xml:space="preserve">
+    <value>13</value>
+  </data>
+  <data name="&gt;&gt;checkBox5.Name" xml:space="preserve">
+    <value>checkBox5</value>
+  </data>
+  <data name="&gt;&gt;checkBox5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox5.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox5.ZOrder" xml:space="preserve">
+    <value>14</value>
+  </data>
+  <data name="&gt;&gt;checkBox4.Name" xml:space="preserve">
+    <value>checkBox4</value>
+  </data>
+  <data name="&gt;&gt;checkBox4.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox4.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox4.ZOrder" xml:space="preserve">
+    <value>15</value>
+  </data>
+  <data name="&gt;&gt;checkBox3.Name" xml:space="preserve">
+    <value>checkBox3</value>
+  </data>
+  <data name="&gt;&gt;checkBox3.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox3.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox3.ZOrder" xml:space="preserve">
+    <value>16</value>
+  </data>
+  <data name="&gt;&gt;checkBox2.Name" xml:space="preserve">
+    <value>checkBox2</value>
+  </data>
+  <data name="&gt;&gt;checkBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox2.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox2.ZOrder" xml:space="preserve">
+    <value>17</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Name" xml:space="preserve">
+    <value>checkBox1</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.Parent" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;checkBox1.ZOrder" xml:space="preserve">
+    <value>18</value>
+  </data>
+  <data name="panel8.Location" type="System.Drawing.Point, System.Drawing">
+    <value>412, 351</value>
+  </data>
+  <data name="panel8.Size" type="System.Drawing.Size, System.Drawing">
+    <value>354, 97</value>
+  </data>
+  <data name="panel8.TabIndex" type="System.Int32, mscorlib">
+    <value>67</value>
+  </data>
+  <data name="&gt;&gt;panel8.Name" xml:space="preserve">
+    <value>panel8</value>
+  </data>
+  <data name="&gt;&gt;panel8.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel8.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;panel8.ZOrder" xml:space="preserve">
+    <value>0</value>
   </data>
   <data name="checkBox19.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -2246,27 +2771,6 @@
   </data>
   <data name="&gt;&gt;checkBox1.ZOrder" xml:space="preserve">
     <value>18</value>
-  </data>
-  <data name="panel8.Location" type="System.Drawing.Point, System.Drawing">
-    <value>412, 351</value>
-  </data>
-  <data name="panel8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>354, 97</value>
-  </data>
-  <data name="panel8.TabIndex" type="System.Int32, mscorlib">
-    <value>67</value>
-  </data>
-  <data name="&gt;&gt;panel8.Name" xml:space="preserve">
-    <value>panel8</value>
-  </data>
-  <data name="&gt;&gt;panel8.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;panel8.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;panel8.ZOrder" xml:space="preserve">
-    <value>0</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>

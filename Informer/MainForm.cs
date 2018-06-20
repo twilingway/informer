@@ -65,13 +65,21 @@ namespace Informer
 
 
 
+            try
+            {
+                GlobalVars._manager.WritePrivateString("main", "version", "1.3.9");
+            }
+            catch (Exception e)
+            {
+                _error.writeLogLine("Write version: " + e.Message, "error");
+            }
 
-            GlobalVars._manager.WritePrivateString("main", "version", "1.3.9");
-
+            MyIDProcess();
             try
             {
                 Process psiwer;
                 psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
+                
                 psiwer.Close();
             }
             catch (Exception ex)
@@ -133,8 +141,49 @@ namespace Informer
 
         }
 
-     
-      private void BtStopClick(object sender, EventArgs e)
+        private void MyIDProcess()
+        {
+            try
+            {
+                int myId = Process.GetCurrentProcess().Id;
+                Debug.WriteLine("My ID: " + myId);
+                Process.GetProcesses().Where(p => p.ProcessName == "Informer" && p.Id != myId).Count(p => { p.Kill(); return true; });
+
+                /*
+                string[] pr_names = { "Informer" };
+
+
+                foreach (Process ps in Process.GetProcesses())
+                {
+                    if (pr_names.Contains(ps.ProcessName) && ps.Id != myId)
+                    {
+                
+                        ps.Kill();
+                    }
+
+                
+
+
+                    //(new string[] { "ps1", "ps2" }).SelectMany(name => Process.GetProcessesByName(name)).Count(p => { p.Kill(); return true; });
+
+
+                    //  (new string[] { "ps1", "ps2" }).SelectMany(name => Process.GetProcessesByName(name)).ToList().ForEach(p => p.Kill());
+                }
+                */
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }  
+          
+            
+          
+
+
+          
+        }
+
+        private void BtStopClick(object sender, EventArgs e)
         {
             try
             {
@@ -233,6 +282,7 @@ namespace Informer
 
                 GlobalVars.timeOnline = 0;
                 tbToken.ReadOnly = true;
+                tbRigName.Text = GlobalVars.name;
                 GlobalVars.mqttIsConnect = true;
                 InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
                 InformationLabel.ForeColor = Color.Green;
@@ -920,64 +970,92 @@ namespace Informer
                           
                             break;
                         case 1:
-                            if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min))
-                            {
-                               
-                                GPUTempMinTimer.Enabled = true;
-
-                                labelStatusTempMin.Text = MyStrings.labelStatusTempMin;
-                                labelStatusTempMin.ForeColor = Color.Red;
-
-                                labelCounterTempMin.Visible = true;
-                                labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
-                                labelCounterTempMin.ForeColor = Color.Red;
-
-
-                            }
-                            else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max))
-                            {
-
-                                GPUTempMaxTimer.Enabled = true;
-
-                                labelStatusTempMax.Text = MyStrings.labelStatusTempMax;
-                                labelStatusTempMax.ForeColor = Color.Red;
-
-                                labelCounterTempMax.Visible = true;
-                                labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
-                                labelCounterTempMax.ForeColor = Color.Red;
-
-
-                            }
-                            else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max) && Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_min))
-
-                            {
-                                GPUTempMinTimer.Enabled = false;
-                                GPUTempMaxTimer.Enabled = false;
-                                labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
-                                labelStatusTempMax.Text = MyStrings.labelStatusTempOK;
-
-                                
-                                labelStatusTempMin.ForeColor = Color.Green;
-                                labelStatusTempMax.ForeColor = Color.Green;
-
-                                labelCounterTempMin.Visible = false;
-                                labelCounterTempMax.Visible = false;
-
-                            }
-                            if (GlobalVars.reboots_temp_max == false)
-                            {
-                                labelStatusTempMax.Text = MyStrings.labelEvent;
-                                labelStatusTempMax.ForeColor = Color.Blue;
-                                labelCounterTempMax.Visible = false;
-
-                            }
+                           
+                            //temp min
                             if (GlobalVars.reboots_temp_min == false)
                             {
-                                labelStatusTempMin.Text = MyStrings.labelEvent;
-                                labelStatusTempMin.ForeColor = Color.Blue;
-                                labelCounterTempMin.Visible = false;
+                               // if (labelStatusTempMin.Text != MyStrings.labelEvent)
+                               // {
+                                    labelStatusTempMin.Text = MyStrings.labelEvent;
+                                    labelStatusTempMin.ForeColor = Color.Blue;
+                                    labelCounterTempMin.Visible = false;
+                                    GlobalVars.timer_t_min = -100;
+                                //  }
 
                             }
+                            else if (GlobalVars.reboots_temp_min == true)
+                            {
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min))
+                                {
+
+                                    GPUTempMinTimer.Enabled = true;
+
+                                    labelStatusTempMin.Text = MyStrings.labelStatusTempMin;
+                                    labelStatusTempMin.ForeColor = Color.Red;
+
+                                    labelCounterTempMin.Visible = true;
+                                    labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
+                                    labelCounterTempMin.ForeColor = Color.Red;
+
+
+                                }
+                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_min))
+                                {
+                                    GPUTempMinTimer.Enabled = false;
+                                    labelCounterTempMin.Visible = false;
+                                    labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
+                                    labelStatusTempMin.ForeColor = Color.Green;
+                                    GlobalVars.timer_t_min = -100;
+
+                                }
+
+
+
+                            }
+
+                            //temp max
+                            if (GlobalVars.reboots_temp_max == false)
+                            {
+                               // if (labelStatusTempMax.Text != MyStrings.labelEvent)
+                              //  {
+                                    labelStatusTempMax.Text = MyStrings.labelEvent;
+                                    labelStatusTempMax.ForeColor = Color.Blue;
+                                    labelCounterTempMax.Visible = false;
+                                    GlobalVars.timer_t_max = -100;
+                                //     }
+
+
+                            }
+                            else if (GlobalVars.reboots_temp_max == true)
+                            {
+                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max))
+                                {
+
+                                    GPUTempMaxTimer.Enabled = true;
+
+                                    labelStatusTempMax.Text = MyStrings.labelStatusTempMax;
+                                    labelStatusTempMax.ForeColor = Color.Red;
+
+                                    labelCounterTempMax.Visible = true;
+                                    labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
+                                    labelCounterTempMax.ForeColor = Color.Red;
+
+
+                                }
+
+                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max))
+                                {
+                                    GPUTempMaxTimer.Enabled = false;
+                                    labelCounterTempMax.Visible = false;
+                                    labelStatusTempMax.Text = MyStrings.labelStatusTempOK;
+                                    labelStatusTempMax.ForeColor = Color.Green;
+                                    GlobalVars.timer_t_max = -100;
+
+                                }
+
+
+                            }
+                           
 
                             break;
                         case 2:
@@ -990,75 +1068,94 @@ namespace Informer
                            // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/load", Encoding.UTF8.GetBytes(p));
                             break;
                         case 5:
-                            if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min))
-                            {
 
-                                GPUFanMinTimer.Enabled = true;
+                            //fan min
 
-
-                                labelStatusFanMin.Text = MyStrings.labelStatusFanMin;
-                                labelStatusFanMin.ForeColor = Color.Red;
-
-                                labelCounterFanMin.Visible = true;
-                                labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
-                                labelCounterFanMin.ForeColor = Color.Red;
-
-
-                            }
-                            else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max))
-                            {
-
-                                GPUFanMaxTimer.Enabled = true;
-
-                                labelStatusFanMax.Text = MyStrings.labelStatusFanMax;
-                                labelStatusFanMax.ForeColor = Color.Red;
-
-                                labelCounterFanMax.Visible = true;
-                                labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
-                                labelCounterFanMax.ForeColor = Color.Red;
-
-
-                            }
-                            else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_max) && Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_min))
-
-                            {
-                                GPUFanMinTimer.Enabled = false;
-                                GPUFanMaxTimer.Enabled = false;
-                                labelStatusFanMin.Text = MyStrings.labelStatusFanOK;
-                                labelStatusFanMax.Text = MyStrings.labelStatusFanOK;
-
-
-                                labelStatusFanMin.ForeColor = Color.Green;
-                                labelStatusFanMax.ForeColor = Color.Green;
-
-                                labelCounterFanMin.Visible = false;
-                                labelCounterFanMax.Visible = false;
-
-                            }
-                            if (GlobalVars.reboots_fan_max == false)
-                            {
-                                labelStatusFanMax.Visible = true;
-                                labelStatusFanMax.Text = MyStrings.labelEvent;
-                                labelStatusFanMax.ForeColor = Color.Blue;
-                                labelCounterFanMax.Visible = false;
-
-                            }
                             if (GlobalVars.reboots_fan_min == false)
                             {
                                 labelStatusFanMin.Visible = true;
                                 labelStatusFanMin.Text = MyStrings.labelEvent;
                                 labelStatusFanMin.ForeColor = Color.Blue;
                                 labelCounterFanMin.Visible = false;
+                                GlobalVars.timer_fan_min = -100;
+
+                            }
+                            else if (GlobalVars.reboots_fan_min == true)
+                            {
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min))
+                                {
+
+                                    GPUFanMinTimer.Enabled = true;
+
+
+                                    labelStatusFanMin.Text = MyStrings.labelStatusFanMin;
+                                    labelStatusFanMin.ForeColor = Color.Red;
+
+                                    labelCounterFanMin.Visible = true;
+                                    labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
+                                    labelCounterFanMin.ForeColor = Color.Red;
+
+
+                                }
+
+                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_min))
+                                {
+
+                                    GPUFanMinTimer.Enabled = false;
+                                    labelCounterFanMin.Visible = false;
+                                    labelStatusFanMin.Text = MyStrings.labelStatusFanOK;
+                                    labelStatusFanMin.ForeColor = Color.Green;
+                                    GlobalVars.timer_t_min = -100;
+                                }
+
+
+
+                            }
+
+                            //fan max
+                            if (GlobalVars.reboots_fan_max == false)
+                            {
+                                labelStatusFanMax.Visible = true;
+                                labelCounterFanMax.Visible = false;
+                                labelStatusFanMax.Text = MyStrings.labelEvent;
+                                labelStatusFanMax.ForeColor = Color.Blue;
+                                GlobalVars.timer_fan_max = -100;
+
+                            }
+                            else if (GlobalVars.reboots_fan_max == true)
+                            {
+
+
+                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max))
+                                {
+
+                                    GPUFanMaxTimer.Enabled = true;
+
+                                    labelStatusFanMax.Text = MyStrings.labelStatusFanMax;
+                                    labelStatusFanMax.ForeColor = Color.Red;
+
+                                    labelCounterFanMax.Visible = true;
+                                    labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
+                                    labelCounterFanMax.ForeColor = Color.Red;
+
+
+                                }
+                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_max))
+                                {
+
+                                    GPUFanMaxTimer.Enabled = false;
+                                    labelCounterFanMax.Visible = false;
+                                    labelStatusFanMax.Text = MyStrings.labelStatusFanOK;
+                                    labelStatusFanMax.ForeColor = Color.Green;
+                                    GlobalVars.timer_fan_max = -100;
+
+                                }
+
 
                             }
 
 
-                            // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/fan", Encoding.UTF8.GetBytes(p));
-                            // mqttClient.Publish("devices/" + GlobalVars.token + "/common/uptime/" + i + "/fan", Encoding.UTF8.GetBytes(p));
                             break;
-
-
-
 
                     }
 
@@ -1070,9 +1167,7 @@ namespace Informer
                 }
 
 
-                //   mqttClient.Publish("Pi/LEDControl2", Encoding.UTF8.GetBytes("SEND: " + labelTest.Text));
-
-                labelTest.Text = labelTest.Text + "1234\n";
+                labelTest.Text = labelTest.Text + " 1234\n";
                 i++;
 
             }
@@ -1438,6 +1533,7 @@ namespace Informer
             GlobalVars.timer_t_max = GlobalVars.timer_t_max - 1;
         }
 
+        //timer temp min
         private void LowTempretureTimerTick(object sender, EventArgs e)
         {
             string msg = "Temp Min, Reboot!";
@@ -1457,6 +1553,8 @@ namespace Informer
             }
                 GlobalVars.timer_t_min = GlobalVars.timer_t_min - 1;
         }
+
+
 
         private void RerunTimerTick(object sender, EventArgs e)
         {

@@ -28,7 +28,8 @@ namespace Informer
             manager = new INIManager(fullPath + "\\my.ini");
             _logs = new LogFile("log_settins");
             _errors = new LogFile("error_settings");
-            ini();
+            
+        //    ini();
         }
 
         private void ZeroingOut()
@@ -118,9 +119,9 @@ namespace Informer
         }
         public void ini()
         {
-            
 
-            string reboot_temp_max = manager.GetPrivateString("main", "reboot_temp_max");
+           
+            string reboots_temp_max = manager.GetPrivateString("main", "reboots_temp_max");
             string temp_max = manager.GetPrivateString("main", "temp_max");
             string time_temp_max = manager.GetPrivateString("main", "time_temp_max");
 
@@ -162,7 +163,7 @@ namespace Informer
             string reboot_internet = manager.GetPrivateString("main", "reboot_internet");
             string time_internet= manager.GetPrivateString("main", "time_internet");
 
-            string time_start = manager.GetPrivateString("main", "time_start");
+            //string time_start = manager.GetPrivateString("main", "time_start");
             //не используется
             string stat = manager.GetPrivateString("main", "stat");
             string pool = manager.GetPrivateString("main", "pool");
@@ -170,11 +171,12 @@ namespace Informer
             //
             
             
-            if (reboot_temp_max == "1")
+            if (reboots_temp_max == "True")
             {
                 cbTempMaxGPU.Checked = true;
+
             }
-            else
+            else if (reboots_temp_max == "False")
             {
                 cbTempMaxGPU.Checked = false;
             }
@@ -272,7 +274,7 @@ namespace Informer
             tbReloadTempFile.Text = reload_temp_min_file;
             tbReloadFileSec.Text = reload_time_min_file;
 
-            combTimeStart.Text = time_start;
+           // combTimeStart.Text = time_start;
             tbPath1.Text = path;
             tbPath2.Text = path2;
             
@@ -716,6 +718,39 @@ namespace Informer
 
         }
 
+        private void SettingsForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+
+
+
+            try
+            {
+
+              //  Properties.Settings.Default.Language = cbLocalize.SelectedValue.ToString();
+              //  Properties.Settings.Default.Save();
+                //this.ShowInTaskbar = false;
+                ZeroingOut();
+
+                this.Close();
+                //Application.Exit();
+
+
+            }
+
+            catch (Exception ex)
+            {
+                _errors.writeLogLine("MainFormClosing:" + ex.Message, "error_settings");
+            }
+
+
+
+        }
+
+        private void SettingsForm_Load(object sender, EventArgs e)
+        {
+            ini();
+        }
+
         private void tbInternetOffSec_KeyPress(object sender, KeyPressEventArgs e)
         {
             // ввод в texBox только цифр и кнопки Backspace
@@ -725,6 +760,9 @@ namespace Informer
                 e.Handled = true;
             }
         }
-        
+
+
+
+
     }
 }
