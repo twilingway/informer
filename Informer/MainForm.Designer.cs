@@ -87,11 +87,11 @@
             this.labelCounerFellOff = new System.Windows.Forms.Label();
             this.labelInternet = new System.Windows.Forms.Label();
             this.labelStatusInternet = new System.Windows.Forms.Label();
-            this.label3CounterInternet = new System.Windows.Forms.Label();
+            this.labelCounterInternet = new System.Windows.Forms.Label();
             this.labelCounterLoadGPU = new System.Windows.Forms.Label();
             this.labelStatusLoadGPU = new System.Windows.Forms.Label();
             this.labelLoadGPU = new System.Windows.Forms.Label();
-            this.GPULoadMin = new System.Windows.Forms.Timer(this.components);
+            this.GPULoadMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelTest = new System.Windows.Forms.Label();
             this.GetEWBF_ZcashTimer = new System.Windows.Forms.Timer(this.components);
             this.labelToken = new System.Windows.Forms.Label();
@@ -411,10 +411,10 @@
             resources.ApplyResources(this.labelStatusInternet, "labelStatusInternet");
             this.labelStatusInternet.Name = "labelStatusInternet";
             // 
-            // label3CounterInternet
+            // labelCounterInternet
             // 
-            resources.ApplyResources(this.label3CounterInternet, "label3CounterInternet");
-            this.label3CounterInternet.Name = "label3CounterInternet";
+            resources.ApplyResources(this.labelCounterInternet, "labelCounterInternet");
+            this.labelCounterInternet.Name = "labelCounterInternet";
             // 
             // labelCounterLoadGPU
             // 
@@ -431,11 +431,11 @@
             resources.ApplyResources(this.labelLoadGPU, "labelLoadGPU");
             this.labelLoadGPU.Name = "labelLoadGPU";
             // 
-            // GPULoadMin
+            // GPULoadMinTimer
             // 
-            this.GPULoadMin.Interval = 1000;
-            this.GPULoadMin.Tag = "load";
-            this.GPULoadMin.Tick += new System.EventHandler(this.GPULoadMin_Tick);
+            this.GPULoadMinTimer.Interval = 1000;
+            this.GPULoadMinTimer.Tag = "load";
+            this.GPULoadMinTimer.Tick += new System.EventHandler(this.GPULoadMin_Tick);
             // 
             // labelTest
             // 
@@ -483,7 +483,7 @@
             this.Controls.Add(this.labelCounterLoadGPU);
             this.Controls.Add(this.labelStatusLoadGPU);
             this.Controls.Add(this.labelLoadGPU);
-            this.Controls.Add(this.label3CounterInternet);
+            this.Controls.Add(this.labelCounterInternet);
             this.Controls.Add(this.labelStatusInternet);
             this.Controls.Add(this.labelInternet);
             this.Controls.Add(this.labelCounerFellOff);
@@ -596,11 +596,11 @@
         private System.Windows.Forms.Label labelCounerFellOff;
         private System.Windows.Forms.Label labelInternet;
         private System.Windows.Forms.Label labelStatusInternet;
-        private System.Windows.Forms.Label label3CounterInternet;
+        private System.Windows.Forms.Label labelCounterInternet;
         private System.Windows.Forms.Label labelCounterLoadGPU;
         private System.Windows.Forms.Label labelStatusLoadGPU;
         private System.Windows.Forms.Label labelLoadGPU;
-        private System.Windows.Forms.Timer GPULoadMin;
+        private System.Windows.Forms.Timer GPULoadMinTimer;
         private System.Windows.Forms.Label labelTest;
         private System.Windows.Forms.Timer GetEWBF_ZcashTimer;
         private System.Windows.Forms.Label labelToken;

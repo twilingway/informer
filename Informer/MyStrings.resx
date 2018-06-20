@@ -148,9 +148,9 @@
     <value>Нет доступа к интернету</value>
   </data>
   <data name="labelStatusLoadGPU" xml:space="preserve">
-    <value>Маленкьая нагрузка</value>
+    <value>Маленкая нагрузка</value>
   </data>
-  <data name="labelStatusMemory" xml:space="preserve">
+  <data name="labelStatusMemoryMin" xml:space="preserve">
     <value>Низкие частоты памяти</value>
   </data>
   <data name="labelStatusTempMax" xml:space="preserve">
@@ -170,5 +170,17 @@
   </data>
   <data name="labelStatusFanOK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="labelStatusLoadGPUMax" xml:space="preserve">
+    <value>Высокая нагрузка</value>
+  </data>
+  <data name="labelStatusOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="labelStatusClockMax" xml:space="preserve">
+    <value>Высокая частота ядра</value>
+  </data>
+  <data name="labelStatusMemoryMax" xml:space="preserve">
+    <value>Высокие частоты памяти</value>
   </data>
 </root>

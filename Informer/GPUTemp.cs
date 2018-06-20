@@ -115,6 +115,12 @@ namespace Informer
 
 
                             }
+                            else if (sensor.SensorType != SensorType.Control && GlobalVars.gpusList.Count == 5)
+                            {
+                                GlobalVars.fan += "0" + ",";
+                                GlobalVars.gpusList.Add(Convert.ToString(0));
+
+                            }
 
 
                             else if (sensor.SensorType == SensorType.Load)//LOAD

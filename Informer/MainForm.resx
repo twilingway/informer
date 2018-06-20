@@ -1283,31 +1283,31 @@
   <data name="&gt;&gt;labelStatusInternet.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <data name="label3CounterInternet.AutoSize" type="System.Boolean, mscorlib">
+  <data name="labelCounterInternet.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="label3CounterInternet.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCounterInternet.Location" type="System.Drawing.Point, System.Drawing">
     <value>311, 327</value>
   </data>
-  <data name="label3CounterInternet.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCounterInternet.Size" type="System.Drawing.Size, System.Drawing">
     <value>73, 13</value>
   </data>
-  <data name="label3CounterInternet.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelCounterInternet.TabIndex" type="System.Int32, mscorlib">
     <value>44</value>
   </data>
-  <data name="label3CounterInternet.Text" xml:space="preserve">
+  <data name="labelCounterInternet.Text" xml:space="preserve">
     <value>                      </value>
   </data>
-  <data name="&gt;&gt;label3CounterInternet.Name" xml:space="preserve">
-    <value>label3CounterInternet</value>
+  <data name="&gt;&gt;labelCounterInternet.Name" xml:space="preserve">
+    <value>labelCounterInternet</value>
   </data>
-  <data name="&gt;&gt;label3CounterInternet.Type" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterInternet.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;label3CounterInternet.Parent" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterInternet.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;label3CounterInternet.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterInternet.ZOrder" xml:space="preserve">
     <value>8</value>
   </data>
   <data name="labelCounterLoadGPU.AutoSize" type="System.Boolean, mscorlib">
@@ -1391,7 +1391,7 @@
   <data name="&gt;&gt;labelLoadGPU.ZOrder" xml:space="preserve">
     <value>7</value>
   </data>
-  <metadata name="GPULoadMin.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="GPULoadMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>808, 56</value>
   </metadata>
   <data name="labelTest.AutoSize" type="System.Boolean, mscorlib">
@@ -10520,10 +10520,10 @@
   <data name="&gt;&gt;FellOffGPUTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;GPULoadMin.Name" xml:space="preserve">
-    <value>GPULoadMin</value>
+  <data name="&gt;&gt;GPULoadMinTimer.Name" xml:space="preserve">
+    <value>GPULoadMinTimer</value>
   </data>
-  <data name="&gt;&gt;GPULoadMin.Type" xml:space="preserve">
+  <data name="&gt;&gt;GPULoadMinTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;GetEWBF_ZcashTimer.Name" xml:space="preserve">

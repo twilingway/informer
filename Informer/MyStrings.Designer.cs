@@ -133,6 +133,15 @@ namespace Informer {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Высокая частота ядра.
+        /// </summary>
+        internal static string labelStatusClockMax {
+            get {
+                return ResourceManager.GetString("labelStatusClockMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Высокие обороты.
         /// </summary>
         internal static string labelStatusFanMax {
@@ -178,7 +187,7 @@ namespace Informer {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Маленкьая нагрузка.
+        ///   Ищет локализованную строку, похожую на Маленкая нагрузка.
         /// </summary>
         internal static string labelStatusLoadGPU {
             get {
@@ -187,11 +196,38 @@ namespace Informer {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Высокая нагрузка.
+        /// </summary>
+        internal static string labelStatusLoadGPUMax {
+            get {
+                return ResourceManager.GetString("labelStatusLoadGPUMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Высокие частоты памяти.
+        /// </summary>
+        internal static string labelStatusMemoryMax {
+            get {
+                return ResourceManager.GetString("labelStatusMemoryMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Низкие частоты памяти.
         /// </summary>
-        internal static string labelStatusMemory {
+        internal static string labelStatusMemoryMin {
             get {
-                return ResourceManager.GetString("labelStatusMemory", resourceCulture);
+                return ResourceManager.GetString("labelStatusMemoryMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на OK.
+        /// </summary>
+        internal static string labelStatusOK {
+            get {
+                return ResourceManager.GetString("labelStatusOK", resourceCulture);
             }
         }
         
