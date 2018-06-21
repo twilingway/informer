@@ -71,11 +71,14 @@ static class GlobalVars
     public static int timer_t_max = -100;
     public static int timer_fan_max = -100;
     public static int timer_fan_min = -100;
-    public static int timer_clock = -100;
-    public static int timer_memory = -100;
+    public static int timer_clock_min = -100;
+    public static int timer_clock_max = -100;
+    public static int timer_memory_min = -100;
+    public static int timer_memory_max = -100;
     public static int timer_inet = -100;
     public static int timer_t_card = -100;
-    public static int timer_load_gpu = -100;
+    public static int timer_load_gpu_min = -100;
+    public static int timer_load_gpu_max = -100;
 
     public static int time_temp_min;
     public static int time_temp_max;
@@ -136,7 +139,9 @@ static class GlobalVars
     public static bool reboot3 = false;
     public static bool reboot4 = false;
     public static bool reboot5 = false;
+    public static bool coreMax = false;
     public static bool reboot6 = false;
+    public static bool memMax = false;
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;
@@ -155,7 +160,7 @@ static class GlobalVars
     public static bool tokenMqtt = false;
     public static Computer _pc = new Computer();
     public static List<String> gpusList = new List<string>();
-    public static List<String[]> gpusList2 = new List<string[]>();
+   // public static List<String[]> gpusList2 = new List<string[]>();
 
     //public static bool nice;
     //итд

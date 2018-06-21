@@ -136,7 +136,7 @@ namespace Informer
 
 
 
-                            GlobalVars.gpuList.Add(GlobalVars.counts, GlobalVars.gpusList);
+                          //-  GlobalVars.gpuList.Add(GlobalVars.counts, GlobalVars.gpusList);
 
                         }
 

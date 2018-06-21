@@ -30,11 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.tbEmail = new System.Windows.Forms.TextBox();
-            this.tbSecret = new System.Windows.Forms.TextBox();
             this.tbRigName = new System.Windows.Forms.TextBox();
-            this.labelEmail = new System.Windows.Forms.Label();
-            this.labelSecret = new System.Windows.Forms.Label();
             this.labelRigName = new System.Windows.Forms.Label();
             this.btStart = new System.Windows.Forms.Button();
             this.btStop = new System.Windows.Forms.Button();
@@ -72,25 +68,23 @@
             this.labelCounterFanMin = new System.Windows.Forms.Label();
             this.GPUCoreMinTimer = new System.Windows.Forms.Timer(this.components);
             this.GPUMemMinTimer = new System.Windows.Forms.Timer(this.components);
-            this.labelClock = new System.Windows.Forms.Label();
-            this.labelMemory = new System.Windows.Forms.Label();
-            this.labelStatusClock = new System.Windows.Forms.Label();
-            this.labelCounterClock = new System.Windows.Forms.Label();
-            this.labelStatusMemory = new System.Windows.Forms.Label();
-            this.labelCounterMemory = new System.Windows.Forms.Label();
-            this.labelInternetPing = new System.Windows.Forms.Label();
-            this.labelStatusInternetPing = new System.Windows.Forms.Label();
+            this.labelClockMin = new System.Windows.Forms.Label();
+            this.labelMemoryMin = new System.Windows.Forms.Label();
+            this.labelStatusClockMin = new System.Windows.Forms.Label();
+            this.labelCounterClockMin = new System.Windows.Forms.Label();
+            this.labelStatusMemoryMin = new System.Windows.Forms.Label();
+            this.labelCounterMemoryMin = new System.Windows.Forms.Label();
             this.DontHaveInternetTimer = new System.Windows.Forms.Timer(this.components);
             this.FellOffGPUTimer = new System.Windows.Forms.Timer(this.components);
             this.labelFellOffGPU = new System.Windows.Forms.Label();
-            this.labelStatusFellOffGPU = new System.Windows.Forms.Label();
-            this.labelCounerFellOff = new System.Windows.Forms.Label();
+            this.labelStatusGPULost = new System.Windows.Forms.Label();
+            this.labelCounerGPULost = new System.Windows.Forms.Label();
             this.labelInternet = new System.Windows.Forms.Label();
             this.labelStatusInternet = new System.Windows.Forms.Label();
             this.labelCounterInternet = new System.Windows.Forms.Label();
-            this.labelCounterLoadGPU = new System.Windows.Forms.Label();
-            this.labelStatusLoadGPU = new System.Windows.Forms.Label();
-            this.labelLoadGPU = new System.Windows.Forms.Label();
+            this.labelCounterLoadMin = new System.Windows.Forms.Label();
+            this.labelStatusLoadMin = new System.Windows.Forms.Label();
+            this.labelLoadMin = new System.Windows.Forms.Label();
             this.GPULoadMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelTest = new System.Windows.Forms.Label();
             this.GetEWBF_ZcashTimer = new System.Windows.Forms.Timer(this.components);
@@ -99,32 +93,24 @@
             this.btExit = new System.Windows.Forms.Button();
             this.cbLocalize = new System.Windows.Forms.ComboBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.GPUCoreMaxTimer = new System.Windows.Forms.Timer(this.components);
+            this.GPUMemMaxTimer = new System.Windows.Forms.Timer(this.components);
+            this.labelClockMax = new System.Windows.Forms.Label();
+            this.labelLoadMax = new System.Windows.Forms.Label();
+            this.labelStatusMemoryMax = new System.Windows.Forms.Label();
+            this.labelMemoryMax = new System.Windows.Forms.Label();
+            this.labelStatusClockMax = new System.Windows.Forms.Label();
+            this.labelStatusLoadMax = new System.Windows.Forms.Label();
+            this.labelCounterMemoryMax = new System.Windows.Forms.Label();
+            this.labelCounterClockMax = new System.Windows.Forms.Label();
+            this.labelCounterLoadMax = new System.Windows.Forms.Label();
+            this.GPULoadMaxTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
-            // 
-            // tbEmail
-            // 
-            resources.ApplyResources(this.tbEmail, "tbEmail");
-            this.tbEmail.Name = "tbEmail";
-            // 
-            // tbSecret
-            // 
-            resources.ApplyResources(this.tbSecret, "tbSecret");
-            this.tbSecret.Name = "tbSecret";
             // 
             // tbRigName
             // 
             resources.ApplyResources(this.tbRigName, "tbRigName");
             this.tbRigName.Name = "tbRigName";
-            // 
-            // labelEmail
-            // 
-            resources.ApplyResources(this.labelEmail, "labelEmail");
-            this.labelEmail.Name = "labelEmail";
-            // 
-            // labelSecret
-            // 
-            resources.ApplyResources(this.labelSecret, "labelSecret");
-            this.labelSecret.Name = "labelSecret";
             // 
             // labelRigName
             // 
@@ -227,7 +213,7 @@
             // 
             resources.ApplyResources(this.labelStatusTempMax, "labelStatusTempMax");
             this.labelStatusTempMax.Name = "labelStatusTempMax";
-            this.labelStatusTempMax.Click += new System.EventHandler(this.labelStatusTempMax_Click);
+            this.labelStatusTempMax.Click += new System.EventHandler(this.GPUMemoryMaxHzTimer_Tick);
             // 
             // labelTimeWork2
             // 
@@ -334,45 +320,35 @@
             this.GPUMemMinTimer.Tag = "memory";
             this.GPUMemMinTimer.Tick += new System.EventHandler(this.GpuMemoryMinHzTimerTick);
             // 
-            // labelClock
+            // labelClockMin
             // 
-            resources.ApplyResources(this.labelClock, "labelClock");
-            this.labelClock.Name = "labelClock";
+            resources.ApplyResources(this.labelClockMin, "labelClockMin");
+            this.labelClockMin.Name = "labelClockMin";
             // 
-            // labelMemory
+            // labelMemoryMin
             // 
-            resources.ApplyResources(this.labelMemory, "labelMemory");
-            this.labelMemory.Name = "labelMemory";
+            resources.ApplyResources(this.labelMemoryMin, "labelMemoryMin");
+            this.labelMemoryMin.Name = "labelMemoryMin";
             // 
-            // labelStatusClock
+            // labelStatusClockMin
             // 
-            resources.ApplyResources(this.labelStatusClock, "labelStatusClock");
-            this.labelStatusClock.Name = "labelStatusClock";
+            resources.ApplyResources(this.labelStatusClockMin, "labelStatusClockMin");
+            this.labelStatusClockMin.Name = "labelStatusClockMin";
             // 
-            // labelCounterClock
+            // labelCounterClockMin
             // 
-            resources.ApplyResources(this.labelCounterClock, "labelCounterClock");
-            this.labelCounterClock.Name = "labelCounterClock";
+            resources.ApplyResources(this.labelCounterClockMin, "labelCounterClockMin");
+            this.labelCounterClockMin.Name = "labelCounterClockMin";
             // 
-            // labelStatusMemory
+            // labelStatusMemoryMin
             // 
-            resources.ApplyResources(this.labelStatusMemory, "labelStatusMemory");
-            this.labelStatusMemory.Name = "labelStatusMemory";
+            resources.ApplyResources(this.labelStatusMemoryMin, "labelStatusMemoryMin");
+            this.labelStatusMemoryMin.Name = "labelStatusMemoryMin";
             // 
-            // labelCounterMemory
+            // labelCounterMemoryMin
             // 
-            resources.ApplyResources(this.labelCounterMemory, "labelCounterMemory");
-            this.labelCounterMemory.Name = "labelCounterMemory";
-            // 
-            // labelInternetPing
-            // 
-            resources.ApplyResources(this.labelInternetPing, "labelInternetPing");
-            this.labelInternetPing.Name = "labelInternetPing";
-            // 
-            // labelStatusInternetPing
-            // 
-            resources.ApplyResources(this.labelStatusInternetPing, "labelStatusInternetPing");
-            this.labelStatusInternetPing.Name = "labelStatusInternetPing";
+            resources.ApplyResources(this.labelCounterMemoryMin, "labelCounterMemoryMin");
+            this.labelCounterMemoryMin.Name = "labelCounterMemoryMin";
             // 
             // DontHaveInternetTimer
             // 
@@ -391,15 +367,15 @@
             resources.ApplyResources(this.labelFellOffGPU, "labelFellOffGPU");
             this.labelFellOffGPU.Name = "labelFellOffGPU";
             // 
-            // labelStatusFellOffGPU
+            // labelStatusGPULost
             // 
-            resources.ApplyResources(this.labelStatusFellOffGPU, "labelStatusFellOffGPU");
-            this.labelStatusFellOffGPU.Name = "labelStatusFellOffGPU";
+            resources.ApplyResources(this.labelStatusGPULost, "labelStatusGPULost");
+            this.labelStatusGPULost.Name = "labelStatusGPULost";
             // 
-            // labelCounerFellOff
+            // labelCounerGPULost
             // 
-            resources.ApplyResources(this.labelCounerFellOff, "labelCounerFellOff");
-            this.labelCounerFellOff.Name = "labelCounerFellOff";
+            resources.ApplyResources(this.labelCounerGPULost, "labelCounerGPULost");
+            this.labelCounerGPULost.Name = "labelCounerGPULost";
             // 
             // labelInternet
             // 
@@ -416,20 +392,20 @@
             resources.ApplyResources(this.labelCounterInternet, "labelCounterInternet");
             this.labelCounterInternet.Name = "labelCounterInternet";
             // 
-            // labelCounterLoadGPU
+            // labelCounterLoadMin
             // 
-            resources.ApplyResources(this.labelCounterLoadGPU, "labelCounterLoadGPU");
-            this.labelCounterLoadGPU.Name = "labelCounterLoadGPU";
+            resources.ApplyResources(this.labelCounterLoadMin, "labelCounterLoadMin");
+            this.labelCounterLoadMin.Name = "labelCounterLoadMin";
             // 
-            // labelStatusLoadGPU
+            // labelStatusLoadMin
             // 
-            resources.ApplyResources(this.labelStatusLoadGPU, "labelStatusLoadGPU");
-            this.labelStatusLoadGPU.Name = "labelStatusLoadGPU";
+            resources.ApplyResources(this.labelStatusLoadMin, "labelStatusLoadMin");
+            this.labelStatusLoadMin.Name = "labelStatusLoadMin";
             // 
-            // labelLoadGPU
+            // labelLoadMin
             // 
-            resources.ApplyResources(this.labelLoadGPU, "labelLoadGPU");
-            this.labelLoadGPU.Name = "labelLoadGPU";
+            resources.ApplyResources(this.labelLoadMin, "labelLoadMin");
+            this.labelLoadMin.Name = "labelLoadMin";
             // 
             // GPULoadMinTimer
             // 
@@ -471,32 +447,102 @@
             resources.ApplyResources(this.notifyIcon1, "notifyIcon1");
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
+            // GPUCoreMaxTimer
+            // 
+            this.GPUCoreMaxTimer.Interval = 1000;
+            this.GPUCoreMaxTimer.Tag = "clock";
+            this.GPUCoreMaxTimer.Tick += new System.EventHandler(this.GpuCoreMaxHzTimerTick);
+            // 
+            // GPUMemMaxTimer
+            // 
+            this.GPUMemMaxTimer.Interval = 1000;
+            this.GPUMemMaxTimer.Tag = "memory";
+            this.GPUMemMaxTimer.Tick += new System.EventHandler(this.GPUMemoryMaxHzTimer_Tick);
+            // 
+            // labelClockMax
+            // 
+            resources.ApplyResources(this.labelClockMax, "labelClockMax");
+            this.labelClockMax.Name = "labelClockMax";
+            // 
+            // labelLoadMax
+            // 
+            resources.ApplyResources(this.labelLoadMax, "labelLoadMax");
+            this.labelLoadMax.Name = "labelLoadMax";
+            // 
+            // labelStatusMemoryMax
+            // 
+            resources.ApplyResources(this.labelStatusMemoryMax, "labelStatusMemoryMax");
+            this.labelStatusMemoryMax.Name = "labelStatusMemoryMax";
+            // 
+            // labelMemoryMax
+            // 
+            resources.ApplyResources(this.labelMemoryMax, "labelMemoryMax");
+            this.labelMemoryMax.Name = "labelMemoryMax";
+            // 
+            // labelStatusClockMax
+            // 
+            resources.ApplyResources(this.labelStatusClockMax, "labelStatusClockMax");
+            this.labelStatusClockMax.Name = "labelStatusClockMax";
+            // 
+            // labelStatusLoadMax
+            // 
+            resources.ApplyResources(this.labelStatusLoadMax, "labelStatusLoadMax");
+            this.labelStatusLoadMax.Name = "labelStatusLoadMax";
+            // 
+            // labelCounterMemoryMax
+            // 
+            resources.ApplyResources(this.labelCounterMemoryMax, "labelCounterMemoryMax");
+            this.labelCounterMemoryMax.Name = "labelCounterMemoryMax";
+            // 
+            // labelCounterClockMax
+            // 
+            resources.ApplyResources(this.labelCounterClockMax, "labelCounterClockMax");
+            this.labelCounterClockMax.Name = "labelCounterClockMax";
+            // 
+            // labelCounterLoadMax
+            // 
+            resources.ApplyResources(this.labelCounterLoadMax, "labelCounterLoadMax");
+            this.labelCounterLoadMax.Name = "labelCounterLoadMax";
+            // 
+            // GPULoadMaxTimer
+            // 
+            this.GPULoadMaxTimer.Interval = 1000;
+            this.GPULoadMaxTimer.Tag = "load";
+            this.GPULoadMaxTimer.Tick += new System.EventHandler(this.GPULoadMaxTimer_Tick);
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelCounterLoadMax);
+            this.Controls.Add(this.labelCounterClockMax);
+            this.Controls.Add(this.labelCounterMemoryMax);
+            this.Controls.Add(this.labelStatusLoadMax);
+            this.Controls.Add(this.labelStatusClockMax);
+            this.Controls.Add(this.labelStatusMemoryMax);
+            this.Controls.Add(this.labelMemoryMax);
+            this.Controls.Add(this.labelLoadMax);
+            this.Controls.Add(this.labelClockMax);
             this.Controls.Add(this.cbLocalize);
             this.Controls.Add(this.btExit);
             this.Controls.Add(this.tbToken);
             this.Controls.Add(this.labelToken);
             this.Controls.Add(this.labelTest);
-            this.Controls.Add(this.labelCounterLoadGPU);
-            this.Controls.Add(this.labelStatusLoadGPU);
-            this.Controls.Add(this.labelLoadGPU);
+            this.Controls.Add(this.labelCounterLoadMin);
+            this.Controls.Add(this.labelStatusLoadMin);
+            this.Controls.Add(this.labelLoadMin);
             this.Controls.Add(this.labelCounterInternet);
             this.Controls.Add(this.labelStatusInternet);
             this.Controls.Add(this.labelInternet);
-            this.Controls.Add(this.labelCounerFellOff);
-            this.Controls.Add(this.labelStatusFellOffGPU);
+            this.Controls.Add(this.labelCounerGPULost);
+            this.Controls.Add(this.labelStatusGPULost);
             this.Controls.Add(this.labelFellOffGPU);
-            this.Controls.Add(this.labelStatusInternetPing);
-            this.Controls.Add(this.labelInternetPing);
-            this.Controls.Add(this.labelCounterMemory);
-            this.Controls.Add(this.labelStatusMemory);
-            this.Controls.Add(this.labelCounterClock);
-            this.Controls.Add(this.labelStatusClock);
-            this.Controls.Add(this.labelMemory);
-            this.Controls.Add(this.labelClock);
+            this.Controls.Add(this.labelCounterMemoryMin);
+            this.Controls.Add(this.labelStatusMemoryMin);
+            this.Controls.Add(this.labelCounterClockMin);
+            this.Controls.Add(this.labelStatusClockMin);
+            this.Controls.Add(this.labelMemoryMin);
+            this.Controls.Add(this.labelClockMin);
             this.Controls.Add(this.labelCounterFanMin);
             this.Controls.Add(this.labelStatusFanMin);
             this.Controls.Add(this.labelCounterFanMax);
@@ -521,11 +567,7 @@
             this.Controls.Add(this.btStop);
             this.Controls.Add(this.btStart);
             this.Controls.Add(this.labelRigName);
-            this.Controls.Add(this.labelSecret);
-            this.Controls.Add(this.labelEmail);
             this.Controls.Add(this.tbRigName);
-            this.Controls.Add(this.tbSecret);
-            this.Controls.Add(this.tbEmail);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "MainForm";
@@ -538,12 +580,7 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox tbEmail;
-        private System.Windows.Forms.TextBox tbSecret;
         private System.Windows.Forms.TextBox tbRigName;
-        private System.Windows.Forms.Label labelEmail;
-        private System.Windows.Forms.Label labelSecret;
         private System.Windows.Forms.Label labelRigName;
         private System.Windows.Forms.Button btStart;
         private System.Windows.Forms.Button btStop;
@@ -581,25 +618,23 @@
         private System.Windows.Forms.Label labelCounterFanMin;
         private System.Windows.Forms.Timer GPUCoreMinTimer;
         private System.Windows.Forms.Timer GPUMemMinTimer;
-        private System.Windows.Forms.Label labelClock;
-        private System.Windows.Forms.Label labelMemory;
-        private System.Windows.Forms.Label labelStatusClock;
-        private System.Windows.Forms.Label labelCounterClock;
-        private System.Windows.Forms.Label labelStatusMemory;
-        private System.Windows.Forms.Label labelCounterMemory;
-        private System.Windows.Forms.Label labelInternetPing;
-        private System.Windows.Forms.Label labelStatusInternetPing;
+        private System.Windows.Forms.Label labelClockMin;
+        private System.Windows.Forms.Label labelMemoryMin;
+        private System.Windows.Forms.Label labelStatusClockMin;
+        private System.Windows.Forms.Label labelCounterClockMin;
+        private System.Windows.Forms.Label labelStatusMemoryMin;
+        private System.Windows.Forms.Label labelCounterMemoryMin;
         private System.Windows.Forms.Timer DontHaveInternetTimer;
         private System.Windows.Forms.Timer FellOffGPUTimer;
         private System.Windows.Forms.Label labelFellOffGPU;
-        private System.Windows.Forms.Label labelStatusFellOffGPU;
-        private System.Windows.Forms.Label labelCounerFellOff;
+        private System.Windows.Forms.Label labelStatusGPULost;
+        private System.Windows.Forms.Label labelCounerGPULost;
         private System.Windows.Forms.Label labelInternet;
         private System.Windows.Forms.Label labelStatusInternet;
         private System.Windows.Forms.Label labelCounterInternet;
-        private System.Windows.Forms.Label labelCounterLoadGPU;
-        private System.Windows.Forms.Label labelStatusLoadGPU;
-        private System.Windows.Forms.Label labelLoadGPU;
+        private System.Windows.Forms.Label labelCounterLoadMin;
+        private System.Windows.Forms.Label labelStatusLoadMin;
+        private System.Windows.Forms.Label labelLoadMin;
         private System.Windows.Forms.Timer GPULoadMinTimer;
         private System.Windows.Forms.Label labelTest;
         private System.Windows.Forms.Timer GetEWBF_ZcashTimer;
@@ -608,6 +643,18 @@
         private System.Windows.Forms.Button btExit;
         private System.Windows.Forms.ComboBox cbLocalize;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Timer GPUCoreMaxTimer;
+        private System.Windows.Forms.Timer GPUMemMaxTimer;
+        private System.Windows.Forms.Label labelClockMax;
+        private System.Windows.Forms.Label labelLoadMax;
+        private System.Windows.Forms.Label labelStatusMemoryMax;
+        private System.Windows.Forms.Label labelMemoryMax;
+        private System.Windows.Forms.Label labelStatusClockMax;
+        private System.Windows.Forms.Label labelStatusLoadMax;
+        private System.Windows.Forms.Label labelCounterMemoryMax;
+        private System.Windows.Forms.Label labelCounterClockMax;
+        private System.Windows.Forms.Label labelCounterLoadMax;
+        private System.Windows.Forms.Timer GPULoadMaxTimer;
     }
 }
 

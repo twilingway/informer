@@ -40,11 +40,14 @@ namespace Informer
             GlobalVars.timer_t_max = -100;
             GlobalVars.timer_fan_max = -100;
             GlobalVars.timer_fan_min = -100;
-            GlobalVars.timer_clock = -100;
-            GlobalVars.timer_memory = -100;
+            GlobalVars.timer_clock_min = -100;
+            GlobalVars.timer_clock_max = -100;
+            GlobalVars.timer_memory_min = -100;
+            GlobalVars.timer_memory_max = -100;
             GlobalVars.timer_inet = -100;
             GlobalVars.timer_t_card = -100;
-            GlobalVars.timer_load_gpu = -100;
+            GlobalVars.timer_load_gpu_min = -100;
+            GlobalVars.timer_load_gpu_max = -100;
 
         }
        
