@@ -949,15 +949,18 @@ namespace Informer
             int i = 0;
             foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
             {
-             
+
+                Debug.WriteLine(GlobalVars.gpusList[1]);
+
                 int j = 0;
                 foreach (String p in keyValue.Value)
                 {
-
+                    
                     switch (j)
                     {
+
                         case 0:
-                            
+                        //name    
                           
                             break;
                         case 1:

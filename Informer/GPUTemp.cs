@@ -107,6 +107,22 @@ namespace Informer
                                 GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
 
                             }
+
+                            else if (sensor.SensorType == SensorType.Load)//LOAD
+                            {
+                                if (sensor.Name == "GPU Core")
+                                {
+
+
+                                    GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
+                                    GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
+
+
+
+                                }
+
+                            }
+
                             else if (sensor.SensorType == SensorType.Control)// FAN
                             {
 
@@ -115,40 +131,27 @@ namespace Informer
 
 
                             }
-                            else if (sensor.SensorType != SensorType.Control && GlobalVars.gpusList.Count == 5)
-                            {
-                                GlobalVars.fan += "0" + ",";
-                                GlobalVars.gpusList.Add(Convert.ToString(0));
-
-                            }
-
-
-                            else if (sensor.SensorType == SensorType.Load)//LOAD
-                            {
-                                if (sensor.Name == "GPU Core")
-                                {
-                                    GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
-                                    GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
 
 
 
-                                }
-                                else if (sensor.Name == "GPU Memory Controller")
-                                {
 
-                                }
 
-                            }
+                            GlobalVars.gpuList.Add(GlobalVars.counts, GlobalVars.gpusList);
 
-                         //   GlobalVars.gpuList.Add(GlobalVars.counts, GlobalVars.gpusList);
                         }
 
-
+                        
                     }
 
                 }
-
-
+                /*
+                 if (GlobalVars.gpusList.Count == 5)
+                {
+                    GlobalVars.fan += "0" + ",";
+                    GlobalVars.gpusList.Add(Convert.ToString(0));
+                }
+                */
+                Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
 
                 //bool status = await GPUSensorsStatus.GetGPUStatus(status);
 

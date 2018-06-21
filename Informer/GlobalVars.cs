@@ -23,9 +23,9 @@ using System.Threading;
 static class GlobalVars
 {
     public static string host = "http://www.allminer.ru";
-  
-   
- 
+
+
+
     public static string name;
     public static string token;
     public static string upTime;
@@ -38,15 +38,15 @@ static class GlobalVars
     public static string fan;
     //public static int mqttcheck = 0;
 
-    
-    
+
+
 
     public static int autostart;
     public static int start_timestamp;
     public static int timeOnline = -1;
     public static int reload_temp_min_file;
     public static int reload_time_min_file;
-    public static string link;   
+    public static string link;
     public static string pathreload;
     public static string filename;
     public static string dir;
@@ -58,7 +58,7 @@ static class GlobalVars
     public static string reboot_temp_min;
     public static string load;
     public static int counts;
-    
+
     public static string reboot_max_fan;
     public static string reboot_min_fan;
     public static string reboot_clock;
@@ -89,7 +89,7 @@ static class GlobalVars
     public static int time_mem_max;
     public static int time_lost_gpu;
     public static int time_lost_inet;
-    
+
 
     public static bool reboots_temp_min;
     public static bool reboots_temp_max;
@@ -120,13 +120,13 @@ static class GlobalVars
 
 
     public static int time_count_GPU;
-    
-    
+
+
     public static int count_GPU;
-    
-    
-    
-    
+
+
+
+
     public static string clock;
     public static string mem;
 
@@ -155,6 +155,7 @@ static class GlobalVars
     public static bool tokenMqtt = false;
     public static Computer _pc = new Computer();
     public static List<String> gpusList = new List<string>();
+    public static List<String[]> gpusList2 = new List<string[]>();
 
     //public static bool nice;
     //итд
