@@ -76,7 +76,7 @@ static class GlobalVars
     public static int timer_memory_min = -100;
     public static int timer_memory_max = -100;
     public static int timer_inet = -100;
-    public static int timer_t_card = -100;
+    public static int timer_gpu_lost = -100;
     public static int timer_load_gpu_min = -100;
     public static int timer_load_gpu_max = -100;
 
@@ -125,7 +125,7 @@ static class GlobalVars
     public static int time_count_GPU;
 
 
-    public static int count_GPU;
+    public static int count_GPU = 0;
 
 
 
@@ -142,6 +142,7 @@ static class GlobalVars
     public static bool coreMax = false;
     public static bool reboot6 = false;
     public static bool memMax = false;
+    public static bool temp0 = false;
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;

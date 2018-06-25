@@ -311,6 +311,9 @@
   <metadata name="TimeWorkTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>753, 14</value>
   </metadata>
+  <data name="btSettings.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="btSettings.Location" type="System.Drawing.Point, System.Drawing">
     <value>83, 378</value>
   </data>
@@ -1295,6 +1298,9 @@
   </data>
   <data name="cbLocalize.TabIndex" type="System.Int32, mscorlib">
     <value>52</value>
+  </data>
+  <data name="cbLocalize.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;cbLocalize.Name" xml:space="preserve">
     <value>cbLocalize</value>

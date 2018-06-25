@@ -233,7 +233,7 @@ namespace Informer
             GlobalVars.timer_clock_max = -100;
             GlobalVars.timer_memory_min = -100;
             GlobalVars.timer_memory_max = -100;
-            GlobalVars.timer_t_card = -100;
+            GlobalVars.timer_gpu_lost = -100;
             GlobalVars.timer_load_gpu_min = -100;
             GlobalVars.timer_load_gpu_max = -100;
             GlobalVars.timer_inet = -100;
@@ -276,7 +276,7 @@ namespace Informer
                 InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
                 InformationLabel.ForeColor = Color.Red;
                 GPUTemp.GetGPU();
-                GlobalVars.mqttIsConnect = false;
+              //  GlobalVars.mqttIsConnect = false;
 
             }
             
@@ -360,6 +360,7 @@ namespace Informer
             labelClockMax.Text = "CLOCK MAX(" + GlobalVars.clock_max + "):";
             labelMemoryMin.Text = "MEMORY MIN(" + GlobalVars.mem_min + "):";
             labelMemoryMax.Text = "MEMORY MAX(" + GlobalVars.mem_max + "):";
+            labelFellOffGPU.Text = "GPU LOST(" + GlobalVars.count_GPU + "):";
 
             int i = 0;
             foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
@@ -394,11 +395,11 @@ namespace Informer
                             }
                             else if (GlobalVars.reboots_temp_min == true)
                             {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min))
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min) && Convert.ToInt32(p) != 0)
                                 {
 
                                     GPUTempMinTimer.Enabled = true;
-
+                                    GlobalVars.temp0 = false;
                                     labelStatusTempMin.Text = MyStrings.labelStatusTempMin;
                                     labelStatusTempMin.ForeColor = Color.Red;
 
@@ -412,10 +413,15 @@ namespace Informer
                                 {
                                     GPUTempMinTimer.Enabled = false;
                                     labelCounterTempMin.Visible = false;
+                                    GlobalVars.temp0 = false;
                                     labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
                                     labelStatusTempMin.ForeColor = Color.Green;
                                     GlobalVars.timer_t_min = -100;
 
+                                }
+                                else if (Convert.ToInt32(p) == 0)
+                                {
+                                    GlobalVars.temp0 = true;
                                 }
 
 
@@ -871,6 +877,45 @@ namespace Informer
                     labelStatusInternet.Text = MyStrings.labelStatusOK;
                     labelStatusInternet.ForeColor = Color.Green;
                     GlobalVars.timer_inet = -100;
+
+                }
+
+
+            }
+            // gpu lost
+            if (GlobalVars.reboots_lost_gpu == false)
+            {
+                labelStatusGPULost.Visible = true;
+                labelCounerGPULost.Visible = false;
+                labelStatusGPULost.Text = MyStrings.labelEvent;
+                labelStatusGPULost.ForeColor = Color.Blue;
+                GlobalVars.timer_gpu_lost = -100;
+
+            }
+            else if (GlobalVars.reboots_lost_gpu == true && GlobalVars.count_GPU > 0)
+            {
+
+                if (GlobalVars.count_GPU > GlobalVars.counts || GlobalVars.temp0 == true)
+                {
+                    FellOffGPUTimer.Enabled = true;
+                    labelCounerGPULost.Visible = true;
+                    labelCounerGPULost.ForeColor = Color.Red;
+                    labelStatusGPULost.Text = MyStrings.labelStatusFellOffGPU;
+                    labelStatusGPULost.ForeColor = Color.Red;
+
+                    GlobalVars.timer_gpu_lost = -100;
+
+                }
+                else if (GlobalVars.count_GPU == GlobalVars.counts && GlobalVars.temp0 == false)
+                {
+
+
+                    FellOffGPUTimer.Enabled = false;
+                    labelCounerGPULost.Visible = false;
+
+                    labelStatusGPULost.Text = MyStrings.labelStatusOK; ;
+                    labelStatusGPULost.ForeColor = Color.Green;
+                    GlobalVars.timer_gpu_lost = -100;
 
                 }
 
@@ -1466,11 +1511,11 @@ namespace Informer
    }
    */
 
-        private async void InternetInactiveTimerTick(object sender, EventArgs e)
+        async private void InternetInactiveTimerTick(object sender, EventArgs e)
         {
             const string bat = "reboot_internet.bat";
 
-            DontHaveInternetTimer.Enabled = false;
+            //DontHaveInternetTimer.Enabled = false;
             try
             {
                 if (GlobalVars.timer_inet < 0)
@@ -1492,11 +1537,19 @@ namespace Informer
                     }
                 }
                 GlobalVars.timer_inet = GlobalVars.timer_inet - 1;
+                await Task.Delay(1);
             }
+            catch ( Exception ex)
+            {
+
+                Debug.WriteLine("InternetInactiveTimer: " + ex);
+            }
+            /*
             finally
             {
                 DontHaveInternetTimer.Enabled = false;
             }
+            */
 
         }
 
@@ -1505,33 +1558,34 @@ namespace Informer
             const string msg = "GPU fell, Reboot!";
             const string bat = "reboot_card.bat";
 
-            FellOffGPUTimer.Enabled = false;
+            // FellOffGPUTimer.Enabled = false;
             try
             {
-                if (GlobalVars.timer_t_card < 0)
+                if (GlobalVars.timer_gpu_lost < 0)
                 {
-                    GlobalVars.timer_t_card = GlobalVars.time_count_GPU;
+                    GlobalVars.timer_gpu_lost = GlobalVars.time_lost_gpu;
                 }
-                if (GlobalVars.timer_t_card == 0)
+                if (GlobalVars.timer_gpu_lost == 0)
                 {
                     if (!GlobalVars.IsRebootStarted)
                     {
-                      //  if (GlobalVars.InternetIsActive)
-                     //   {
-                            Reboot(msg, bat);
+                        //  if (GlobalVars.InternetIsActive)
+                        //   {
+                        Reboot(msg, bat);
                         //    GlobalVars.IsRebootStarted = true;
-                     //   }
-                     //   else
-                     //   {
-                     //       GlobalVars.timer_t_card = -100;
-                     //   }
+                        //   }
+                        //   else
+                        //   {
+                        //       GlobalVars.timer_t_card = -100;
+                        //   }
                     }
                 }
-                GlobalVars.timer_t_card = GlobalVars.timer_t_card - 1;
+                GlobalVars.timer_gpu_lost = GlobalVars.timer_gpu_lost - 1;
             }
-            finally
+            catch (Exception ex)
             {
-                FellOffGPUTimer.Enabled = false;
+
+                Debug.WriteLine("GPU LOST " + ex);
             }
 
         }
@@ -1672,7 +1726,7 @@ namespace Informer
                 GlobalVars.ping = false;
 
             }
-            else if (GlobalVars.pingCount <= 3)
+            else if (GlobalVars.pingCount < 3)
             {
 
                 GlobalVars.ping = true;
@@ -1684,15 +1738,30 @@ namespace Informer
         private static List<string> getComputersListFromTxtFile(string pathToFile)
         {
             List<string> computersList = new List<string>();
-            using (StreamReader sr = new StreamReader(pathToFile, Encoding.Default))
+            try
             {
-                string line = "";
-                while ((line = sr.ReadLine()) != null)
+                
+                using (StreamReader sr = new StreamReader(pathToFile, Encoding.Default))
                 {
-                    computersList.Add(line);
+                    string line = "";
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        computersList.Add(line);
+                    }
                 }
+                return computersList;
             }
-            return computersList;
+            catch (System.IO.FileNotFoundException e)
+            {
+                computersList.Add("google.com");
+                return computersList;
+
+            }
+            catch (Exception e)
+            {
+                computersList.Add("google.com");
+                return computersList;
+            }
         }
 
 
@@ -1728,7 +1797,8 @@ namespace Informer
             catch (Exception e)
             {
                 GlobalVars.pingCount = GlobalVars.pingCount + 1;
-                Debug.WriteLine("Возникла ошибка! " + hostAdress + " " + GlobalVars.pingCount + "Ex " +e.Message);
+                Debug.WriteLine("Возникла ошибка! " + hostAdress + " " + GlobalVars.pingCount + " Ex " +e.Message);
+                GlobalVars.ping = false;
             }
         }
 

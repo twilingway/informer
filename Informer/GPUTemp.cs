@@ -136,13 +136,17 @@ namespace Informer
 
 
 
-                          //-  GlobalVars.gpuList.Add(GlobalVars.counts, GlobalVars.gpusList);
+                          
 
                         }
 
                         
                     }
 
+                }
+                if (GlobalVars.count_GPU == 0)
+                {
+                    GlobalVars.count_GPU = GlobalVars.counts;
                 }
                 /*
                  if (GlobalVars.gpusList.Count == 5)
@@ -151,7 +155,7 @@ namespace Informer
                     GlobalVars.gpusList.Add(Convert.ToString(0));
                 }
                 */
-             //   Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
+                //   Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
 
                 //bool status = await GPUSensorsStatus.GetGPUStatus(status);
 

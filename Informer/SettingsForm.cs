@@ -45,7 +45,7 @@ namespace Informer
             GlobalVars.timer_memory_min = -100;
             GlobalVars.timer_memory_max = -100;
             GlobalVars.timer_inet = -100;
-            GlobalVars.timer_t_card = -100;
+            GlobalVars.timer_gpu_lost = -100;
             GlobalVars.timer_load_gpu_min = -100;
             GlobalVars.timer_load_gpu_max = -100;
 

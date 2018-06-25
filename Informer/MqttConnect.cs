@@ -67,10 +67,9 @@ namespace Informer
                     GlobalVars.client.Disconnected += async (s, e) =>
                     {
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
-                        
-                        
-                        await Task.Delay(TimeSpan.FromSeconds(10));
                         GlobalVars.mqttIsConnect = false;
+                        await Task.Delay(TimeSpan.FromSeconds(10));
+                        
                         /*
 
                         try
@@ -99,6 +98,7 @@ namespace Informer
 
                     try
                     {
+                       // GlobalVars.mqttIsConnect = false;
                         await GlobalVars.client.ConnectAsync(options);
                         GlobalVars.mqttIsConnect = true;
                         MainForm.Message("Connected");
@@ -117,7 +117,7 @@ namespace Informer
                     catch (Exception exception)
                     {
                         Debug.WriteLine("### CONNECTING FAILED ###" + Environment.NewLine + exception);
-
+                        GlobalVars.mqttIsConnect = false;
                     }
 
 

@@ -152,7 +152,7 @@
             // 
             // GetTempretureTimer
             // 
-            this.GetTempretureTimer.Interval = 5000;
+            this.GetTempretureTimer.Interval = 1000;
             this.GetTempretureTimer.Tag = "get temp";
             this.GetTempretureTimer.Tick += new System.EventHandler(this.GetTempretureTimerTick);
             // 
