@@ -160,6 +160,7 @@ namespace Informer
                         catch (Exception ex)
                         {
 
+                            Debug.WriteLine("CommandProcesser " + ex);
                          
                         }
 
@@ -173,7 +174,7 @@ namespace Informer
                         }
                         catch (Exception ex)
                         {
-
+                            Debug.WriteLine("Interval " + ex);
                         }
 
                         break;

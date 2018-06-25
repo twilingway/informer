@@ -105,6 +105,8 @@
             this.labelCounterClockMax = new System.Windows.Forms.Label();
             this.labelCounterLoadMax = new System.Windows.Forms.Label();
             this.GPULoadMaxTimer = new System.Windows.Forms.Timer(this.components);
+            this.PingTimer = new System.Windows.Forms.Timer(this.components);
+            this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tbRigName
@@ -150,13 +152,13 @@
             // 
             // GetTempretureTimer
             // 
-            this.GetTempretureTimer.Interval = 1000;
+            this.GetTempretureTimer.Interval = 5000;
             this.GetTempretureTimer.Tag = "get temp";
             this.GetTempretureTimer.Tick += new System.EventHandler(this.GetTempretureTimerTick);
             // 
             // NextAutoStart
             // 
-            this.NextAutoStart.Interval = 300000;
+            this.NextAutoStart.Interval = 60000;
             this.NextAutoStart.Tag = "active 1 timer";
             this.NextAutoStart.Tick += new System.EventHandler(this.NextAutoStart_Tick);
             // 
@@ -510,6 +512,16 @@
             this.GPULoadMaxTimer.Tag = "load";
             this.GPULoadMaxTimer.Tick += new System.EventHandler(this.GPULoadMaxTimer_Tick);
             // 
+            // PingTimer
+            // 
+            this.PingTimer.Interval = 10000;
+            this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
+            // 
+            // MqttConnectTimer
+            // 
+            this.MqttConnectTimer.Interval = 5000;
+            this.MqttConnectTimer.Tick += new System.EventHandler(this.MqttConnectTimer_Tick);
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -655,6 +667,8 @@
         private System.Windows.Forms.Label labelCounterClockMax;
         private System.Windows.Forms.Label labelCounterLoadMax;
         private System.Windows.Forms.Timer GPULoadMaxTimer;
+        private System.Windows.Forms.Timer PingTimer;
+        private System.Windows.Forms.Timer MqttConnectTimer;
     }
 }
 

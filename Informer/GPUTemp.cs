@@ -151,7 +151,7 @@ namespace Informer
                     GlobalVars.gpusList.Add(Convert.ToString(0));
                 }
                 */
-                Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
+             //   Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
 
                 //bool status = await GPUSensorsStatus.GetGPUStatus(status);
 

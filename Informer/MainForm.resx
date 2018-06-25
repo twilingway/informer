@@ -429,7 +429,7 @@
     <value>17, 53</value>
   </metadata>
   <data name="labelCounterTempMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 126</value>
+    <value>266, 126</value>
   </data>
   <data name="labelCounterTempMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -456,7 +456,7 @@
     <value>True</value>
   </data>
   <data name="labelTempMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>38, 126</value>
+    <value>20, 126</value>
   </data>
   <data name="labelTempMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 13</value>
@@ -486,7 +486,7 @@
     <value>True</value>
   </data>
   <data name="labelFanMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>47, 156</value>
+    <value>20, 156</value>
   </data>
   <data name="labelFanMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>57, 13</value>
@@ -538,7 +538,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelCounterTempMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 111</value>
+    <value>266, 111</value>
   </data>
   <data name="labelCounterTempMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -565,7 +565,7 @@
     <value>True</value>
   </data>
   <data name="labelTempMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>41, 111</value>
+    <value>20, 111</value>
   </data>
   <data name="labelTempMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>63, 13</value>
@@ -592,7 +592,7 @@
     <value>True</value>
   </data>
   <data name="labelReloadFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>25, 291</value>
+    <value>20, 291</value>
   </data>
   <data name="labelReloadFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>79, 13</value>
@@ -640,7 +640,7 @@
     <value>35</value>
   </data>
   <data name="labelCounterReloadFile.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 291</value>
+    <value>266, 291</value>
   </data>
   <data name="labelCounterReloadFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -667,7 +667,7 @@
     <value>True</value>
   </data>
   <data name="labelFanMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>50, 141</value>
+    <value>20, 141</value>
   </data>
   <data name="labelFanMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>54, 13</value>
@@ -718,7 +718,7 @@
     <value>32</value>
   </data>
   <data name="labelCounterFanMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 171</value>
+    <value>266, 156</value>
   </data>
   <data name="labelCounterFanMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -769,7 +769,7 @@
     <value>30</value>
   </data>
   <data name="labelCounterFanMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 141</value>
+    <value>266, 141</value>
   </data>
   <data name="labelCounterFanMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -802,7 +802,7 @@
     <value>True</value>
   </data>
   <data name="labelClockMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>36, 201</value>
+    <value>20, 201</value>
   </data>
   <data name="labelClockMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>68, 13</value>
@@ -829,7 +829,7 @@
     <value>True</value>
   </data>
   <data name="labelMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>23, 231</value>
+    <value>20, 231</value>
   </data>
   <data name="labelMemoryMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>81, 13</value>
@@ -877,7 +877,7 @@
     <value>26</value>
   </data>
   <data name="labelCounterClockMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 201</value>
+    <value>266, 201</value>
   </data>
   <data name="labelCounterClockMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -925,7 +925,7 @@
     <value>24</value>
   </data>
   <data name="labelCounterMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 231</value>
+    <value>266, 231</value>
   </data>
   <data name="labelCounterMemoryMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -958,7 +958,7 @@
     <value>True</value>
   </data>
   <data name="labelFellOffGPU.Location" type="System.Drawing.Point, System.Drawing">
-    <value>40, 261</value>
+    <value>20, 261</value>
   </data>
   <data name="labelFellOffGPU.Size" type="System.Drawing.Size, System.Drawing">
     <value>64, 13</value>
@@ -1006,7 +1006,7 @@
     <value>21</value>
   </data>
   <data name="labelCounerGPULost.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 261</value>
+    <value>266, 261</value>
   </data>
   <data name="labelCounerGPULost.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -1033,7 +1033,7 @@
     <value>True</value>
   </data>
   <data name="labelInternet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>39, 276</value>
+    <value>20, 276</value>
   </data>
   <data name="labelInternet.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 13</value>
@@ -1081,7 +1081,7 @@
     <value>18</value>
   </data>
   <data name="labelCounterInternet.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 276</value>
+    <value>266, 276</value>
   </data>
   <data name="labelCounterInternet.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -1105,7 +1105,7 @@
     <value>17</value>
   </data>
   <data name="labelCounterLoadMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 186</value>
+    <value>266, 171</value>
   </data>
   <data name="labelCounterLoadMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -1156,7 +1156,7 @@
     <value>True</value>
   </data>
   <data name="labelLoadMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>42, 171</value>
+    <value>20, 171</value>
   </data>
   <data name="labelLoadMin.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 13</value>
@@ -5771,7 +5771,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelClockMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>33, 216</value>
+    <value>20, 216</value>
   </data>
   <data name="labelClockMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>71, 13</value>
@@ -5801,7 +5801,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelLoadMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>39, 186</value>
+    <value>20, 186</value>
   </data>
   <data name="labelLoadMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 13</value>
@@ -5939,7 +5939,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelCounterMemoryMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 246</value>
+    <value>266, 246</value>
   </data>
   <data name="labelCounterMemoryMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -5966,7 +5966,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelCounterClockMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 216</value>
+    <value>266, 216</value>
   </data>
   <data name="labelCounterClockMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -5993,7 +5993,7 @@
     <value>NoControl</value>
   </data>
   <data name="labelCounterLoadMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>267, 156</value>
+    <value>266, 186</value>
   </data>
   <data name="labelCounterLoadMax.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
@@ -6018,6 +6018,12 @@
   </data>
   <metadata name="GPULoadMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>331, 92</value>
+  </metadata>
+  <metadata name="PingTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>487, 92</value>
+  </metadata>
+  <metadata name="MqttConnectTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>594, 92</value>
   </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -10602,6 +10608,18 @@
     <value>GPULoadMaxTimer</value>
   </data>
   <data name="&gt;&gt;GPULoadMaxTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PingTimer.Name" xml:space="preserve">
+    <value>PingTimer</value>
+  </data>
+  <data name="&gt;&gt;PingTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MqttConnectTimer.Name" xml:space="preserve">
+    <value>MqttConnectTimer</value>
+  </data>
+  <data name="&gt;&gt;MqttConnectTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

@@ -13,64 +13,70 @@ namespace Informer
     {
 
 
+       
         public static async Task RunAsync()
         {
-          
-
-                var options = new MqttClientOptionsBuilder()
-
-                        .WithClientId(GlobalVars.token)
-                        .WithTcpServer("allminer.ru", 1883)
-                        .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
-                        .WithCredentials(GlobalVars.token, GlobalVars.token)
-                        //.WithTls()
-                        .WithCleanSession(true)
-                        .Build();
-
-               // var factory = new MqttFactory();
-
-                GlobalVars.mqttClient = GlobalVars.factory.CreateMqttClient();
-
-
-
-            
+            Debug.WriteLine(GlobalVars.mqttIsConnect);
+            if (GlobalVars.mqttIsConnect == false)
+            {
 
                 try
                 {
+
+                    var options = new MqttClientOptionsBuilder()
+
+                            .WithClientId(GlobalVars.token)
+                            .WithTcpServer("allminer.ru", 1883)
+                            .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
+                            .WithCredentials(GlobalVars.token, GlobalVars.token)
+                            //.WithTls()
+                            .WithCleanSession(true)
+                            .Build();
+
+                    // var factory = new MqttFactory();
+                    //var factory = new MqttFactory();
+
+                    GlobalVars.client = GlobalVars.factory.CreateMqttClient();
+
+
+                    //client = factory.CreateMqttClient();
+
                     // Create TCP based options using the builder.
 
 
 
-                    GlobalVars.mqttClient.ApplicationMessageReceived += (s, e) =>
-                    {
-                        Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
-                        Debug.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
-                        Debug.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
-                        Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
-                        Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
+                    GlobalVars.client.ApplicationMessageReceived += (s, e) =>
+                        {
+                            Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
+                            Debug.WriteLine($"+ Topic = {e.ApplicationMessage.Topic}");
+                            Debug.WriteLine($"+ Payload = {Encoding.UTF8.GetString(e.ApplicationMessage.Payload)}");
+                            Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
+                            Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
 
-                        CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
+                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
 
-                    };
+                        };
 
-                    GlobalVars.mqttClient.Connected += async (s, e) =>
-                    {
+                    GlobalVars.client.Connected += async (s, e) =>
+                   {
+                      
+                           await GlobalVars.client.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
+                   };
 
-                        await GlobalVars.mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
-                    };
 
-                /*
-                    GlobalVars.mqttClient.Disconnected += async (s, e) =>
+                    GlobalVars.client.Disconnected += async (s, e) =>
                     {
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
+                        
+                        
+                        await Task.Delay(TimeSpan.FromSeconds(10));
+                        GlobalVars.mqttIsConnect = false;
+                        /*
 
-                        await Task.Delay(TimeSpan.FromSeconds(5));
-
-                       
                         try
                         {
-                            await GlobalVars.mqttClient.ConnectAsync(options);
-
+                            await client.ConnectAsync(options);
+                            GlobalVars.mqttIsConnect = true;
 
                             var message = new MqttApplicationMessageBuilder()
                                    .WithTopic("devices/" + GlobalVars.token + "/init")
@@ -79,21 +85,23 @@ namespace Informer
                                    .WithRetainFlag()
                                    .Build();
 
-                            await GlobalVars.mqttClient.PublishAsync(message);
+                            await client.PublishAsync(message);
 
                         }
                         catch
                         {
                             Debug.WriteLine("### RECONNECTING FAILED ###");
                         }
-                       
+                        */
                     };
-                    */
+
+
 
                     try
                     {
-                        await GlobalVars.mqttClient.ConnectAsync(options);
-
+                        await GlobalVars.client.ConnectAsync(options);
+                        GlobalVars.mqttIsConnect = true;
+                        MainForm.Message("Connected");
 
                         var message = new MqttApplicationMessageBuilder()
                                    .WithTopic("devices/" + GlobalVars.token + "/init")
@@ -102,7 +110,9 @@ namespace Informer
                                    .WithRetainFlag()
                                    .Build();
 
-                        await GlobalVars.mqttClient.PublishAsync(message);
+                        await GlobalVars.client.PublishAsync(message);
+
+
                     }
                     catch (Exception exception)
                     {
@@ -113,30 +123,48 @@ namespace Informer
 
 
 
+                    /*
+                    while (true)
+                    {
+                       // Console.ReadLine();
 
+                       // await client.SubscribeAsync(new TopicFilter("test", MqttQualityOfServiceLevel.AtMostOnce));
+                       // await client.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
+                        var message = new MqttApplicationMessageBuilder()
+                                      .WithTopic("devices/" + GlobalVars.token + "/init")
+                                      .WithPayload("1")
+                                      .WithAtMostOnceQoS()
+                                      .WithRetainFlag()
+                                      .Build();
 
+                        await client.PublishAsync(message);
+                    }
+                    */
+                    /*
+                    if (client.IsConnected)
+                    {
+                        GlobalVars.mqttIsConnect = true;
+                    }
+                    else if (!client.IsConnected)
+                    {
+                        GlobalVars.mqttIsConnect = false;
+                    }
+                    */
                 }
                 catch (Exception exception)
                 {
-                    Debug.WriteLine(exception);
+                    Debug.WriteLine("### EXCEPTION ###" + exception);
                 }
 
 
-
-           // }
-        }
-        /*
-        static Task FactorialAsync(CancellationToken token)
-        {
-            return Task.Run(() =>
+            }
+            else if (GlobalVars.mqttIsConnect == true)
             {
                
-             token.ThrowIfCancellationRequested();
-                    
-                
-            }, token);
+            }
+          
         }
-        */
+       
 
     }
 }
