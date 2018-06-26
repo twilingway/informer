@@ -25,7 +25,7 @@ namespace Informer
 
                     case "reboot":
 
-                        //Message("Informer Reboot from Allminer.ru!");
+                        MainForm.Message("Informer Reboot from Allminer.ru!");
                         Process psiwer;
                         psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
                         psiwer.Close();

@@ -1008,28 +1008,28 @@
   <data name="&gt;&gt;labelStatusGPULost.ZOrder" xml:space="preserve">
     <value>21</value>
   </data>
-  <data name="labelCounerGPULost.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="labelCounterGPULost.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 261</value>
   </data>
-  <data name="labelCounerGPULost.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="labelCounterGPULost.Size" type="System.Drawing.Size, System.Drawing">
     <value>36, 13</value>
   </data>
-  <data name="labelCounerGPULost.TabIndex" type="System.Int32, mscorlib">
+  <data name="labelCounterGPULost.TabIndex" type="System.Int32, mscorlib">
     <value>41</value>
   </data>
-  <data name="labelCounerGPULost.Text" xml:space="preserve">
+  <data name="labelCounterGPULost.Text" xml:space="preserve">
     <value>                     </value>
   </data>
-  <data name="&gt;&gt;labelCounerGPULost.Name" xml:space="preserve">
-    <value>labelCounerGPULost</value>
+  <data name="&gt;&gt;labelCounterGPULost.Name" xml:space="preserve">
+    <value>labelCounterGPULost</value>
   </data>
-  <data name="&gt;&gt;labelCounerGPULost.Type" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterGPULost.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;labelCounerGPULost.Parent" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterGPULost.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;labelCounerGPULost.ZOrder" xml:space="preserve">
+  <data name="&gt;&gt;labelCounterGPULost.ZOrder" xml:space="preserve">
     <value>20</value>
   </data>
   <data name="labelInternet.AutoSize" type="System.Boolean, mscorlib">
@@ -1199,6 +1199,9 @@
   </data>
   <data name="labelTest.Text" xml:space="preserve">
     <value>labelTest</value>
+  </data>
+  <data name="labelTest.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="&gt;&gt;labelTest.Name" xml:space="preserve">
     <value>labelTest</value>
@@ -6031,6 +6034,9 @@
   <metadata name="MqttConnectTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>594, 92</value>
   </metadata>
+  <metadata name="OHMTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>748, 92</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -10488,7 +10494,7 @@
     <value>CenterScreen</value>
   </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>Informer | Allminer.ru v1.3.9 RU</value>
+    <value>Informer | Allminer.ru v1.4.0 beta RU</value>
   </data>
   <data name="&gt;&gt;GetTempretureTimer.Name" xml:space="preserve">
     <value>GetTempretureTimer</value>
@@ -10626,6 +10632,12 @@
     <value>MqttConnectTimer</value>
   </data>
   <data name="&gt;&gt;MqttConnectTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;OHMTimer.Name" xml:space="preserve">
+    <value>OHMTimer</value>
+  </data>
+  <data name="&gt;&gt;OHMTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">

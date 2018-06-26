@@ -78,7 +78,7 @@
             this.FellOffGPUTimer = new System.Windows.Forms.Timer(this.components);
             this.labelFellOffGPU = new System.Windows.Forms.Label();
             this.labelStatusGPULost = new System.Windows.Forms.Label();
-            this.labelCounerGPULost = new System.Windows.Forms.Label();
+            this.labelCounterGPULost = new System.Windows.Forms.Label();
             this.labelInternet = new System.Windows.Forms.Label();
             this.labelStatusInternet = new System.Windows.Forms.Label();
             this.labelCounterInternet = new System.Windows.Forms.Label();
@@ -107,6 +107,7 @@
             this.GPULoadMaxTimer = new System.Windows.Forms.Timer(this.components);
             this.PingTimer = new System.Windows.Forms.Timer(this.components);
             this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
+            this.OHMTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tbRigName
@@ -374,10 +375,10 @@
             resources.ApplyResources(this.labelStatusGPULost, "labelStatusGPULost");
             this.labelStatusGPULost.Name = "labelStatusGPULost";
             // 
-            // labelCounerGPULost
+            // labelCounterGPULost
             // 
-            resources.ApplyResources(this.labelCounerGPULost, "labelCounerGPULost");
-            this.labelCounerGPULost.Name = "labelCounerGPULost";
+            resources.ApplyResources(this.labelCounterGPULost, "labelCounterGPULost");
+            this.labelCounterGPULost.Name = "labelCounterGPULost";
             // 
             // labelInternet
             // 
@@ -522,6 +523,11 @@
             this.MqttConnectTimer.Interval = 5000;
             this.MqttConnectTimer.Tick += new System.EventHandler(this.MqttConnectTimer_Tick);
             // 
+            // OHMTimer
+            // 
+            this.OHMTimer.Interval = 10000;
+            this.OHMTimer.Tick += new System.EventHandler(this.OHMTimer_Tick);
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -546,7 +552,7 @@
             this.Controls.Add(this.labelCounterInternet);
             this.Controls.Add(this.labelStatusInternet);
             this.Controls.Add(this.labelInternet);
-            this.Controls.Add(this.labelCounerGPULost);
+            this.Controls.Add(this.labelCounterGPULost);
             this.Controls.Add(this.labelStatusGPULost);
             this.Controls.Add(this.labelFellOffGPU);
             this.Controls.Add(this.labelCounterMemoryMin);
@@ -640,7 +646,7 @@
         private System.Windows.Forms.Timer FellOffGPUTimer;
         private System.Windows.Forms.Label labelFellOffGPU;
         private System.Windows.Forms.Label labelStatusGPULost;
-        private System.Windows.Forms.Label labelCounerGPULost;
+        private System.Windows.Forms.Label labelCounterGPULost;
         private System.Windows.Forms.Label labelInternet;
         private System.Windows.Forms.Label labelStatusInternet;
         private System.Windows.Forms.Label labelCounterInternet;
@@ -669,6 +675,7 @@
         private System.Windows.Forms.Timer GPULoadMaxTimer;
         private System.Windows.Forms.Timer PingTimer;
         private System.Windows.Forms.Timer MqttConnectTimer;
+        private System.Windows.Forms.Timer OHMTimer;
     }
 }
 

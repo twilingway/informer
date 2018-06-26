@@ -119,7 +119,7 @@ static class GlobalVars
     public static int clock_min;
     public static int clock_max;
 
-    public static int interval;
+    public static int interval = 60;
 
 
     public static int time_count_GPU;

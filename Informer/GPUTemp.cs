@@ -21,12 +21,17 @@ namespace Informer
             try
             {
                 //GlobalVars._pc = new Computer();
-                GlobalVars._pc.CPUEnabled = true;
-                //_pc.Open();
-                GlobalVars._pc.GPUEnabled = true;
+                /*
+                if (GlobalVars.temp0 == true) {
+                    GlobalVars._pc.Close();
+                    GlobalVars._pc = null;
+                    GlobalVars._pc = new Computer();
+                    GlobalVars._pc.CPUEnabled = true;
+                    GlobalVars._pc.GPUEnabled = true;
+                    GlobalVars._pc.Open();
 
-                GlobalVars._pc.Open();
-
+                }
+                */
                 // List<String> gpusList = new List<string>();
                 //  GlobalVars.gpuList = new Dictionary<int, List<string>>();
                 GlobalVars.gpusList.Clear();
@@ -148,16 +153,7 @@ namespace Informer
                 {
                     GlobalVars.count_GPU = GlobalVars.counts;
                 }
-                /*
-                 if (GlobalVars.gpusList.Count == 5)
-                {
-                    GlobalVars.fan += "0" + ",";
-                    GlobalVars.gpusList.Add(Convert.ToString(0));
-                }
-                */
-                //   Debug.WriteLine(GlobalVars.counts + " " + GlobalVars.gpusList.Count);
-
-                //bool status = await GPUSensorsStatus.GetGPUStatus(status);
+               
 
             }
             catch(Exception e)
@@ -166,27 +162,7 @@ namespace Informer
 
             }
 
-            /*
-            return await Task.Run(() =>
-            {
-                bool result = true;
-                
-                for (int i = 1; i <= x; i++)
-                {
-                    result *= i;
-                }
-                
-                return result;
-            
-            });
-
-        */
-        /*
-            int num = 5;
-
-            int result = await FactorialAsync(num);
-
-    */
+           
         }
 
 

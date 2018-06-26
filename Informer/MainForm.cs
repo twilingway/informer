@@ -198,7 +198,7 @@ namespace Informer
             Message("Informer Stopped!");
 
          
-            SendDataTimer.Enabled = false;
+           
             GetTempretureTimer.Enabled = false;
             PingTimer.Enabled = false;
             MqttConnectTimer.Enabled = false;
@@ -261,7 +261,7 @@ namespace Informer
                 btStart.Enabled = false;
                 btStop.Visible = true;
                 AutoStartTimer.Enabled = false;
-             //   Message("Informer Started!");
+                //Message("Informer Started!");
                 GlobalVars.timeOnline = 0;
                 tbToken.ReadOnly = true;
                 tbRigName.Text = GlobalVars.name;
@@ -319,6 +319,7 @@ namespace Informer
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
             InformationLabel.Text = "Запущен";
+            Message("Informer Started!");
             InformationLabel.ForeColor = Color.Green;
             Hide();
             MqttConnectTimer.Enabled = true;
@@ -411,8 +412,10 @@ namespace Informer
                                 else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_min))
                                 {
                                     GPUTempMinTimer.Enabled = false;
-                                    labelCounterTempMin.Visible = false;
+                                    OHMTimer.Enabled = false;
                                     GlobalVars.temp0 = false;
+                                    labelCounterTempMin.Visible = false;
+                                    
                                     labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
                                     labelStatusTempMin.ForeColor = Color.Green;
                                     GlobalVars.timer_t_min = -100;
@@ -421,15 +424,10 @@ namespace Informer
                                 if (Convert.ToInt32(p) == 0)
                                 {
                                     GlobalVars.temp0 = true;
-                                    GlobalVars._pc.Close();
-                                    GlobalVars._pc = null;
-                                    GlobalVars._pc = new Computer();
-                                    GlobalVars._pc.CPUEnabled = true;
-                                    GlobalVars._pc.GPUEnabled = true;
-                                    GlobalVars._pc.Open();
                                     Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
+                                    OHMTimer.Enabled = true;
                                 }
-
+                                Debug.WriteLine("Temp0ON: " + Convert.ToInt32(p));
 
 
                             }
@@ -892,7 +890,7 @@ namespace Informer
             if (GlobalVars.reboots_lost_gpu == false)
             {
                 labelStatusGPULost.Visible = true;
-                labelCounerGPULost.Visible = false;
+                labelCounterGPULost.Visible = false;
                 labelStatusGPULost.Text = MyStrings.labelEvent;
                 labelStatusGPULost.ForeColor = Color.Blue;
                 GlobalVars.timer_gpu_lost = -100;
@@ -903,14 +901,19 @@ namespace Informer
 
                 if (GlobalVars.count_GPU > GlobalVars.counts || GlobalVars.temp0 == true)
                 {
-                    
+                    if (FellOffGPUTimer.Enabled == false)
+                    {
+                        GlobalVars.timer_gpu_lost = -100;
+                    }
+
                     FellOffGPUTimer.Enabled = true;
-                    labelCounerGPULost.Visible = true;
-                    labelCounerGPULost.ForeColor = Color.Red;
+                    labelCounterGPULost.Visible = true;
+                    labelCounterGPULost.ForeColor = Color.Red;
+                    labelCounterGPULost.Text = GlobalVars.timer_gpu_lost.ToString();
                     labelStatusGPULost.Text = MyStrings.labelStatusFellOffGPU;
                     labelStatusGPULost.ForeColor = Color.Red;
+                    
 
-                    GlobalVars.timer_gpu_lost = -100;
 
                 }
                 else if (GlobalVars.count_GPU == GlobalVars.counts && GlobalVars.temp0 == false)
@@ -918,7 +921,7 @@ namespace Informer
 
 
                     FellOffGPUTimer.Enabled = false;
-                    labelCounerGPULost.Visible = false;
+                    labelCounterGPULost.Visible = false;
 
                     labelStatusGPULost.Text = MyStrings.labelStatusOK; ;
                     labelStatusGPULost.ForeColor = Color.Green;
@@ -935,8 +938,8 @@ namespace Informer
         //public void SendData()
         public static async Task SendData()
         {
-
-            if(GlobalVars.mqttIsConnect == true)
+            
+            if (GlobalVars.mqttIsConnect == true)
             {
                 try
                 {
@@ -1250,7 +1253,9 @@ namespace Informer
                 PingTimer.Enabled = true;
                 GetTempretureTimer.Enabled = true;
                 MqttConnectTimer.Enabled = true;
-                
+                Message("Informer Started!");
+
+
             }
                      
 
@@ -1384,6 +1389,8 @@ namespace Informer
         {
             if (GlobalVars.mqttIsConnect)
             {
+                SendDataTimer.Interval = GlobalVars.interval * 1000;
+                Debug.WriteLine("Interval: " + SendDataTimer.Interval);
                 await SendData();
             }
             
@@ -1473,57 +1480,12 @@ namespace Informer
             GlobalVars.timer_memory_max = GlobalVars.timer_memory_max - 1;
         }
 
-        /*
-   public void СheckForPing()
-   {
-       try
-       {
-           using (Ping ping = new System.Net.NetworkInformation.Ping())
-           {
-               PingReply pingReply = null;
-               int timeout = 1000;
-               pingReply = ping.Send("8.8.8.8", timeout);
-
-               if (pingReply.Status == IPStatus.Success)
-               {
-                   GlobalVars.InternetIsActive = true;
-                   labelStatusInternetPing.Text = "OK";
-                   labelStatusInternetPing.ForeColor = Color.Green;
-
-
-               }
-               else
-               {
-                   _log.writeLogLine(" INTERNET OFF", "log");
-                   labelStatusInternetPing.Text = "No access to the Internet";
-                   labelStatusInternetPing.ForeColor = Color.Red;
-                   GlobalVars.InternetIsActive = false;
-
-               }
-
-
-           }
-
-       }
-
-       catch (Exception ex)
-       {
-
-           _error.writeLogLine(ex.Message + " INTERNET OFF", "error");
-           labelStatusInternetPing.Text = "No access to the Internet";
-           labelStatusInternetPing.ForeColor = Color.Red;
-           GlobalVars.InternetIsActive = false;
-       }
-
-   }
-   */
-
+    
         async private void InternetInactiveTimerTick(object sender, EventArgs e)
         {
             const string bat = "reboot_internet.bat";
 
-            //DontHaveInternetTimer.Enabled = false;
-            try
+           try
             {
                 if (GlobalVars.timer_inet < 0)
                 {
@@ -1543,30 +1505,38 @@ namespace Informer
                         }
                     }
                 }
-                GlobalVars.timer_inet = GlobalVars.timer_inet - 1;
+                /*
+                if (GlobalVars.temp0 == true)
+                {
+                    GlobalVars._pc.Close();
+                    GlobalVars._pc = null;
+                    GlobalVars._pc = new Computer();
+                    GlobalVars._pc.CPUEnabled = true;
+                    GlobalVars._pc.GPUEnabled = true;
+                    GlobalVars._pc.Open();
+
+                }
+                */
                 await Task.Delay(1);
+                
+
+                GlobalVars.timer_inet = GlobalVars.timer_inet - 1;
+                
             }
             catch ( Exception ex)
             {
 
                 Debug.WriteLine("InternetInactiveTimer: " + ex);
             }
-            /*
-            finally
-            {
-                DontHaveInternetTimer.Enabled = false;
-            }
-            */
-
+            
         }
 
-        private void FellOffTimerTick(object o, EventArgs e)
+        async private void FellOffTimerTick(object o, EventArgs e)
         {
             const string msg = "GPU fell, Reboot!";
             const string bat = "reboot_card.bat";
 
-            // FellOffGPUTimer.Enabled = false;
-            try
+           try
             {
                 if (GlobalVars.timer_gpu_lost < 0)
                 {
@@ -1576,18 +1546,13 @@ namespace Informer
                 {
                     if (!GlobalVars.IsRebootStarted)
                     {
-                        //  if (GlobalVars.InternetIsActive)
-                        //   {
+                        
                         Reboot(msg, bat);
-                        //    GlobalVars.IsRebootStarted = true;
-                        //   }
-                        //   else
-                        //   {
-                        //       GlobalVars.timer_t_card = -100;
-                        //   }
+                        
                     }
                 }
                 GlobalVars.timer_gpu_lost = GlobalVars.timer_gpu_lost - 1;
+                await Task.Delay(1);
             }
             catch (Exception ex)
             {
@@ -1813,6 +1778,21 @@ namespace Informer
         {
 
             await MqttConnect.RunAsync();
+
+        }
+
+        async private void OHMTimer_Tick(object sender, EventArgs e)
+        {
+
+            GlobalVars._pc.Close();
+            GlobalVars._pc = null;
+            GlobalVars._pc = new Computer();
+            GlobalVars._pc.CPUEnabled = true;
+            GlobalVars._pc.GPUEnabled = true;
+            GlobalVars._pc.Open();
+
+            await Task.Delay(15);
+
 
         }
 
