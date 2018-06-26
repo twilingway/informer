@@ -38,7 +38,7 @@ namespace Informer
     {
 
         private static List<string> hosts = new List<string>();
-        private Computer _pc;
+       // private Computer _pc;
         private static Http _http = new Http();
         private LogFile _log, _error;
         //List<String> gpusList = new List<string>();
@@ -88,14 +88,13 @@ namespace Informer
                 _error.writeLogLine("Kill launcher: " + ex.Message, "error");
             }
 
-            _pc = new Computer();
-            _pc.CPUEnabled = true;
-            //_pc.Open();
-            _pc.GPUEnabled = true;
+            // _pc = new Computer();
+            GlobalVars._pc.CPUEnabled = true;
+            GlobalVars._pc.GPUEnabled = true;
+            GlobalVars._pc.Open();
+            //_pc.Close();
 
-            _pc.Open();
-
-
+            //GlobalVars._pc.Close();
             _log = new LogFile("log");
             _error = new LogFile("error");
 
@@ -419,9 +418,16 @@ namespace Informer
                                     GlobalVars.timer_t_min = -100;
 
                                 }
-                                else if (Convert.ToInt32(p) == 0)
+                                if (Convert.ToInt32(p) == 0)
                                 {
                                     GlobalVars.temp0 = true;
+                                    GlobalVars._pc.Close();
+                                    GlobalVars._pc = null;
+                                    GlobalVars._pc = new Computer();
+                                    GlobalVars._pc.CPUEnabled = true;
+                                    GlobalVars._pc.GPUEnabled = true;
+                                    GlobalVars._pc.Open();
+                                    Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
                                 }
 
 
@@ -897,6 +903,7 @@ namespace Informer
 
                 if (GlobalVars.count_GPU > GlobalVars.counts || GlobalVars.temp0 == true)
                 {
+                    
                     FellOffGPUTimer.Enabled = true;
                     labelCounerGPULost.Visible = true;
                     labelCounerGPULost.ForeColor = Color.Red;
