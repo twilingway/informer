@@ -41,7 +41,7 @@ static class GlobalVars
 
 
 
-    public static int autostart;
+    public static int autostart = 60;
     public static int start_timestamp;
     public static int timeOnline = -1;
     public static int reload_temp_min_file;
@@ -143,6 +143,7 @@ static class GlobalVars
     public static bool reboot6 = false;
     public static bool memMax = false;
     public static bool temp0 = false;
+    public static bool firsrun = true;
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;

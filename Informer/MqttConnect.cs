@@ -101,6 +101,7 @@ namespace Informer
                        // GlobalVars.mqttIsConnect = false;
                         await GlobalVars.client.ConnectAsync(options);
                         GlobalVars.mqttIsConnect = true;
+                        GlobalVars.firsrun = false;
                        // MainForm.Message("Connected");
 
                         var message = new MqttApplicationMessageBuilder()

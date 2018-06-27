@@ -232,6 +232,15 @@ namespace Informer {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Started.
+        /// </summary>
+        internal static string labelStatusStarted {
+            get {
+                return ResourceManager.GetString("labelStatusStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Перегрев.
         /// </summary>
         internal static string labelStatusTempMax {
