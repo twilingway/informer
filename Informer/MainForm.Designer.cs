@@ -108,6 +108,7 @@
             this.PingTimer = new System.Windows.Forms.Timer(this.components);
             this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
             this.OHMTimer = new System.Windows.Forms.Timer(this.components);
+            this.GPUStatusTimer = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // tbRigName
@@ -153,7 +154,7 @@
             // 
             // GetTempretureTimer
             // 
-            this.GetTempretureTimer.Interval = 1000;
+            this.GetTempretureTimer.Interval = 2000;
             this.GetTempretureTimer.Tag = "get temp";
             this.GetTempretureTimer.Tick += new System.EventHandler(this.GetTempretureTimerTick);
             // 
@@ -528,6 +529,10 @@
             this.OHMTimer.Interval = 10000;
             this.OHMTimer.Tick += new System.EventHandler(this.OHMTimer_Tick);
             // 
+            // GPUStatusTimer
+            // 
+            this.GPUStatusTimer.Tick += new System.EventHandler(this.GPUStatusTimer_Tick);
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -676,6 +681,7 @@
         private System.Windows.Forms.Timer PingTimer;
         private System.Windows.Forms.Timer MqttConnectTimer;
         private System.Windows.Forms.Timer OHMTimer;
+        private System.Windows.Forms.Timer GPUStatusTimer;
     }
 }
 

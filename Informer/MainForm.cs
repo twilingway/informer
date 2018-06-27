@@ -197,8 +197,8 @@ namespace Informer
             _log.writeLogLine("Informer stopped", "log");
             Message("Informer Stopped!");
 
-         
-           
+
+            GPUStatusTimer.Enabled = false;
             GetTempretureTimer.Enabled = false;
             PingTimer.Enabled = false;
             MqttConnectTimer.Enabled = false;
@@ -244,7 +244,7 @@ namespace Informer
 
 
 
-        private void GetTempretureTimerTick(object sender, EventArgs e)
+        async private void GetTempretureTimerTick(object sender, EventArgs e)
         {
             GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
@@ -255,14 +255,14 @@ namespace Informer
                 GlobalVars.token = tbToken.Text;
                 GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
                 SendDataTimer.Enabled = true;
-                GPUTemp.GetGPU();
+              // GPUTemp.GetGPU();
                
 
                 btStart.Enabled = false;
                 btStop.Visible = true;
                 AutoStartTimer.Enabled = false;
                 //Message("Informer Started!");
-                GlobalVars.timeOnline = 0;
+                //GlobalVars.timeOnline = 0;
                 tbToken.ReadOnly = true;
                 tbRigName.Text = GlobalVars.name;
                 GlobalVars.mqttIsConnect = true;
@@ -272,9 +272,9 @@ namespace Informer
             }
             else if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false)
             {
-                InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-                InformationLabel.ForeColor = Color.Red;
-                GPUTemp.GetGPU();
+              //  InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+             //   InformationLabel.ForeColor = Color.Red;
+             //   GPUTemp.GetGPU();
               //  GlobalVars.mqttIsConnect = false;
 
             }
@@ -287,10 +287,12 @@ namespace Informer
                 AutoStartTimer.Enabled = false;
                 btStop.Visible = true;
                 GPUTemp.GetGPU();
-                labelTest.Text = Convert.ToString(GlobalVars.gpusList.Count);
+               // GpuStatus();
+                
                 GlobalVars.gpuList.Add(GlobalVars.gpusList.Count, GlobalVars.gpusList);
-                GpuStatus();
-               
+
+                labelTest.Text = Convert.ToString(GlobalVars.gpusList.Count);
+
 
             }
             catch (Exception ex)
@@ -298,6 +300,7 @@ namespace Informer
                 _error.writeLogLine("GetTempTimer: " + ex.Message, "error");
             }
 
+            await Task.Delay(1000);
             //GPUTemp.GetGPU();
             
             
@@ -309,7 +312,7 @@ namespace Informer
         private void NextAutoStart_Tick(object sender, EventArgs e)
         {
 
-            
+            GPUStatusTimer.Enabled = true;
             GetTempretureTimer.Enabled = true;
             PingTimer.Enabled = true;
             AutoStartTimer.Enabled = false;
@@ -1247,9 +1250,9 @@ namespace Informer
             {
                 GlobalVars.token = tbToken.Text;
                 tbToken.ReadOnly = true;
-              //   Action<string> asyn = new Action<string>(Pinger);
-              
+                //   Action<string> asyn = new Action<string>(Pinger);
 
+                GPUStatusTimer.Enabled = true;
                 PingTimer.Enabled = true;
                 GetTempretureTimer.Enabled = true;
                 MqttConnectTimer.Enabled = true;
@@ -1517,7 +1520,7 @@ namespace Informer
 
                 }
                 */
-                await Task.Delay(1);
+                
                 
 
                 GlobalVars.timer_inet = GlobalVars.timer_inet - 1;
@@ -1528,7 +1531,8 @@ namespace Informer
 
                 Debug.WriteLine("InternetInactiveTimer: " + ex);
             }
-            
+
+            await Task.Delay(1);
         }
 
         async private void FellOffTimerTick(object o, EventArgs e)
@@ -1774,7 +1778,7 @@ namespace Informer
             }
         }
 
-        private async void MqttConnectTimer_Tick(object sender, EventArgs e)
+        async void MqttConnectTimer_Tick(object sender, EventArgs e)
         {
 
             await MqttConnect.RunAsync();
@@ -1791,9 +1795,15 @@ namespace Informer
             GlobalVars._pc.GPUEnabled = true;
             GlobalVars._pc.Open();
 
-            await Task.Delay(15);
+            await Task.Delay(500);
 
 
+        }
+
+        async private void GPUStatusTimer_Tick(object sender, EventArgs e)
+        {
+            GpuStatus();
+            await Task.Delay(1000);
         }
 
 

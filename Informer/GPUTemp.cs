@@ -166,20 +166,6 @@ namespace Informer
         }
 
 
-        static Task<int> FactorialAsync(int x)
-        {
-            int result = 1;
-
-            return Task.Run(() =>
-            {
-              //  for (int i = 1; i <= x; i++)
-              //  {
-              //      result *= i;
-              //  }
-                return result;
-            });
-        }
-
     }
 }
         
