@@ -143,6 +143,7 @@ static class GlobalVars
     public static bool reboot6 = false;
     public static bool memMax = false;
     public static bool temp0 = false;
+    public static bool firsrun = true;
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
     public static bool rebootLoadGPU = false;

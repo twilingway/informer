@@ -183,4 +183,7 @@
   <data name="labelStatusMemoryMax" xml:space="preserve">
     <value>Высокие частоты памяти</value>
   </data>
+  <data name="labelStatusStarted" xml:space="preserve">
+    <value>Started</value>
+  </data>
 </root>

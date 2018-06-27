@@ -197,8 +197,8 @@ namespace Informer
             _log.writeLogLine("Informer stopped", "log");
             Message("Informer Stopped!");
 
-         
-           
+
+            GlobalVars.firsrun = true;
             GetTempretureTimer.Enabled = false;
             PingTimer.Enabled = false;
             MqttConnectTimer.Enabled = false;
@@ -270,7 +270,7 @@ namespace Informer
                 InformationLabel.ForeColor = Color.Green;
                 labelTest.Text = Convert.ToString(GlobalVars.gpuList.Count);
             }
-            else if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false)
+            else if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
             {
                 InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
                 InformationLabel.ForeColor = Color.Red;
@@ -318,11 +318,15 @@ namespace Informer
             GlobalVars.timeOnline = 0;
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
-            InformationLabel.Text = "Запущен";
+           
             Message("Informer Started!");
             InformationLabel.ForeColor = Color.Green;
             Hide();
             MqttConnectTimer.Enabled = true;
+            InformationLabel.Visible = true;
+
+            InformationLabel.Text = MyStrings.labelStatusStarted;
+            InformationLabel.ForeColor = Color.Green;
         }
 
         private void AutoStart_Tick(object sender, EventArgs e)
@@ -859,7 +863,7 @@ namespace Informer
             else if (GlobalVars.reboots_lost_inet == true )
             {
 
-                if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false)
+                if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
                 {
 
                     DontHaveInternetTimer.Enabled = true;
@@ -1253,7 +1257,11 @@ namespace Informer
                 PingTimer.Enabled = true;
                 GetTempretureTimer.Enabled = true;
                 MqttConnectTimer.Enabled = true;
-                Message("Informer Started!");
+                //Message("Informer Started!");
+                InformationLabel.Visible = true;
+
+                InformationLabel.Text = MyStrings.labelStatusStarted;
+                InformationLabel.ForeColor = Color.Green;
 
 
             }
