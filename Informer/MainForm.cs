@@ -1018,7 +1018,7 @@ namespace Informer
                         .Build();
 
                     await GlobalVars.client.PublishAsync(send_data);
-                    
+                    Debug.WriteLine("SendData: " + send_data);
 
 
 
