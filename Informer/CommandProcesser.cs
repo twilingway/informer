@@ -144,15 +144,20 @@ namespace Informer
                             GlobalVars.clock_max = response.Params.data_ranges.Clock[1];
                             GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.clock_max), Convert.ToString(response.Params.data_ranges.Clock[1]));
 
-                            GlobalVars.name = response.Params.name;
-                            GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
-
+                            if (!string.IsNullOrWhiteSpace(response.Params.name))
+                            {
+                                GlobalVars.name = response.Params.name;
+                                GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
+                            }
                             //tbRigName.Text = GlobalVars.name;
 
                             GlobalVars.autostart = response.Params.timers.autostart;
                             GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.autostart), Convert.ToString(response.Params.timers.autostart));
-                                                                                  
-                            GlobalVars.interval = response.Params.interval;
+
+                            if (response.Params.interval > 0)
+                            {
+                                GlobalVars.interval = response.Params.interval;
+                            }
 
 
 

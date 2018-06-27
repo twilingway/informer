@@ -169,7 +169,7 @@ namespace Informer
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                Debug.WriteLine("KILL Informer: " + e);
             }  
           
            
@@ -252,34 +252,22 @@ namespace Informer
 
             if (GlobalVars.mqttIsConnect == true)
             {
-              //  _log.writeLogLine("Informer is started ", "log");
-               
-                GlobalVars.token = tbToken.Text;
-                GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
-                SendDataTimer.Enabled = true;
-              // GPUTemp.GetGPU();
-               
-
+                             
+             //   GlobalVars.token = tbToken.Text;
+             //   GlobalVars._manager.WritePrivateString("main", "token", tbToken.Text);
+             
                 btStart.Enabled = false;
                 btStop.Visible = true;
+
                 AutoStartTimer.Enabled = false;
-                //Message("Informer Started!");
-                //GlobalVars.timeOnline = 0;
+               
+                GlobalVars.timeOnline = 0;
                 tbToken.ReadOnly = true;
                 tbRigName.Text = GlobalVars.name;
-                GlobalVars.mqttIsConnect = true;
-                InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
-                InformationLabel.ForeColor = Color.Green;
+             
                 labelTest.Text = Convert.ToString(GlobalVars.gpuList.Count);
             }
-            else if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
-            {
-              //  InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-             //   InformationLabel.ForeColor = Color.Red;
-             //   GPUTemp.GetGPU();
-              //  GlobalVars.mqttIsConnect = false;
 
-            }
             
 
             try
@@ -289,8 +277,6 @@ namespace Informer
                 AutoStartTimer.Enabled = false;
                 btStop.Visible = true;
                 GPUTemp.GetGPU();
-               // GpuStatus();
-                
                 GlobalVars.gpuList.Add(GlobalVars.gpusList.Count, GlobalVars.gpusList);
 
                 labelTest.Text = Convert.ToString(GlobalVars.gpusList.Count);
@@ -303,7 +289,7 @@ namespace Informer
             }
 
             await Task.Delay(1000);
-            //GPUTemp.GetGPU();
+           
             
             
         }
@@ -313,30 +299,33 @@ namespace Informer
 
         private void NextAutoStart_Tick(object sender, EventArgs e)
         {
-
+            GlobalVars.token = tbToken.Text;
             GPUStatusTimer.Enabled = true;
             GetTempretureTimer.Enabled = true;
             PingTimer.Enabled = true;
             AutoStartTimer.Enabled = false;
             btStop.Visible = true;
             btStart.Enabled = false;
-            GlobalVars.timeOnline = 0;
+           // GlobalVars.timeOnline = 0;
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
-           
-            Message("Informer Started!");
-            InformationLabel.ForeColor = Color.Green;
-            Hide();
+            if (!string.IsNullOrWhiteSpace(GlobalVars.name))
+            {
+                Message("Informer Started!");
+            }
+
             MqttConnectTimer.Enabled = true;
             InformationLabel.Visible = true;
-
             InformationLabel.Text = MyStrings.labelStatusStarted;
             InformationLabel.ForeColor = Color.Green;
+            Hide();
+            
+            
         }
 
         private void AutoStart_Tick(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(GlobalVars.token))
+            if (!string.IsNullOrWhiteSpace(GlobalVars.token))
             {
                 tbToken.ReadOnly = true;
                 NextAutoStart.Start();
@@ -372,6 +361,16 @@ namespace Informer
             labelFellOffGPU.Text = "GPU LOST(" + GlobalVars.count_GPU + "):";
 
             int i = 0;
+            int tempMinCount = 0;
+            int tempMaxCount = 0;
+            int fanMinCount = 0;
+            int fanMaxCount = 0;
+            int loadMinCount = 0;
+            int loadMaxCount = 0;
+            int clockMinCount = 0;
+            int clockMaxCount = 0;
+            int memoryMinCount = 0;
+            int memoryMaxCount = 0;
             foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
             {
 
@@ -404,7 +403,7 @@ namespace Informer
                             }
                             else if (GlobalVars.reboots_temp_min == true)
                             {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min) && Convert.ToInt32(p) != 0)
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min) && Convert.ToInt32(p) != 0 && tempMinCount == 0)
                                 {
 
                                     GPUTempMinTimer.Enabled = true;
@@ -415,6 +414,7 @@ namespace Informer
                                     labelCounterTempMin.Visible = true;
                                     labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
                                     labelCounterTempMin.ForeColor = Color.Red;
+                                    tempMinCount++;
 
 
                                 }
@@ -433,10 +433,10 @@ namespace Informer
                                 if (Convert.ToInt32(p) == 0)
                                 {
                                     GlobalVars.temp0 = true;
-                                    Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
+                                  //  Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
                                     OHMTimer.Enabled = true;
                                 }
-                                Debug.WriteLine("Temp0ON: " + Convert.ToInt32(p));
+                               // Debug.WriteLine("Temp0ON: " + Convert.ToInt32(p));
 
 
                             }
@@ -453,7 +453,7 @@ namespace Informer
                             }
                             else if (GlobalVars.reboots_temp_max == true)
                             {
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max))
+                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max) && tempMaxCount == 0)
                                 {
 
                                     GPUTempMaxTimer.Enabled = true;
@@ -464,11 +464,12 @@ namespace Informer
                                     labelCounterTempMax.Visible = true;
                                     labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
                                     labelCounterTempMax.ForeColor = Color.Red;
+                                    tempMaxCount++;
 
 
                                 }
 
-                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max))
+                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max) )
                                 {
                                     GPUTempMaxTimer.Enabled = false;
                                     labelCounterTempMax.Visible = false;
@@ -499,7 +500,7 @@ namespace Informer
                                 if (GlobalVars.reboots_clock_min == true)
                                 {
                                     
-                                    if (Convert.ToInt32(pp) <= GlobalVars.clock_min)
+                                    if (Convert.ToInt32(pp) <= GlobalVars.clock_min && clockMinCount == 0)
                                     {
                                         GPUCoreMinTimer.Enabled = true;
 
@@ -510,6 +511,7 @@ namespace Informer
                                         labelCounterClockMin.Visible = true;
                                         labelCounterClockMin.Text = GlobalVars.timer_clock_min.ToString();
                                         labelCounterClockMin.ForeColor = Color.Red;
+                                        clockMinCount++;
 
                                     }
                                     else if (Convert.ToInt32(pp) >= GlobalVars.clock_min)
@@ -539,7 +541,7 @@ namespace Informer
 
                                 if (GlobalVars.reboots_clock_max == true)
                                 {
-                                    if (Convert.ToInt32(pp) >= Convert.ToInt32(GlobalVars.clock_max))
+                                    if (Convert.ToInt32(pp) >= Convert.ToInt32(GlobalVars.clock_max) && clockMaxCount == 0)
                                     {
                                         GPUCoreMaxTimer.Enabled = true;
 
@@ -550,6 +552,7 @@ namespace Informer
                                         labelCounterClockMax.Visible = true;
                                         labelCounterClockMax.Text = GlobalVars.timer_clock_max.ToString();
                                         labelCounterClockMax.ForeColor = Color.Red;
+                                        clockMaxCount++;
 
                                     }
                                     else if (Convert.ToInt32(pp) <= Convert.ToInt32(GlobalVars.clock_max))
@@ -560,6 +563,7 @@ namespace Informer
                                         labelStatusClockMax.Text = MyStrings.labelStatusOK;
                                         labelStatusClockMax.ForeColor = Color.Green;
                                         GlobalVars.timer_clock_max = -100;
+                                      
 
 
                                     }
@@ -590,7 +594,7 @@ namespace Informer
                            
                             if (GlobalVars.reboots_mem_min == true)
                             {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.mem_min))
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.mem_min) && memoryMinCount == 0)
                                 {
                                     GPUMemMinTimer.Enabled = true;
 
@@ -601,6 +605,7 @@ namespace Informer
                                     labelCounterMemoryMin.Visible = true;
                                     labelCounterMemoryMin.Text = GlobalVars.timer_memory_min.ToString();
                                     labelCounterMemoryMin.ForeColor = Color.Red;
+                                    memoryMinCount++;
 
                                 }
                                 else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.mem_min))
@@ -629,7 +634,7 @@ namespace Informer
 
                             if (GlobalVars.reboots_mem_max == true)
                             {
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.mem_max))
+                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.mem_max) && memoryMaxCount == 0)
                                 {
                                     GPUMemMaxTimer.Enabled = true;
 
@@ -640,6 +645,7 @@ namespace Informer
                                     labelCounterMemoryMax.Visible = true;
                                     labelCounterMemoryMax.Text = GlobalVars.timer_memory_max.ToString();
                                     labelCounterMemoryMax.ForeColor = Color.Red;
+                                    memoryMaxCount++;
 
                                 }
                                 else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.mem_max))
@@ -673,7 +679,7 @@ namespace Informer
                           
                             if (GlobalVars.reboots_load_min == true)
                             {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_min))
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_min) && loadMinCount == 0)
                                 {
                                     GPULoadMinTimer.Enabled = true;
 
@@ -684,6 +690,7 @@ namespace Informer
                                     labelCounterLoadMin.Visible = true;
                                     labelCounterLoadMin.Text = GlobalVars.timer_load_gpu_min.ToString();
                                     labelCounterLoadMin.ForeColor = Color.Red;
+                                    loadMinCount++;
 
                                 }
                                 else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.load_GPU_min))
@@ -711,7 +718,7 @@ namespace Informer
 
                             if (GlobalVars.reboots_load_max == true)
                             {
-                                if (Convert.ToInt32(p) > Convert.ToInt32(GlobalVars.load_GPU_max))
+                                if (Convert.ToInt32(p) > Convert.ToInt32(GlobalVars.load_GPU_max) && loadMaxCount == 0)
                                 {
                                     GPULoadMaxTimer.Enabled = true;
 
@@ -722,7 +729,7 @@ namespace Informer
                                     labelCounterLoadMax.Visible = true;
                                     labelCounterLoadMax.Text = GlobalVars.timer_load_gpu_max.ToString();
                                     labelCounterLoadMax.ForeColor = Color.Red;
-
+                                    loadMaxCount++;
                                 }
                                 else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_max))
                                 {
@@ -765,7 +772,7 @@ namespace Informer
                             }
                             else if (GlobalVars.reboots_fan_min == true)
                             {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min))
+                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min) && fanMinCount == 0)
                                 {
 
                                     GPUFanMinTimer.Enabled = true;
@@ -777,7 +784,7 @@ namespace Informer
                                     labelCounterFanMin.Visible = true;
                                     labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
                                     labelCounterFanMin.ForeColor = Color.Red;
-
+                                    fanMinCount++;
 
                                 }
 
@@ -809,7 +816,7 @@ namespace Informer
                             {
 
 
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max))
+                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max) && fanMaxCount == 0)
                                 {
 
                                     GPUFanMaxTimer.Enabled = true;
@@ -820,6 +827,7 @@ namespace Informer
                                     labelCounterFanMax.Visible = true;
                                     labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
                                     labelCounterFanMax.ForeColor = Color.Red;
+                                    fanMaxCount++;
 
 
                                 }
@@ -865,7 +873,7 @@ namespace Informer
                 GlobalVars.timer_fan_max = -100;
 
             }
-            else if (GlobalVars.reboots_lost_inet == true )
+            else if (GlobalVars.reboots_lost_inet == true)
             {
 
                 if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
@@ -881,7 +889,7 @@ namespace Informer
                     labelCounterInternet.ForeColor = Color.Red;
                 }
 
-                
+
                 else if (GlobalVars.mqttIsConnect == true || GlobalVars.ping == true)
                 {
 
@@ -895,6 +903,19 @@ namespace Informer
 
 
             }
+            //autorization
+            if (GlobalVars.mqttIsConnect == false && GlobalVars.firsrun == false)
+            {
+                InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                InformationLabel.ForeColor = Color.Red;
+            }
+            else if (GlobalVars.mqttIsConnect == true && GlobalVars.firsrun == false)
+            {
+                InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
+                InformationLabel.ForeColor = Color.Green;
+            }
+
+
             // gpu lost
             if (GlobalVars.reboots_lost_gpu == false)
             {
@@ -1109,7 +1130,7 @@ namespace Informer
             СheckForNewVersion();
         }
 
-        private void UptimeTimerTick(object sender, EventArgs e)
+        async private void UptimeTimerTick(object sender, EventArgs e)
         {
             GlobalVars.timeOnline = GlobalVars.timeOnline + 1;
             int min = GlobalVars.timeOnline;
@@ -1119,6 +1140,7 @@ namespace Informer
             min = min - (h * 60);
          
             labelTimeWork2.Text = ("Days: " + d.ToString() + " Hours: " + h.ToString() + " Minute: " + min.ToString());
+            await Task.Delay(1);
           
         }
 
@@ -1126,24 +1148,12 @@ namespace Informer
         {
             try
             {
-                // GetTempretureTimer.Enabled = false;
-               
-                GPUTempMinTimer.Enabled = false;
                 _http.GetContent(
                     GlobalVars.host +
                     "/api.php?token=" + GlobalVars.token +
                     "&event=" + "reboot" +
                     "&reason="  + GlobalVars.name + " " + msg
-                    /*
-                    "&fan=" + GlobalVars.fan +
-                    "&start_timestamp=" + GlobalVars.start_timestamp.ToString() +
-                    "&v=" + GlobalVars.versions +
-                    "&load=" + GlobalVars.load +
-                    "&clock=" + GlobalVars.clock +
-                     "&mem=" + GlobalVars.mem +
                    
-                    "&hash=" + "417"
-                    */
                     );
 
                 _log.writeLogLine("Reboot rig " + GlobalVars.name + " " + msg, "log");
@@ -1254,17 +1264,25 @@ namespace Informer
 
             if (!string.IsNullOrWhiteSpace(tbToken.Text))
             {
+
+                MqttConnectTimer.Enabled = true;
+                GetTempretureTimer.Enabled = true;
+                GPUStatusTimer.Enabled = true;
+                SendDataTimer.Enabled = true;
                 GlobalVars.token = tbToken.Text;
                 tbToken.ReadOnly = true;
                 //   Action<string> asyn = new Action<string>(Pinger);
-
-                GPUStatusTimer.Enabled = true;
+                
+                
                 PingTimer.Enabled = true;
-                GetTempretureTimer.Enabled = true;
-                MqttConnectTimer.Enabled = true;
-                //Message("Informer Started!");
-                InformationLabel.Visible = true;
+                
+                
+                if (!string.IsNullOrWhiteSpace(GlobalVars.name))
+                {
+                    Message("Informer Started!");
+                }
 
+                InformationLabel.Visible = true;
                 InformationLabel.Text = MyStrings.labelStatusStarted;
                 InformationLabel.ForeColor = Color.Green;
 
@@ -1301,7 +1319,7 @@ namespace Informer
             }
         }
 
-        private void TempretureTimerTick(object sender, EventArgs e)
+        async private void TempretureTimerTick(object sender, EventArgs e)
         {
             string msg = "Temp MAX, Reboot!";
             string bat = "reboot_t_max.bat";
@@ -1319,10 +1337,11 @@ namespace Informer
               
             }
             GlobalVars.timer_t_max = GlobalVars.timer_t_max - 1;
+            await Task.Delay(1);
         }
 
         //timer temp min
-        private void LowTempretureTimerTick(object sender, EventArgs e)
+       async private void LowTempretureTimerTick(object sender, EventArgs e)
         {
             string msg = "Temp Min, Reboot!";
             string bat = "reboot_t_min.bat";
@@ -1340,6 +1359,7 @@ namespace Informer
                 }
             }
                 GlobalVars.timer_t_min = GlobalVars.timer_t_min - 1;
+            await Task.Delay(1);
         }
 
 
@@ -1358,7 +1378,7 @@ namespace Informer
             GlobalVars.timer_r_min = GlobalVars.timer_r_min - 1;
         }
 
-        private void FanMaxTimerTick(object sender, EventArgs e)
+        async private void FanMaxTimerTick(object sender, EventArgs e)
         {
             const string msg = "FAN Max, Reboot! ";
             const string bat = "reboot_fan_max.bat";
@@ -1375,9 +1395,10 @@ namespace Informer
                 }
             }
             GlobalVars.timer_fan_max = GlobalVars.timer_fan_max - 1;
+            await Task.Delay(1);
         }
 
-        private void FanMinTimerTick(object sender, EventArgs e)
+        async private void FanMinTimerTick(object sender, EventArgs e)
         {
             const string msg = "FAN Min, Reboot!";
             const string bat = "reboot_fan_min.bat";
@@ -1396,14 +1417,18 @@ namespace Informer
                 }
             }
             GlobalVars.timer_fan_min = GlobalVars.timer_fan_min - 1;
+            await Task.Delay(1);
         }
 
         private async void SendDataTimerTick(object sender, EventArgs e)
         {
-            if (GlobalVars.mqttIsConnect)
+            if (GlobalVars.mqttIsConnect == true)
             {
-                SendDataTimer.Interval = GlobalVars.interval * 1000;
-                Debug.WriteLine("Interval: " + SendDataTimer.Interval);
+                if (GlobalVars.interval > 0)
+                {
+                    SendDataTimer.Interval = GlobalVars.interval * 1000;
+                }
+             //   Debug.WriteLine("Interval: " + SendDataTimer.Interval);
                 await SendData();
             }
             
@@ -1411,7 +1436,7 @@ namespace Informer
 
         
 
-        private void GpuCoreMinHzTimerTick(object sender, EventArgs e)
+        async private void GpuCoreMinHzTimerTick(object sender, EventArgs e)
         {
             const string msg = "Core Min , Reboot!";
             const string bat = "reboot_clock.bat";
@@ -1429,9 +1454,10 @@ namespace Informer
                 }
             }
             GlobalVars.timer_clock_min = GlobalVars.timer_clock_min - 1;
+            await Task.Delay(1);
         }
 
-        private void GpuCoreMaxHzTimerTick(object sender, EventArgs e)
+       async private void GpuCoreMaxHzTimerTick(object sender, EventArgs e)
         {
             const string msg = "Core Max , Reboot!";
             const string bat = "reboot_clock_max.bat";
@@ -1449,10 +1475,11 @@ namespace Informer
                 }
             }
             GlobalVars.timer_clock_max = GlobalVars.timer_clock_max - 1;
+            await Task.Delay(1);
         }
 
 
-        private void GpuMemoryMinHzTimerTick(object sender, EventArgs e)
+       async private void GpuMemoryMinHzTimerTick(object sender, EventArgs e)
         {
             const string msg = "Memory Min, Reboot!";
             const string bat = "reboot_memory.bat";
@@ -1470,27 +1497,36 @@ namespace Informer
                 }
             }
             GlobalVars.timer_memory_min = GlobalVars.timer_memory_min - 1;
+            await Task.Delay(1);
         }
 
 
-        private void GPUMemoryMaxHzTimer_Tick(object sender, EventArgs e)
+        async private void GPUMemoryMaxHzTimer_Tick(object sender, EventArgs e)
         {
             const string msg = "Memory Max, Reboot!";
             const string bat = "reboot_memory_max.bat";
-            if (GlobalVars.timer_memory_max < 0)
+            try
             {
-                GlobalVars.timer_memory_max = GlobalVars.time_mem_max;
-            }
-            if (GlobalVars.timer_memory_max == 0)
-            {
-                if (!GlobalVars.memMax)
+                if (GlobalVars.timer_memory_max < 0)
                 {
-
-                    Reboot(msg, bat);
-
+                    GlobalVars.timer_memory_max = GlobalVars.time_mem_max;
                 }
+                if (GlobalVars.timer_memory_max == 0)
+                {
+                    if (!GlobalVars.memMax)
+                    {
+
+                        Reboot(msg, bat);
+
+                    }
+                }
+                GlobalVars.timer_memory_max = GlobalVars.timer_memory_max - 1;
             }
-            GlobalVars.timer_memory_max = GlobalVars.timer_memory_max - 1;
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Memory Max:" + ex);
+            }
+            await Task.Delay(1);
         }
 
     
@@ -1542,7 +1578,7 @@ namespace Informer
                 Debug.WriteLine("InternetInactiveTimer: " + ex);
             }
 
-            await Task.Delay(100);
+            await Task.Delay(1);
         }
 
         async private void FellOffTimerTick(object o, EventArgs e)
@@ -1566,25 +1602,24 @@ namespace Informer
                     }
                 }
                 GlobalVars.timer_gpu_lost = GlobalVars.timer_gpu_lost - 1;
-                await Task.Delay(1);
+               
             }
             catch (Exception ex)
             {
 
                 Debug.WriteLine("GPU LOST " + ex);
             }
+            await Task.Delay(1);
 
         }
 
-        private void GPULoadMin_Tick(object sender, EventArgs e)
+       async private void GPULoadMin_Tick(object sender, EventArgs e)
         {
             const string msg = "GPU Load Min, Reboot!";
             const string bat = "reboot_load_min.bat";
 
-            GPULoadMinTimer.Enabled = false;
-            try
-            {
-                if (GlobalVars.timer_load_gpu_min < 0)
+          
+            if (GlobalVars.timer_load_gpu_min < 0)
                 {
                     GlobalVars.timer_load_gpu_min = GlobalVars.time_load_GPU_min;
                 }
@@ -1596,11 +1631,9 @@ namespace Informer
                     }
                 }
                 GlobalVars.timer_load_gpu_min = GlobalVars.timer_load_gpu_min - 1;
-            }
-            finally
-            {
-                GPULoadMinTimer.Enabled = false;
-            }
+           
+           
+            await Task.Delay(1);
         }
 
  
@@ -1664,12 +1697,12 @@ namespace Informer
             
         }
 
-        private void GPULoadMaxTimer_Tick(object sender, EventArgs e)
+        async private void GPULoadMaxTimer_Tick(object sender, EventArgs e)
         {
             const string msg = "GPU Load Max, Reboot!";
             const string bat = "reboot_load_max.bat";
 
-            GPULoadMinTimer.Enabled = false;
+            //GPULoadMinTimer.Enabled = false;
             try
             {
                 if (GlobalVars.timer_load_gpu_max < 0)
@@ -1685,10 +1718,11 @@ namespace Informer
                 }
                 GlobalVars.timer_load_gpu_max = GlobalVars.timer_load_gpu_max - 1;
             }
-            finally
+            catch (Exception ex)
             {
-                GPULoadMinTimer.Enabled = false;
+                Debug.WriteLine("GPU Load Max " + ex);
             }
+            await Task.Delay(1);
         }
 
         private void PingTimer_Tick(object sender, EventArgs e)
@@ -1767,14 +1801,14 @@ namespace Informer
                 {
                     //  GlobalVars.ping = true;
                     GlobalVars.pingCount = GlobalVars.pingCount + 1;
-                    Debug.WriteLine("PING WRONG! " + hostAdress + " " + GlobalVars.pingCount);
+                   // Debug.WriteLine("PING WRONG! " + hostAdress + " " + GlobalVars.pingCount);
                 }
 
                 else if (pr.Status == IPStatus.Success)
                 {
                     //  GlobalVars.ping = true;
                     GlobalVars.pingCount = GlobalVars.pingCount - 1;
-                    Debug.WriteLine("PING OK! " + hostAdress + " " + GlobalVars.pingCount);
+                   // Debug.WriteLine("PING OK! " + hostAdress + " " + GlobalVars.pingCount);
                 }
                 
                 // Записываем в файл все проблемные машины
@@ -1813,7 +1847,7 @@ namespace Informer
         async private void GPUStatusTimer_Tick(object sender, EventArgs e)
         {
             GpuStatus();
-            await Task.Delay(1000);
+            await Task.Delay(1);
         }
 
 

@@ -16,7 +16,7 @@ namespace Informer
        
         public static async Task RunAsync()
         {
-            Debug.WriteLine(GlobalVars.mqttIsConnect);
+           // Debug.WriteLine("mqttIsConnect: " + GlobalVars.mqttIsConnect);
             if (GlobalVars.mqttIsConnect == false)
             {
 
@@ -59,8 +59,14 @@ namespace Informer
 
                     GlobalVars.client.Connected += async (s, e) =>
                    {
-                      
+                       try
+                       {
                            await GlobalVars.client.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
+                       }
+                       catch (Exception ex)
+                       {
+                           Debug.WriteLine("client.SubscribeAsync: " + ex);
+                       }
                    };
 
 
@@ -68,7 +74,7 @@ namespace Informer
                     {
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
                         GlobalVars.mqttIsConnect = false;
-                        await Task.Delay(TimeSpan.FromSeconds(10));
+                        await Task.Delay(TimeSpan.FromSeconds(5));
                         
                         /*
 
@@ -98,11 +104,14 @@ namespace Informer
 
                     try
                     {
-                       // GlobalVars.mqttIsConnect = false;
+                        // GlobalVars.mqttIsConnect = false;
                         await GlobalVars.client.ConnectAsync(options);
                         GlobalVars.mqttIsConnect = true;
                         GlobalVars.firsrun = false;
-                       // MainForm.Message("Connected");
+                        //GlobalVars.token = tbToken.Text;
+                        GlobalVars._manager.WritePrivateString("main", "token", GlobalVars.token);
+                        // MainForm.Message("Connected");
+
 
                         var message = new MqttApplicationMessageBuilder()
                                    .WithTopic("devices/" + GlobalVars.token + "/init")
@@ -115,10 +124,17 @@ namespace Informer
 
 
                     }
+                    catch (MQTTnet.Adapter.MqttConnectingFailedException ex )
+                    {
+                       // Debug.WriteLine("### ConnectionRefusedBadUsernameOrPassword ###" + ex.Message);
+                        GlobalVars.mqttIsConnect = false;
+                        GlobalVars.firsrun = false;
+                    }
                     catch (Exception exception)
                     {
                         Debug.WriteLine("### CONNECTING FAILED ###" + Environment.NewLine + exception);
                         GlobalVars.mqttIsConnect = false;
+                        GlobalVars.firsrun = false;
                     }
 
 
@@ -159,11 +175,7 @@ namespace Informer
 
 
             }
-            else if (GlobalVars.mqttIsConnect == true)
-            {
-               
-            }
-          
+                     
         }
        
 

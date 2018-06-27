@@ -531,6 +531,7 @@
             // 
             // GPUStatusTimer
             // 
+            this.GPUStatusTimer.Interval = 1000;
             this.GPUStatusTimer.Tick += new System.EventHandler(this.GPUStatusTimer_Tick);
             // 
             // MainForm
