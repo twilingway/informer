@@ -20,23 +20,12 @@ namespace Informer
         {
             try
             {
-                //GlobalVars._pc = new Computer();
-                /*
-                if (GlobalVars.temp0 == true) {
-                    GlobalVars._pc.Close();
-                    GlobalVars._pc = null;
-                    GlobalVars._pc = new Computer();
-                    GlobalVars._pc.CPUEnabled = true;
-                    GlobalVars._pc.GPUEnabled = true;
-                    GlobalVars._pc.Open();
 
-                }
-                */
                 // List<String> gpusList = new List<string>();
                 //  GlobalVars.gpuList = new Dictionary<int, List<string>>();
                 GlobalVars.gpusList.Clear();
                 GlobalVars.gpuList.Clear();
-                
+
                 GlobalVars.card = "";
                 GlobalVars.temp = "";
                 GlobalVars.fan = "";
@@ -44,129 +33,124 @@ namespace Informer
                 GlobalVars.clock = "";
                 GlobalVars.mem = "";
                 GlobalVars.counts = 0;
-               // for (int i = 0; i < 12; i++)
-               // {
-                    foreach (var hard in GlobalVars._pc.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
+
+                foreach (var hard in GlobalVars._pc.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
+                {
+
+                    hard.Update();
+
+
+                    if (hard.HardwareType == HardwareType.GpuAti || hard.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
                     {
 
-                        hard.Update();
+                        GlobalVars.counts = GlobalVars.counts + 1;
+                        GlobalVars.card += hard.Name + ",";
+                        GlobalVars.gpusList.Add(hard.Name);
 
-
-                        if (hard.HardwareType == HardwareType.GpuAti || hard.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
+                        foreach (var sensor in hard.Sensors)//ИДЕМ по сенсорам
                         {
 
-                            GlobalVars.counts = GlobalVars.counts + 1;
-                            GlobalVars.card += hard.Name + ",";
-                            GlobalVars.gpusList.Add(hard.Name);
 
-                            foreach (var sensor in hard.Sensors)//ИДЕМ по сенсорам
+                            if (sensor.SensorType == SensorType.Clock)
+                            {//ЧАСТОТЫ
+
+
+
+                                if (sensor.Name == "GPU Core")//ЯДРО
+                                {
+
+                                    GlobalVars.clock += sensor.Value.GetValueOrDefault() + ";";
+                                    GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
+
+
+                                }
+
+
+
+                                if (hard.HardwareType == HardwareType.GpuAti)
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
+                                    {
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
+
+                                    }
+
+                                }
+                                else if (hard.HardwareType == HardwareType.GpuNvidia)
+                                {
+                                    if (sensor.Name == "GPU Memory")//ПАМЯТЬ
+                                    {
+                                        GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
+                                        GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
+
+                                    }
+                                }
+                                else
+                                {
+
+                                }
+
+
+
+                            }
+                            else if (sensor.SensorType == SensorType.Temperature)//Температура
                             {
 
 
-                                if (sensor.SensorType == SensorType.Clock)
-                                {//ЧАСТОТЫ
+                                GlobalVars.temp += sensor.Value.GetValueOrDefault() + ",";
+                                GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
 
+                            }
 
-
-                                    if (sensor.Name == "GPU Core")//ЯДРО
-                                    {
-
-                                        GlobalVars.clock += sensor.Value.GetValueOrDefault() + ";";
-                                        GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
-
-
-                                    }
-
-
-
-                                    if (hard.HardwareType == HardwareType.GpuAti)
-                                    {
-                                        if (sensor.Name == "GPU Memory")//ПАМЯТЬ
-                                        {
-                                            GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
-                                            GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
-
-                                        }
-
-                                    }
-                                    else if (hard.HardwareType == HardwareType.GpuNvidia)
-                                    {
-                                        if (sensor.Name == "GPU Memory")//ПАМЯТЬ
-                                        {
-                                            GlobalVars.mem += sensor.Value.GetValueOrDefault() + ";";
-                                            GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
-
-                                        }
-                                    }
-                                    else
-                                    {
-
-                                    }
-
-
-
-                                }
-                                else if (sensor.SensorType == SensorType.Temperature)//Температура
+                            else if (sensor.SensorType == SensorType.Load)//LOAD
+                            {
+                                if (sensor.Name == "GPU Core")
                                 {
 
 
-                                    GlobalVars.temp += sensor.Value.GetValueOrDefault() + ",";
-                                    GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
-
-                                }
-
-                                else if (sensor.SensorType == SensorType.Load)//LOAD
-                                {
-                                    if (sensor.Name == "GPU Core")
-                                    {
-
-
-                                        GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
-                                        GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
-
-
-
-                                    }
-
-                                }
-
-                                else if (sensor.SensorType == SensorType.Control)// FAN
-                                {
-
-                                    GlobalVars.fan += sensor.Value.GetValueOrDefault() + ",";
+                                    GlobalVars.load += sensor.Value.GetValueOrDefault() + ",";
                                     GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
 
 
+
                                 }
 
+                            }
+
+                            else if (sensor.SensorType == SensorType.Control)// FAN
+                            {
+
+                                GlobalVars.fan += sensor.Value.GetValueOrDefault() + ",";
+                                GlobalVars.gpusList.Add(Convert.ToString(sensor.Value.GetValueOrDefault()));
 
 
-
-
-
-                        
                             }
 
 
+
+                           
                         }
 
-                        
+                        GlobalVars.gpuList.Add(GlobalVars.gpusList.Count, GlobalVars.gpusList);
 
+                       // GlobalVars.gpuList.K
 
                     }
 
 
-                    GlobalVars.gpuList.Add(GlobalVars.gpusList.Count, GlobalVars.gpusList);
+                    
 
-              //  }
+                }
 
                 if (GlobalVars.count_GPU == 0)
                 {
                     GlobalVars.count_GPU = GlobalVars.counts;
                 }
-               
+
 
             }
+
             catch(Exception e)
             {
                 Debug.WriteLine(e);

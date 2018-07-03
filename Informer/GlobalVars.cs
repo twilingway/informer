@@ -128,6 +128,9 @@ static class GlobalVars
     public static int count_GPU = 0;
 
 
+    public static int tempMinCount;
+
+
 
 
     public static string clock;
