@@ -248,7 +248,7 @@ namespace Informer
 
         async private void GetTempretureTimerTick(object sender, EventArgs e)
         {
-            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+           // GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
             if (GlobalVars.mqttIsConnect == true)
             {
@@ -261,7 +261,7 @@ namespace Informer
 
                 AutoStartTimer.Enabled = false;
                
-                GlobalVars.timeOnline = 0;
+               // GlobalVars.timeOnline = 0;
                 tbToken.ReadOnly = true;
                 tbRigName.Text = GlobalVars.name;
              
@@ -277,7 +277,7 @@ namespace Informer
                 AutoStartTimer.Enabled = false;
                 btStop.Visible = true;
                 GPUTemp.GetGPU();
-                GlobalVars.gpuList.Add(GlobalVars.gpusList.Count, GlobalVars.gpusList);
+               
 
                 labelTest.Text = Convert.ToString(GlobalVars.gpusList.Count);
 
@@ -299,7 +299,9 @@ namespace Informer
 
         private void NextAutoStart_Tick(object sender, EventArgs e)
         {
+            GlobalVars.start_timestamp = (int)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
             GlobalVars.token = tbToken.Text;
+            SendDataTimer.Enabled = true;
             GPUStatusTimer.Enabled = true;
             GetTempretureTimer.Enabled = true;
             PingTimer.Enabled = true;
@@ -348,618 +350,643 @@ namespace Informer
         public void GpuStatus()
         {
 
-            labelTempMin.Text = "TEMP MIN(" + GlobalVars.temp_min + "):";
-            labelTempMax.Text = "TEMP MAX(" + GlobalVars.temp_max + "):";
-            labelFanMin.Text = "FAN MIN(" + GlobalVars.fan_min + "):";
-            labelFanMax.Text = "FAN MAX(" + GlobalVars.fan_max + "):";
-            labelLoadMin.Text = "LOAD MIN(" + GlobalVars.load_GPU_min + "):";
-            labelLoadMax.Text = "LOAD MAX(" + GlobalVars.load_GPU_max + "):";
-            labelClockMin.Text = "CLOCK MIN(" + GlobalVars.clock_min + "):";
-            labelClockMax.Text = "CLOCK MAX(" + GlobalVars.clock_max + "):";
-            labelMemoryMin.Text = "MEMORY MIN(" + GlobalVars.mem_min + "):";
-            labelMemoryMax.Text = "MEMORY MAX(" + GlobalVars.mem_max + "):";
-            labelFellOffGPU.Text = "GPU LOST(" + GlobalVars.count_GPU + "):";
-
-            int i = 0;
-            int tempMinCount = 0;
-            int tempMaxCount = 0;
-            int fanMinCount = 0;
-            int fanMaxCount = 0;
-            int loadMinCount = 0;
-            int loadMaxCount = 0;
-            int clockMinCount = 0;
-            int clockMaxCount = 0;
-            int memoryMinCount = 0;
-            int memoryMaxCount = 0;
-            foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
+            try
             {
 
-              //  Debug.WriteLine(GlobalVars.gpusList[1]);
+                labelTempMin.Text = "TEMP MIN(" + GlobalVars.temp_min + "):";
+                labelTempMax.Text = "TEMP MAX(" + GlobalVars.temp_max + "):";
+                labelFanMin.Text = "FAN MIN(" + GlobalVars.fan_min + "):";
+                labelFanMax.Text = "FAN MAX(" + GlobalVars.fan_max + "):";
+                labelLoadMin.Text = "LOAD MIN(" + GlobalVars.load_GPU_min + "):";
+                labelLoadMax.Text = "LOAD MAX(" + GlobalVars.load_GPU_max + "):";
+                labelClockMin.Text = "CLOCK MIN(" + GlobalVars.clock_min + "):";
+                labelClockMax.Text = "CLOCK MAX(" + GlobalVars.clock_max + "):";
+                labelMemoryMin.Text = "MEMORY MIN(" + GlobalVars.mem_min + "):";
+                labelMemoryMax.Text = "MEMORY MAX(" + GlobalVars.mem_max + "):";
+                labelFellOffGPU.Text = "GPU LOST(" + GlobalVars.count_GPU + "):";
 
-                int j = 0;
-                foreach (String p in keyValue.Value)
+                int i = 0;
+                int tempMinCount = 0;
+                int tempMaxCount = 0;
+                int fanMinCount = 0;
+                int fanMaxCount = 0;
+                int loadMinCount = 0;
+                int loadMaxCount = 0;
+                int clockMinCount = 0;
+                int clockMaxCount = 0;
+                int memoryMinCount = 0;
+                int memoryMaxCount = 0;
+                foreach (KeyValuePair<int, List<String>> keyValue in GlobalVars.gpuList)
                 {
 
-                    switch (j)
+                    //  Debug.WriteLine(GlobalVars.gpusList[1]);
+
+                    int j = 0;
+                    foreach (String p in keyValue.Value)
                     {
 
-                        case 0:
-                        //name    
-                          
-                            break;
-                        case 1:
+                        switch (j)
+                        {
 
-                            
-                            //temp min
-                            if (GlobalVars.reboots_temp_min == false)
-                            {
-                              
+                            case 0:
+                                //name    
+
+                                break;
+                            case 1:
+
+
+                                //temp min
+                                if (GlobalVars.reboots_temp_min == false)
+                                {
+
                                     labelStatusTempMin.Text = MyStrings.labelEvent;
                                     labelStatusTempMin.ForeColor = Color.Blue;
                                     labelCounterTempMin.Visible = false;
                                     GlobalVars.timer_t_min = -100;
-                               
-
-                            }
-                            else if (GlobalVars.reboots_temp_min == true)
-                            {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min) && Convert.ToInt32(p) != 0 && tempMinCount == 0)
-                                {
-
-                                    GPUTempMinTimer.Enabled = true;
-                                    GlobalVars.temp0 = false;
-                                    labelStatusTempMin.Text = MyStrings.labelStatusTempMin;
-                                    labelStatusTempMin.ForeColor = Color.Red;
-
-                                    labelCounterTempMin.Visible = true;
-                                    labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
-                                    labelCounterTempMin.ForeColor = Color.Red;
-                                    tempMinCount++;
 
 
                                 }
-                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_min))
+                                else if (GlobalVars.reboots_temp_min == true)
                                 {
-                                    GPUTempMinTimer.Enabled = false;
-                                    OHMTimer.Enabled = false;
-                                    GlobalVars.temp0 = false;
-                                    labelCounterTempMin.Visible = false;
-                                    
-                                    labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
-                                    labelStatusTempMin.ForeColor = Color.Green;
-                                    GlobalVars.timer_t_min = -100;
+                                    if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_min) && Convert.ToInt32(p) != 0 && tempMinCount == 0)
+                                    {
+
+                                        GPUTempMinTimer.Enabled = true;
+                                        GlobalVars.temp0 = false;
+                                        labelStatusTempMin.Text = MyStrings.labelStatusTempMin;
+                                        labelStatusTempMin.ForeColor = Color.Red;
+
+                                        labelCounterTempMin.Visible = true;
+                                        labelCounterTempMin.Text = GlobalVars.timer_t_min.ToString();
+                                        labelCounterTempMin.ForeColor = Color.Red;
+                                        tempMinCount++;
+
+
+                                    }
+                                    else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_min))
+                                    {
+                                        GPUTempMinTimer.Enabled = false;
+                                        OHMTimer.Enabled = false;
+                                        GlobalVars.temp0 = false;
+                                        labelCounterTempMin.Visible = false;
+
+                                        labelStatusTempMin.Text = MyStrings.labelStatusTempOK;
+                                        labelStatusTempMin.ForeColor = Color.Green;
+                                        GlobalVars.timer_t_min = -100;
+
+                                    }
+                                    if (Convert.ToInt32(p) == 0)
+                                    {
+                                        GlobalVars.temp0 = true;
+                                        //  Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
+                                        OHMTimer.Enabled = true;
+                                    }
+                                    // Debug.WriteLine("Temp0ON: " + Convert.ToInt32(p));
+
 
                                 }
-                                if (Convert.ToInt32(p) == 0)
+
+                                //temp max
+                                if (GlobalVars.reboots_temp_max == false)
                                 {
-                                    GlobalVars.temp0 = true;
-                                  //  Debug.WriteLine("Temp0: " + Convert.ToInt32(p));
-                                    OHMTimer.Enabled = true;
-                                }
-                               // Debug.WriteLine("Temp0ON: " + Convert.ToInt32(p));
 
-
-                            }
-
-                            //temp max
-                            if (GlobalVars.reboots_temp_max == false)
-                            {
-                             
                                     labelStatusTempMax.Text = MyStrings.labelEvent;
                                     labelStatusTempMax.ForeColor = Color.Blue;
                                     labelCounterTempMax.Visible = false;
                                     GlobalVars.timer_t_max = -100;
-                               
-                            }
-                            else if (GlobalVars.reboots_temp_max == true)
-                            {
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max) && tempMaxCount == 0)
-                                {
-
-                                    GPUTempMaxTimer.Enabled = true;
-
-                                    labelStatusTempMax.Text = MyStrings.labelStatusTempMax;
-                                    labelStatusTempMax.ForeColor = Color.Red;
-
-                                    labelCounterTempMax.Visible = true;
-                                    labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
-                                    labelCounterTempMax.ForeColor = Color.Red;
-                                    tempMaxCount++;
-
 
                                 }
-
-                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max) )
+                                else if (GlobalVars.reboots_temp_max == true)
                                 {
-                                    GPUTempMaxTimer.Enabled = false;
-                                    labelCounterTempMax.Visible = false;
-                                    labelStatusTempMax.Text = MyStrings.labelStatusTempOK;
-                                    labelStatusTempMax.ForeColor = Color.Green;
-                                    GlobalVars.timer_t_max = -100;
-
-                                }
-
-
-                            }
-                           
-
-                            break;
-                        case 2:
-                            // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/core", Encoding.UTF8.GetBytes(p));
-                            //core
-                            try
-                            {
-                                IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
-                                double b = double.Parse(p, formatter);
-
-                                //Debug.WriteLine("PPPP " + Math.Floor(b));
-                                int pp = Convert.ToInt32(Math.Floor(b));
-
-                                //Debug.WriteLine("PPPP " + pp);
-
-                                if (GlobalVars.reboots_clock_min == true)
-                                {
-                                    
-                                    if (Convert.ToInt32(pp) <= GlobalVars.clock_min && clockMinCount == 0)
+                                    if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.temp_max) && tempMaxCount == 0)
                                     {
-                                        GPUCoreMinTimer.Enabled = true;
 
+                                        GPUTempMaxTimer.Enabled = true;
 
-                                        labelStatusClockMin.Text = MyStrings.labelStatusClock;
-                                        labelStatusClockMin.ForeColor = Color.Red;
+                                        labelStatusTempMax.Text = MyStrings.labelStatusTempMax;
+                                        labelStatusTempMax.ForeColor = Color.Red;
 
-                                        labelCounterClockMin.Visible = true;
-                                        labelCounterClockMin.Text = GlobalVars.timer_clock_min.ToString();
-                                        labelCounterClockMin.ForeColor = Color.Red;
-                                        clockMinCount++;
+                                        labelCounterTempMax.Visible = true;
+                                        labelCounterTempMax.Text = GlobalVars.timer_t_max.ToString();
+                                        labelCounterTempMax.ForeColor = Color.Red;
+                                        tempMaxCount++;
+
 
                                     }
-                                    else if (Convert.ToInt32(pp) >= GlobalVars.clock_min)
+
+                                    else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.temp_max))
+                                    {
+                                        GPUTempMaxTimer.Enabled = false;
+                                        labelCounterTempMax.Visible = false;
+                                        labelStatusTempMax.Text = MyStrings.labelStatusTempOK;
+                                        labelStatusTempMax.ForeColor = Color.Green;
+                                        GlobalVars.timer_t_max = -100;
+
+                                    }
+
+
+                                }
+
+
+                                break;
+                            case 2:
+                                // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/core", Encoding.UTF8.GetBytes(p));
+                                //core
+                                try
+                                {
+                                    IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
+                                    double bc = double.Parse(p, formatter);
+
+                                    //Debug.WriteLine("PPPP " + Math.Floor(b));
+                                    int pc = Convert.ToInt32(Math.Floor(bc));
+
+                                    //Debug.WriteLine("PPPP " + pp);
+
+                                    if (GlobalVars.reboots_clock_min == true)
                                     {
 
-                                        GPUCoreMinTimer.Enabled = false;
+                                        if (Convert.ToInt32(pc) <= GlobalVars.clock_min && clockMinCount == 0)
+                                        {
+                                            GPUCoreMinTimer.Enabled = true;
+
+
+                                            labelStatusClockMin.Text = MyStrings.labelStatusClock;
+                                            labelStatusClockMin.ForeColor = Color.Red;
+
+                                            labelCounterClockMin.Visible = true;
+                                            labelCounterClockMin.Text = GlobalVars.timer_clock_min.ToString();
+                                            labelCounterClockMin.ForeColor = Color.Red;
+                                            clockMinCount++;
+
+                                        }
+                                        else if (Convert.ToInt32(pc) >= GlobalVars.clock_min)
+                                        {
+
+                                            GPUCoreMinTimer.Enabled = false;
+                                            labelCounterClockMin.Visible = false;
+                                            labelStatusClockMin.Text = MyStrings.labelStatusOK;
+                                            labelStatusClockMin.ForeColor = Color.Green;
+                                            GlobalVars.timer_clock_min = -100;
+
+
+                                        }
+                                    }
+                                    else if (GlobalVars.reboots_clock_min == false)
+                                    {
+                                        labelStatusClockMin.Visible = true;
+                                        labelStatusClockMin.Text = MyStrings.labelEvent;
+                                        labelStatusClockMin.ForeColor = Color.Blue;
                                         labelCounterClockMin.Visible = false;
-                                        labelStatusClockMin.Text = MyStrings.labelStatusOK;
-                                        labelStatusClockMin.ForeColor = Color.Green;
                                         GlobalVars.timer_clock_min = -100;
+                                        GPUCoreMinTimer.Enabled = false;
+
 
 
                                     }
-                                }
-                                else if (GlobalVars.reboots_clock_min == false)
-                                {
-                                    labelStatusClockMin.Visible = true;
-                                    labelStatusClockMin.Text = MyStrings.labelEvent;
-                                    labelStatusClockMin.ForeColor = Color.Blue;
-                                    labelCounterClockMin.Visible = false;
-                                    GlobalVars.timer_clock_min = -100;
-                                    GPUCoreMinTimer.Enabled = false;
 
-
-
-                                }
-
-                                if (GlobalVars.reboots_clock_max == true)
-                                {
-                                    if (Convert.ToInt32(pp) >= Convert.ToInt32(GlobalVars.clock_max) && clockMaxCount == 0)
+                                    if (GlobalVars.reboots_clock_max == true)
                                     {
-                                        GPUCoreMaxTimer.Enabled = true;
+                                        if (Convert.ToInt32(pc) >= Convert.ToInt32(GlobalVars.clock_max) && clockMaxCount == 0)
+                                        {
+                                            GPUCoreMaxTimer.Enabled = true;
 
 
-                                        labelStatusClockMax.Text = MyStrings.labelStatusClockMax;
-                                        labelStatusClockMax.ForeColor = Color.Red;
+                                            labelStatusClockMax.Text = MyStrings.labelStatusClockMax;
+                                            labelStatusClockMax.ForeColor = Color.Red;
 
-                                        labelCounterClockMax.Visible = true;
-                                        labelCounterClockMax.Text = GlobalVars.timer_clock_max.ToString();
-                                        labelCounterClockMax.ForeColor = Color.Red;
-                                        clockMaxCount++;
+                                            labelCounterClockMax.Visible = true;
+                                            labelCounterClockMax.Text = GlobalVars.timer_clock_max.ToString();
+                                            labelCounterClockMax.ForeColor = Color.Red;
+                                            clockMaxCount++;
 
+                                        }
+                                        else if (Convert.ToInt32(pc) <= Convert.ToInt32(GlobalVars.clock_max))
+                                        {
+
+                                            GPUCoreMaxTimer.Enabled = false;
+                                            labelCounterClockMax.Visible = false;
+                                            labelStatusClockMax.Text = MyStrings.labelStatusOK;
+                                            labelStatusClockMax.ForeColor = Color.Green;
+                                            GlobalVars.timer_clock_max = -100;
+
+
+
+                                        }
                                     }
-                                    else if (Convert.ToInt32(pp) <= Convert.ToInt32(GlobalVars.clock_max))
+                                    else if (GlobalVars.reboots_clock_max == false)
                                     {
 
-                                        GPUCoreMaxTimer.Enabled = false;
+                                        labelStatusClockMax.Visible = true;
+                                        labelStatusClockMax.Text = MyStrings.labelEvent;
+                                        labelStatusClockMax.ForeColor = Color.Blue;
                                         labelCounterClockMax.Visible = false;
-                                        labelStatusClockMax.Text = MyStrings.labelStatusOK;
-                                        labelStatusClockMax.ForeColor = Color.Green;
                                         GlobalVars.timer_clock_max = -100;
-                                      
+                                        GPUCoreMaxTimer.Enabled = false;
+
+                                    }
+                                }
+                                catch (Exception x)
+                                {
+
+                                    Debug.WriteLine("Core:" + x);
+                                }
+
+
+                                break;
+                            case 3:
+                                // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/memory", Encoding.UTF8.GetBytes(p));
+                                // memory
+                                try
+                                {
+                                    IFormatProvider formatter = new NumberFormatInfo { NumberDecimalSeparator = "," };
+                                    double bm = double.Parse(p, formatter);
+
+                                    //Debug.WriteLine("PPPP " + Math.Floor(b));
+                                    int pm = Convert.ToInt32(Math.Floor(bm));
+
+                                    //Debug.WriteLine("PPPP " + pp);
+
+
+                                    if (GlobalVars.reboots_mem_min == true)
+                                    {
+                                        if (Convert.ToInt32(pm) <= Convert.ToInt32(GlobalVars.mem_min) && memoryMinCount == 0)
+                                        {
+                                            GPUMemMinTimer.Enabled = true;
+
+
+                                            labelStatusMemoryMin.Text = MyStrings.labelStatusMemoryMin;
+                                            labelStatusMemoryMin.ForeColor = Color.Red;
+
+                                            labelCounterMemoryMin.Visible = true;
+                                            labelCounterMemoryMin.Text = GlobalVars.timer_memory_min.ToString();
+                                            labelCounterMemoryMin.ForeColor = Color.Red;
+                                            memoryMinCount++;
+
+                                        }
+                                        else if (Convert.ToInt32(pm) >= Convert.ToInt32(GlobalVars.mem_min))
+                                        {
+
+                                            GPUMemMinTimer.Enabled = false;
+                                            labelCounterMemoryMin.Visible = false;
+                                            labelStatusMemoryMin.Text = MyStrings.labelStatusOK;
+                                            labelStatusMemoryMin.ForeColor = Color.Green;
+                                            GlobalVars.timer_memory_min = -100;
+
+
+                                        }
+                                    }
+                                    else if (GlobalVars.reboots_mem_min == false)
+                                    {
+
+                                        labelStatusMemoryMin.Visible = true;
+                                        labelStatusMemoryMin.Text = MyStrings.labelEvent;
+                                        labelStatusMemoryMin.ForeColor = Color.Blue;
+                                        labelCounterMemoryMin.Visible = false;
+                                        GlobalVars.timer_memory_min = -100;
+                                        GPUMemMinTimer.Enabled = false;
+
+                                    }
+
+                                    if (GlobalVars.reboots_mem_max == true)
+                                    {
+                                        if (Convert.ToInt32(pm) >= Convert.ToInt32(GlobalVars.mem_max) && memoryMaxCount == 0)
+                                        {
+                                            GPUMemMaxTimer.Enabled = true;
+
+
+                                            labelStatusMemoryMax.Text = MyStrings.labelStatusMemoryMax;
+                                            labelStatusMemoryMax.ForeColor = Color.Red;
+
+                                            labelCounterMemoryMax.Visible = true;
+                                            labelCounterMemoryMax.Text = GlobalVars.timer_memory_max.ToString();
+                                            labelCounterMemoryMax.ForeColor = Color.Red;
+                                            memoryMaxCount++;
+
+                                        }
+                                        else if (Convert.ToInt32(pm) <= Convert.ToInt32(GlobalVars.mem_max))
+                                        {
+
+                                            GPUMemMaxTimer.Enabled = false;
+                                            labelCounterMemoryMax.Visible = false;
+                                            labelStatusMemoryMax.Text = MyStrings.labelStatusOK;
+                                            labelStatusMemoryMax.ForeColor = Color.Green;
+                                            GlobalVars.timer_memory_max = -100;
+
+
+                                        }
+                                    }
+                                    else if (GlobalVars.reboots_mem_max == false)
+                                    {
+
+                                        labelStatusMemoryMax.Visible = true;
+                                        labelStatusMemoryMax.Text = MyStrings.labelEvent;
+                                        labelStatusMemoryMax.ForeColor = Color.Blue;
+                                        labelCounterMemoryMax.Visible = false;
+                                        GlobalVars.timer_memory_max = -100;
+                                        GPUMemMaxTimer.Enabled = false;
+                                    }
+
+
+                                   
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    Debug.WriteLine("Memory:" + ex);
+                                }
+                                break;
+                            case 4:
+
+                                //gpu load min
+
+                                if (GlobalVars.reboots_load_min == true)
+                                {
+                                    if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_min) && loadMinCount == 0)
+                                    {
+                                        GPULoadMinTimer.Enabled = true;
+
+
+                                        labelStatusLoadMin.Text = MyStrings.labelStatusLoadGPU;
+                                        labelStatusLoadMin.ForeColor = Color.Red;
+
+                                        labelCounterLoadMin.Visible = true;
+                                        labelCounterLoadMin.Text = GlobalVars.timer_load_gpu_min.ToString();
+                                        labelCounterLoadMin.ForeColor = Color.Red;
+                                        loadMinCount++;
+
+                                    }
+                                    else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.load_GPU_min))
+                                    {
+
+                                        GPULoadMinTimer.Enabled = false;
+                                        labelCounterLoadMin.Visible = false;
+                                        labelStatusLoadMin.Text = MyStrings.labelStatusOK;
+                                        labelStatusLoadMin.ForeColor = Color.Green;
+                                        GlobalVars.timer_load_gpu_min = -100;
 
 
                                     }
                                 }
-                                else if (GlobalVars.reboots_clock_max == false)
+                                else if (GlobalVars.reboots_load_min == false)
                                 {
-
-                                    labelStatusClockMax.Visible = true;
-                                    labelStatusClockMax.Text = MyStrings.labelEvent;
-                                    labelStatusClockMax.ForeColor = Color.Blue;
-                                    labelCounterClockMax.Visible = false;
-                                    GlobalVars.timer_clock_max = -100;
-                                    GPUCoreMaxTimer.Enabled = false;
-
-                                }
-                            }
-                            catch(Exception x)
-                            {
-
-                                Debug.WriteLine(x);
-                            }
-
-
-                                break;
-                        case 3:
-                            // mqttClient.Publish("devices/" + GlobalVars.token + "/gpus/" + i + "/memory", Encoding.UTF8.GetBytes(p));
-                            // memory
-                           
-                            if (GlobalVars.reboots_mem_min == true)
-                            {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.mem_min) && memoryMinCount == 0)
-                                {
-                                    GPUMemMinTimer.Enabled = true;
-
-
-                                    labelStatusMemoryMin.Text = MyStrings.labelStatusMemoryMin;
-                                    labelStatusMemoryMin.ForeColor = Color.Red;
-
-                                    labelCounterMemoryMin.Visible = true;
-                                    labelCounterMemoryMin.Text = GlobalVars.timer_memory_min.ToString();
-                                    labelCounterMemoryMin.ForeColor = Color.Red;
-                                    memoryMinCount++;
-
-                                }
-                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.mem_min))
-                                {
-
-                                    GPUMemMinTimer.Enabled = false;
-                                    labelCounterMemoryMin.Visible = false;
-                                    labelStatusMemoryMin.Text = MyStrings.labelStatusOK;
-                                    labelStatusMemoryMin.ForeColor = Color.Green;
-                                    GlobalVars.timer_memory_min = -100;
-
-
-                                }
-                            }
-                            else if (GlobalVars.reboots_mem_min == false)
-                            {
-
-                                labelStatusMemoryMin.Visible = true;
-                                labelStatusMemoryMin.Text = MyStrings.labelEvent;
-                                labelStatusMemoryMin.ForeColor = Color.Blue;
-                                labelCounterMemoryMin.Visible = false;
-                                GlobalVars.timer_memory_min = -100;
-                                GPUMemMinTimer.Enabled = false;
-                         
-                            }
-
-                            if (GlobalVars.reboots_mem_max == true)
-                            {
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.mem_max) && memoryMaxCount == 0)
-                                {
-                                    GPUMemMaxTimer.Enabled = true;
-
-
-                                    labelStatusMemoryMax.Text = MyStrings.labelStatusMemoryMax;
-                                    labelStatusMemoryMax.ForeColor = Color.Red;
-
-                                    labelCounterMemoryMax.Visible = true;
-                                    labelCounterMemoryMax.Text = GlobalVars.timer_memory_max.ToString();
-                                    labelCounterMemoryMax.ForeColor = Color.Red;
-                                    memoryMaxCount++;
-
-                                }
-                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.mem_max))
-                                {
-
-                                    GPUMemMaxTimer.Enabled = false;
-                                    labelCounterMemoryMax.Visible = false;
-                                    labelStatusMemoryMax.Text = MyStrings.labelStatusOK;
-                                    labelStatusMemoryMax.ForeColor = Color.Green;
-                                    GlobalVars.timer_memory_max = -100;
-
-
-                                }
-                            }
-                            else if (GlobalVars.reboots_mem_max == false)
-                            {
-
-                                labelStatusMemoryMax.Visible = true;
-                                labelStatusMemoryMax.Text = MyStrings.labelEvent;
-                                labelStatusMemoryMax.ForeColor = Color.Blue;
-                                labelCounterMemoryMax.Visible = false;
-                                GlobalVars.timer_memory_max = -100;
-                                GPUMemMaxTimer.Enabled = false;
-                            }
-
-
-                                break;
-                        case 4:
-                            
-                            //gpu load min
-                          
-                            if (GlobalVars.reboots_load_min == true)
-                            {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_min) && loadMinCount == 0)
-                                {
-                                    GPULoadMinTimer.Enabled = true;
-
-
-                                    labelStatusLoadMin.Text = MyStrings.labelStatusLoadGPU;
-                                    labelStatusLoadMin.ForeColor = Color.Red;
-
-                                    labelCounterLoadMin.Visible = true;
-                                    labelCounterLoadMin.Text = GlobalVars.timer_load_gpu_min.ToString();
-                                    labelCounterLoadMin.ForeColor = Color.Red;
-                                    loadMinCount++;
-
-                                }
-                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.load_GPU_min))
-                                {
-
-                                    GPULoadMinTimer.Enabled = false;
+                                    labelStatusLoadMin.Visible = true;
+                                    labelStatusLoadMin.Text = MyStrings.labelEvent;
+                                    labelStatusLoadMin.ForeColor = Color.Blue;
                                     labelCounterLoadMin.Visible = false;
-                                    labelStatusLoadMin.Text = MyStrings.labelStatusOK;
-                                    labelStatusLoadMin.ForeColor = Color.Green;
                                     GlobalVars.timer_load_gpu_min = -100;
-
+                                    GPULoadMinTimer.Enabled = false;
 
                                 }
-                            }
-                            else if (GlobalVars.reboots_load_min == false)
-                            {
-                                labelStatusLoadMin.Visible = true;
-                                labelStatusLoadMin.Text = MyStrings.labelEvent;
-                                labelStatusLoadMin.ForeColor = Color.Blue;
-                                labelCounterLoadMin.Visible = false;
-                                GlobalVars.timer_load_gpu_min = -100;
-                                GPULoadMinTimer.Enabled = false;
 
-                            }
-
-                            if (GlobalVars.reboots_load_max == true)
-                            {
-                                if (Convert.ToInt32(p) > Convert.ToInt32(GlobalVars.load_GPU_max) && loadMaxCount == 0)
+                                if (GlobalVars.reboots_load_max == true)
                                 {
-                                    GPULoadMaxTimer.Enabled = true;
+                                    if (Convert.ToInt32(p) > Convert.ToInt32(GlobalVars.load_GPU_max) && loadMaxCount == 0)
+                                    {
+                                        GPULoadMaxTimer.Enabled = true;
 
 
-                                    labelStatusLoadMax.Text = MyStrings.labelStatusLoadGPUMax;
-                                    labelStatusLoadMax.ForeColor = Color.Red;
+                                        labelStatusLoadMax.Text = MyStrings.labelStatusLoadGPUMax;
+                                        labelStatusLoadMax.ForeColor = Color.Red;
 
-                                    labelCounterLoadMax.Visible = true;
-                                    labelCounterLoadMax.Text = GlobalVars.timer_load_gpu_max.ToString();
-                                    labelCounterLoadMax.ForeColor = Color.Red;
-                                    loadMaxCount++;
+                                        labelCounterLoadMax.Visible = true;
+                                        labelCounterLoadMax.Text = GlobalVars.timer_load_gpu_max.ToString();
+                                        labelCounterLoadMax.ForeColor = Color.Red;
+                                        loadMaxCount++;
+                                    }
+                                    else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_max))
+                                    {
+
+                                        GPULoadMaxTimer.Enabled = false;
+                                        labelCounterLoadMax.Visible = false;
+                                        labelStatusLoadMax.Text = MyStrings.labelStatusOK;
+                                        labelStatusLoadMax.ForeColor = Color.Green;
+                                        GlobalVars.timer_load_gpu_max = -100;
+
+
+                                    }
                                 }
-                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.load_GPU_max))
-                                {
 
-                                    GPULoadMaxTimer.Enabled = false;
+                                else if (GlobalVars.reboots_load_max == false)
+                                {
+                                    labelStatusLoadMax.Visible = true;
+                                    labelStatusLoadMax.Text = MyStrings.labelEvent;
+                                    labelStatusLoadMax.ForeColor = Color.Blue;
                                     labelCounterLoadMax.Visible = false;
-                                    labelStatusLoadMax.Text = MyStrings.labelStatusOK;
-                                    labelStatusLoadMax.ForeColor = Color.Green;
                                     GlobalVars.timer_load_gpu_max = -100;
+                                    GPULoadMaxTimer.Enabled = false;
 
 
                                 }
-                            }
-
-                            else if (GlobalVars.reboots_load_max == false)
-                            {
-                                labelStatusLoadMax.Visible = true;
-                                labelStatusLoadMax.Text = MyStrings.labelEvent;
-                                labelStatusLoadMax.ForeColor = Color.Blue;
-                                labelCounterLoadMax.Visible = false;
-                                GlobalVars.timer_load_gpu_max = -100;
-                                GPULoadMaxTimer.Enabled = false;
-
-
-                            }
 
                                 break;
-                        case 5:
+                            case 5:
 
-                            //fan min
+                                //fan min
 
-                            if (GlobalVars.reboots_fan_min == false)
-                            {
-                                labelStatusFanMin.Visible = true;
-                                labelStatusFanMin.Text = MyStrings.labelEvent;
-                                labelStatusFanMin.ForeColor = Color.Blue;
-                                labelCounterFanMin.Visible = false;
-                                GlobalVars.timer_fan_min = -100;
-
-                            }
-                            else if (GlobalVars.reboots_fan_min == true)
-                            {
-                                if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min) && fanMinCount == 0)
+                                if (GlobalVars.reboots_fan_min == false)
                                 {
-
-                                    GPUFanMinTimer.Enabled = true;
-
-
-                                    labelStatusFanMin.Text = MyStrings.labelStatusFanMin;
-                                    labelStatusFanMin.ForeColor = Color.Red;
-
-                                    labelCounterFanMin.Visible = true;
-                                    labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
-                                    labelCounterFanMin.ForeColor = Color.Red;
-                                    fanMinCount++;
-
-                                }
-
-                                else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_min))
-                                {
-
-                                    GPUFanMinTimer.Enabled = false;
+                                    labelStatusFanMin.Visible = true;
+                                    labelStatusFanMin.Text = MyStrings.labelEvent;
+                                    labelStatusFanMin.ForeColor = Color.Blue;
                                     labelCounterFanMin.Visible = false;
-                                    labelStatusFanMin.Text = MyStrings.labelStatusFanOK;
-                                    labelStatusFanMin.ForeColor = Color.Green;
-                                    GlobalVars.timer_t_min = -100;
+                                    GlobalVars.timer_fan_min = -100;
+
                                 }
-
-
-
-                            }
-
-                            //fan max
-                            if (GlobalVars.reboots_fan_max == false)
-                            {
-                                labelStatusFanMax.Visible = true;
-                                labelCounterFanMax.Visible = false;
-                                labelStatusFanMax.Text = MyStrings.labelEvent;
-                                labelStatusFanMax.ForeColor = Color.Blue;
-                                GlobalVars.timer_fan_max = -100;
-
-                            }
-                            else if (GlobalVars.reboots_fan_max == true)
-                            {
-
-
-                                if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max) && fanMaxCount == 0)
+                                else if (GlobalVars.reboots_fan_min == true)
                                 {
+                                    if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_min) && fanMinCount == 0)
+                                    {
 
-                                    GPUFanMaxTimer.Enabled = true;
+                                        GPUFanMinTimer.Enabled = true;
 
-                                    labelStatusFanMax.Text = MyStrings.labelStatusFanMax;
-                                    labelStatusFanMax.ForeColor = Color.Red;
 
-                                    labelCounterFanMax.Visible = true;
-                                    labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
-                                    labelCounterFanMax.ForeColor = Color.Red;
-                                    fanMaxCount++;
+                                        labelStatusFanMin.Text = MyStrings.labelStatusFanMin;
+                                        labelStatusFanMin.ForeColor = Color.Red;
+
+                                        labelCounterFanMin.Visible = true;
+                                        labelCounterFanMin.Text = GlobalVars.timer_fan_min.ToString();
+                                        labelCounterFanMin.ForeColor = Color.Red;
+                                        fanMinCount++;
+
+                                    }
+
+                                    else if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_min))
+                                    {
+
+                                        GPUFanMinTimer.Enabled = false;
+                                        labelCounterFanMin.Visible = false;
+                                        labelStatusFanMin.Text = MyStrings.labelStatusFanOK;
+                                        labelStatusFanMin.ForeColor = Color.Green;
+                                        GlobalVars.timer_t_min = -100;
+                                    }
+
 
 
                                 }
-                                else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_max))
-                                {
 
-                                    GPUFanMaxTimer.Enabled = false;
+                                //fan max
+                                if (GlobalVars.reboots_fan_max == false)
+                                {
+                                    labelStatusFanMax.Visible = true;
                                     labelCounterFanMax.Visible = false;
-                                    labelStatusFanMax.Text = MyStrings.labelStatusFanOK;
-                                    labelStatusFanMax.ForeColor = Color.Green;
+                                    labelStatusFanMax.Text = MyStrings.labelEvent;
+                                    labelStatusFanMax.ForeColor = Color.Blue;
                                     GlobalVars.timer_fan_max = -100;
 
                                 }
+                                else if (GlobalVars.reboots_fan_max == true)
+                                {
 
 
-                            }
+                                    if (Convert.ToInt32(p) >= Convert.ToInt32(GlobalVars.fan_max) && fanMaxCount == 0)
+                                    {
+
+                                        GPUFanMaxTimer.Enabled = true;
+
+                                        labelStatusFanMax.Text = MyStrings.labelStatusFanMax;
+                                        labelStatusFanMax.ForeColor = Color.Red;
+
+                                        labelCounterFanMax.Visible = true;
+                                        labelCounterFanMax.Text = GlobalVars.timer_fan_max.ToString();
+                                        labelCounterFanMax.ForeColor = Color.Red;
+                                        fanMaxCount++;
 
 
-                            break;
+                                    }
+                                    else if (Convert.ToInt32(p) <= Convert.ToInt32(GlobalVars.fan_max))
+                                    {
+
+                                        GPUFanMaxTimer.Enabled = false;
+                                        labelCounterFanMax.Visible = false;
+                                        labelStatusFanMax.Text = MyStrings.labelStatusFanOK;
+                                        labelStatusFanMax.ForeColor = Color.Green;
+                                        GlobalVars.timer_fan_max = -100;
+
+                                    }
+
+
+                                }
+
+
+                                break;
+
+                        }
+
+                        // Console.WriteLine(p.Name);
+                        // labelTest.Text += " " + p;
+                        j++;
+
 
                     }
 
-                    // Console.WriteLine(p.Name);
-                   // labelTest.Text += " " + p;
-                    j++;
 
+
+                    labelTest.Text = labelTest.Text + " 1234\n";
+                    i++;
 
                 }
-
-
-
-                labelTest.Text = labelTest.Text + " 1234\n";
-                i++;
-
-            }
-            //no inet
-            if (GlobalVars.reboots_lost_inet == false)
-            {
-                labelStatusInternet.Visible = true;
-                labelCounterInternet.Visible = false;
-                labelStatusInternet.Text = MyStrings.labelEvent;
-                labelStatusInternet.ForeColor = Color.Blue;
-                GlobalVars.timer_fan_max = -100;
-
-            }
-            else if (GlobalVars.reboots_lost_inet == true)
-            {
-
-                if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
+                //no inet
+                if (GlobalVars.reboots_lost_inet == false)
                 {
-
-                    DontHaveInternetTimer.Enabled = true;
-
-                    labelStatusInternet.Text = MyStrings.labelStatusInternet;
-                    labelStatusInternet.ForeColor = Color.Red;
-
-                    labelCounterInternet.Visible = true;
-                    labelCounterInternet.Text = GlobalVars.timer_inet.ToString();
-                    labelCounterInternet.ForeColor = Color.Red;
-                }
-
-
-                else if (GlobalVars.mqttIsConnect == true || GlobalVars.ping == true)
-                {
-
-                    DontHaveInternetTimer.Enabled = false;
+                    labelStatusInternet.Visible = true;
                     labelCounterInternet.Visible = false;
-                    labelStatusInternet.Text = MyStrings.labelStatusOK;
-                    labelStatusInternet.ForeColor = Color.Green;
-                    GlobalVars.timer_inet = -100;
+                    labelStatusInternet.Text = MyStrings.labelEvent;
+                    labelStatusInternet.ForeColor = Color.Blue;
+                    GlobalVars.timer_fan_max = -100;
 
                 }
-
-
-            }
-            //autorization
-            if (GlobalVars.mqttIsConnect == false && GlobalVars.firsrun == false)
-            {
-                InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
-                InformationLabel.ForeColor = Color.Red;
-            }
-            else if (GlobalVars.mqttIsConnect == true && GlobalVars.firsrun == false)
-            {
-                InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
-                InformationLabel.ForeColor = Color.Green;
-            }
-
-
-            // gpu lost
-            if (GlobalVars.reboots_lost_gpu == false)
-            {
-                labelStatusGPULost.Visible = true;
-                labelCounterGPULost.Visible = false;
-                labelStatusGPULost.Text = MyStrings.labelEvent;
-                labelStatusGPULost.ForeColor = Color.Blue;
-                GlobalVars.timer_gpu_lost = -100;
-
-            }
-            else if (GlobalVars.reboots_lost_gpu == true && GlobalVars.count_GPU > 0)
-            {
-
-                if (GlobalVars.count_GPU > GlobalVars.counts || GlobalVars.temp0 == true)
+                else if (GlobalVars.reboots_lost_inet == true)
                 {
-                    if (FellOffGPUTimer.Enabled == false)
+
+                    if (GlobalVars.mqttIsConnect == false && GlobalVars.ping == false && GlobalVars.firsrun == false)
                     {
-                        GlobalVars.timer_gpu_lost = -100;
+
+                        DontHaveInternetTimer.Enabled = true;
+
+                        labelStatusInternet.Text = MyStrings.labelStatusInternet;
+                        labelStatusInternet.ForeColor = Color.Red;
+
+                        labelCounterInternet.Visible = true;
+                        labelCounterInternet.Text = GlobalVars.timer_inet.ToString();
+                        labelCounterInternet.ForeColor = Color.Red;
                     }
 
-                    FellOffGPUTimer.Enabled = true;
-                    labelCounterGPULost.Visible = true;
-                    labelCounterGPULost.ForeColor = Color.Red;
-                    labelCounterGPULost.Text = GlobalVars.timer_gpu_lost.ToString();
-                    labelStatusGPULost.Text = MyStrings.labelStatusFellOffGPU;
-                    labelStatusGPULost.ForeColor = Color.Red;
-                    
+
+                    else if (GlobalVars.mqttIsConnect == true || GlobalVars.ping == true)
+                    {
+
+                        DontHaveInternetTimer.Enabled = false;
+                        labelCounterInternet.Visible = false;
+                        labelStatusInternet.Text = MyStrings.labelStatusOK;
+                        labelStatusInternet.ForeColor = Color.Green;
+                        GlobalVars.timer_inet = -100;
+
+                    }
 
 
                 }
-                else if (GlobalVars.count_GPU == GlobalVars.counts && GlobalVars.temp0 == false)
+                //autorization
+                if (GlobalVars.mqttIsConnect == false && GlobalVars.firsrun == false)
                 {
+                    InformationLabel.Text = MyStrings.labelInformationAuthorizationFailed;
+                    InformationLabel.ForeColor = Color.Red;
+                }
+                else if (GlobalVars.mqttIsConnect == true && GlobalVars.firsrun == false)
+                {
+                    InformationLabel.Text = MyStrings.labelInformationAuthorizationOK;
+                    InformationLabel.ForeColor = Color.Green;
+                }
 
 
-                    FellOffGPUTimer.Enabled = false;
+                // gpu lost
+                if (GlobalVars.reboots_lost_gpu == false)
+                {
+                    labelStatusGPULost.Visible = true;
                     labelCounterGPULost.Visible = false;
-
-                    labelStatusGPULost.Text = MyStrings.labelStatusOK; ;
-                    labelStatusGPULost.ForeColor = Color.Green;
+                    labelStatusGPULost.Text = MyStrings.labelEvent;
+                    labelStatusGPULost.ForeColor = Color.Blue;
                     GlobalVars.timer_gpu_lost = -100;
 
                 }
+                else if (GlobalVars.reboots_lost_gpu == true && GlobalVars.count_GPU > 0)
+                {
+
+                    if (GlobalVars.count_GPU > GlobalVars.counts || GlobalVars.temp0 == true)
+                    {
+                        if (FellOffGPUTimer.Enabled == false)
+                        {
+                            GlobalVars.timer_gpu_lost = -100;
+                        }
+
+                        FellOffGPUTimer.Enabled = true;
+                        labelCounterGPULost.Visible = true;
+                        labelCounterGPULost.ForeColor = Color.Red;
+                        labelCounterGPULost.Text = GlobalVars.timer_gpu_lost.ToString();
+                        labelStatusGPULost.Text = MyStrings.labelStatusFellOffGPU;
+                        labelStatusGPULost.ForeColor = Color.Red;
 
 
+
+                    }
+                    else if (GlobalVars.count_GPU == GlobalVars.counts && GlobalVars.temp0 == false)
+                    {
+
+
+                        FellOffGPUTimer.Enabled = false;
+                        labelCounterGPULost.Visible = false;
+
+                        labelStatusGPULost.Text = MyStrings.labelStatusOK; ;
+                        labelStatusGPULost.ForeColor = Color.Green;
+                        GlobalVars.timer_gpu_lost = -100;
+
+                    }
+
+
+                }
+            }
+            catch (Exception e) {
+
+                Debug.WriteLine("GpuStatus: " + e);
             }
 
         }
@@ -1029,6 +1056,8 @@ namespace Informer
 
                     }
                     */
+
+                    
 
                     GlobalVars.upTime = UpTime.ToString(@"dd\.hh\:mm\:ss");
                     var send_data = new MqttApplicationMessageBuilder()

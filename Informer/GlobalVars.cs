@@ -43,7 +43,7 @@ static class GlobalVars
 
     public static int autostart = 60;
     public static int start_timestamp;
-    public static int timeOnline = -1;
+    public static int timeOnline = 0;
     public static int reload_temp_min_file;
     public static int reload_time_min_file;
     public static string link;
