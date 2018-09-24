@@ -109,6 +109,8 @@
             this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
             this.OHMTimer = new System.Windows.Forms.Timer(this.components);
             this.GPUStatusTimer = new System.Windows.Forms.Timer(this.components);
+            this.labelListGPU = new System.Windows.Forms.Label();
+            this.labelTestGPU = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbRigName
@@ -526,7 +528,7 @@
             // 
             // OHMTimer
             // 
-            this.OHMTimer.Interval = 10000;
+            this.OHMTimer.Interval = 5000;
             this.OHMTimer.Tick += new System.EventHandler(this.OHMTimer_Tick);
             // 
             // GPUStatusTimer
@@ -534,10 +536,22 @@
             this.GPUStatusTimer.Interval = 1000;
             this.GPUStatusTimer.Tick += new System.EventHandler(this.GPUStatusTimer_Tick);
             // 
+            // labelListGPU
+            // 
+            resources.ApplyResources(this.labelListGPU, "labelListGPU");
+            this.labelListGPU.Name = "labelListGPU";
+            // 
+            // labelTestGPU
+            // 
+            resources.ApplyResources(this.labelTestGPU, "labelTestGPU");
+            this.labelTestGPU.Name = "labelTestGPU";
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.labelTestGPU);
+            this.Controls.Add(this.labelListGPU);
             this.Controls.Add(this.labelCounterLoadMax);
             this.Controls.Add(this.labelCounterClockMax);
             this.Controls.Add(this.labelCounterMemoryMax);
@@ -683,6 +697,8 @@
         private System.Windows.Forms.Timer MqttConnectTimer;
         private System.Windows.Forms.Timer OHMTimer;
         private System.Windows.Forms.Timer GPUStatusTimer;
+        private System.Windows.Forms.Label labelListGPU;
+        private System.Windows.Forms.Label labelTestGPU;
     }
 }
 

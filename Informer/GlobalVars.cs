@@ -143,6 +143,7 @@ static class GlobalVars
     public static bool reboot6 = false;
     public static bool memMax = false;
     public static bool temp0 = false;
+    public static bool gpu_lost = false;
     public static bool firsrun = true;
     public static bool IsRebootStarted = false;
     public static bool rebootDontHaveInternet = false;
@@ -153,8 +154,11 @@ static class GlobalVars
     public static bool ping = false;
 
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
-    public static Dictionary<int, List<string>> gpuList = new Dictionary<int, List<string>>();
-  
+    //public static Dictionary<int, List<string>> gpuList = new Dictionary<int, List<string>>();
+   // public static Dictionary<string, string> gpuParams = new Dictionary<string, string>();
+    public static List<Dictionary<string, string>> gpuList = new List<Dictionary<string, string>>();
+    //public static List<int> gpusList = new List<int>();
+
     public static string fullPath = Application.StartupPath.ToString();
     public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
   
@@ -163,7 +167,7 @@ static class GlobalVars
    // public static CancellationTokenSource cancelTokenSource;
     public static bool tokenMqtt = false;
     public static Computer _pc = new Computer();
-    public static List<String> gpusList = new List<string>();
+    
     public static List<bool> problemPing = new List<bool>();
   
 
