@@ -149,7 +149,6 @@ namespace Informer
                                 GlobalVars.name = response.Params.name;
                                 GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.name), Convert.ToString(response.Params.name));
                             }
-                            //tbRigName.Text = GlobalVars.name;
 
                             GlobalVars.autostart = response.Params.timers.autostart;
                             GlobalVars._manager.WritePrivateString("main", nameof(GlobalVars.autostart), Convert.ToString(response.Params.timers.autostart));
@@ -195,12 +194,7 @@ namespace Informer
 
         }
 
-
-
     }
-
-
-
 
 }
 

@@ -16,13 +16,10 @@ namespace Informer
        
         public static async Task RunAsync()
         {
-           // Debug.WriteLine("mqttIsConnect: " + GlobalVars.mqttIsConnect);
             if (GlobalVars.mqttIsConnect == false)
             {
-
                 try
                 {
-
                     var options = new MqttClientOptionsBuilder()
 
                             .WithClientId(GlobalVars.token)
@@ -33,18 +30,11 @@ namespace Informer
                             .WithCleanSession(true)
                             .Build();
 
-                    // var factory = new MqttFactory();
-                    //var factory = new MqttFactory();
 
                     GlobalVars.client = GlobalVars.factory.CreateMqttClient();
 
 
-                    //client = factory.CreateMqttClient();
-
                     // Create TCP based options using the builder.
-
-
-
                     GlobalVars.client.ApplicationMessageReceived += (s, e) =>
                         {
                             Debug.WriteLine("### RECEIVED APPLICATION MESSAGE ###");
@@ -75,44 +65,16 @@ namespace Informer
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
                         GlobalVars.mqttIsConnect = false;
                         await Task.Delay(TimeSpan.FromSeconds(5));
-                        
-                        /*
-
-                        try
-                        {
-                            await client.ConnectAsync(options);
-                            GlobalVars.mqttIsConnect = true;
-
-                            var message = new MqttApplicationMessageBuilder()
-                                   .WithTopic("devices/" + GlobalVars.token + "/init")
-                                   .WithPayload("1")
-                                   .WithAtMostOnceQoS()
-                                   .WithRetainFlag()
-                                   .Build();
-
-                            await client.PublishAsync(message);
-
-                        }
-                        catch
-                        {
-                            Debug.WriteLine("### RECONNECTING FAILED ###");
-                        }
-                        */
                     };
 
 
 
                     try
                     {
-                        // GlobalVars.mqttIsConnect = false;
                         await GlobalVars.client.ConnectAsync(options);
                         GlobalVars.mqttIsConnect = true;
                         GlobalVars.firsrun = false;
-                        //GlobalVars.token = tbToken.Text;
                         GlobalVars._manager.WritePrivateString("main", "token", GlobalVars.token);
-                        // MainForm.Message("Connected");
-
-
                         var message = new MqttApplicationMessageBuilder()
                                    .WithTopic("devices/" + GlobalVars.token + "/init")
                                    .WithPayload("1")
@@ -126,7 +88,6 @@ namespace Informer
                     }
                     catch (MQTTnet.Adapter.MqttConnectingFailedException ex )
                     {
-                       // Debug.WriteLine("### ConnectionRefusedBadUsernameOrPassword ###" + ex.Message);
                         GlobalVars.mqttIsConnect = false;
                         GlobalVars.firsrun = false;
                     }
@@ -136,37 +97,6 @@ namespace Informer
                         GlobalVars.mqttIsConnect = false;
                         GlobalVars.firsrun = false;
                     }
-
-
-
-
-                    /*
-                    while (true)
-                    {
-                       // Console.ReadLine();
-
-                       // await client.SubscribeAsync(new TopicFilter("test", MqttQualityOfServiceLevel.AtMostOnce));
-                       // await client.SubscribeAsync(new TopicFilterBuilder().WithTopic("devices/" + GlobalVars.token + "/commands").Build());
-                        var message = new MqttApplicationMessageBuilder()
-                                      .WithTopic("devices/" + GlobalVars.token + "/init")
-                                      .WithPayload("1")
-                                      .WithAtMostOnceQoS()
-                                      .WithRetainFlag()
-                                      .Build();
-
-                        await client.PublishAsync(message);
-                    }
-                    */
-                    /*
-                    if (client.IsConnected)
-                    {
-                        GlobalVars.mqttIsConnect = true;
-                    }
-                    else if (!client.IsConnected)
-                    {
-                        GlobalVars.mqttIsConnect = false;
-                    }
-                    */
                 }
                 catch (Exception exception)
                 {

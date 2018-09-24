@@ -15,7 +15,6 @@ namespace Informer
         {
 
             GlobalVars.autostart = 60;
-            //string worker;
             GlobalVars.versions = GlobalVars._manager.GetPrivateString("main", "version");
             GlobalVars.token = GlobalVars._manager.GetPrivateString("main", "token");
             GlobalVars.name = GlobalVars._manager.GetPrivateString("main", "name");

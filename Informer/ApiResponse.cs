@@ -40,10 +40,6 @@ namespace Informer
       //  [JsonProperty("commands")]
         public string command { get; set; }
     }
-
-
-
-
     public class Settings
     {
         /// <summary
@@ -55,16 +51,7 @@ namespace Informer
         /// </summary>
 
     }
-    /*
-    public partial class MqttGetSettings
-    {
-        [JsonProperty("params")]
-        public Params Params { get; set; }
-
-        [JsonProperty("commands")]
-        public string Commands { get; set; }
-    }
-    */
+    
 
     public partial class Params
     {
@@ -78,7 +65,6 @@ namespace Informer
 
     public class Timers
     {
-
         public int temp_min { get; set; }
         public int temp_max { get; set; }
         public int fan_min { get; set; }
@@ -98,7 +84,6 @@ namespace Informer
 
     public class Reboots
     {
-
         public bool temp_min { get; set; }
         public bool temp_max { get; set; }
         public bool fan_min { get; set; }
@@ -111,8 +96,6 @@ namespace Informer
         public bool mem_max { get; set; }
         public bool lost_gpu { get; set; }
         public bool lost_inet { get; set; }
-
-       
     }
 
     public class Data_ranges

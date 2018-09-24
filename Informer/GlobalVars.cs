@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Net;
-//using HardwareMonitor.Hardware;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
@@ -18,29 +17,17 @@ using System.IO;
 using MQTTnet.Client;
 using MQTTnet;
 using System.Threading;
-//using uPLibrary.Networking.M2Mqtt;
-//using uPLibrary.Networking.M2Mqtt.Messages;
 static class GlobalVars
 {
     public static string host = "http://www.allminer.ru";
 
-
-
     public static string name;
     public static string token;
     public static string upTime;
-    //public static string json_send;
-    //public static string mqttsetparams;
     public static string versions;
-    //public static string wallet;
     public static string card;
     public static string temp;
     public static string fan;
-    //public static int mqttcheck = 0;
-
-
-
-
     public static int autostart = 60;
     public static int start_timestamp;
     public static int timeOnline = 0;
@@ -127,12 +114,6 @@ static class GlobalVars
 
     public static int count_GPU = 0;
 
-
-    public static int tempMinCount;
-
-
-
-
     public static string clock;
     public static string mem;
 
@@ -157,23 +138,19 @@ static class GlobalVars
     public static bool ping = false;
 
     public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
-    //public static Dictionary<int, List<string>> gpuList = new Dictionary<int, List<string>>();
-   // public static Dictionary<string, string> gpuParams = new Dictionary<string, string>();
+   
     public static List<Dictionary<string, string>> gpuList = new List<Dictionary<string, string>>();
-    //public static List<int> gpusList = new List<int>();
+   
 
     public static string fullPath = Application.StartupPath.ToString();
     public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
   
     public static MqttFactory factory = new MqttFactory();
     public static IMqttClient client;
-   // public static CancellationTokenSource cancelTokenSource;
+  
     public static bool tokenMqtt = false;
     public static Computer _pc = new Computer();
     
     public static List<bool> problemPing = new List<bool>();
   
-
-    //public static bool nice;
-    //итд
 }
