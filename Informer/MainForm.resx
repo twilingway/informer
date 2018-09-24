@@ -1200,9 +1200,6 @@
   <data name="labelTest.Text" xml:space="preserve">
     <value>labelTest</value>
   </data>
-  <data name="labelTest.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
   <data name="&gt;&gt;labelTest.Name" xml:space="preserve">
     <value>labelTest</value>
   </data>
