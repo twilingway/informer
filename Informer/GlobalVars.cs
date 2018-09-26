@@ -1,12 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Net;
 using Newtonsoft.Json;
@@ -17,140 +10,137 @@ using System.IO;
 using MQTTnet.Client;
 using MQTTnet;
 using System.Threading;
-static class GlobalVars
+using Informer;
+using System.Windows.Forms;
+
+public class GlobalVars
 {
-    public static string host = "http://www.allminer.ru";
+    public string host = "http://www.allminer.ru";
 
-    public static string name;
-    public static string token;
-    public static string upTime;
-    public static string versions;
-    public static string card;
-    public static string temp;
-    public static string fan;
-    public static int autostart = 60;
-    public static int start_timestamp;
-    public static int timeOnline = 0;
-    public static int reload_temp_min_file;
-    public static int reload_time_min_file;
-    public static string link;
-    public static string pathreload;
-    public static string filename;
-    public static string dir;
-    public static string pathreload2;
-    public static string filename2;
-    public static string dir2;
-    public static string reload_file;
-    public static string reboot_temp_max;
-    public static string reboot_temp_min;
-    public static string load;
-    public static int counts;
+    public Informer.Timers Timer;
+    public Reboots Reboots;
+    public Data_ranges Ranges;
 
-    public static string reboot_max_fan;
-    public static string reboot_min_fan;
-    public static string reboot_clock;
-    public static string reboot_memory;
-    public static string reboot_GPU;
-    public static string reboot_load_GPU;
-    public static string reboot_internet;
-    public static int timer_r_min = -100;
-    public static int timer_t_min = -100;
-    public static int timer_t_max = -100;
-    public static int timer_fan_max = -100;
-    public static int timer_fan_min = -100;
-    public static int timer_clock_min = -100;
-    public static int timer_clock_max = -100;
-    public static int timer_memory_min = -100;
-    public static int timer_memory_max = -100;
-    public static int timer_inet = -100;
-    public static int timer_gpu_lost = -100;
-    public static int timer_load_gpu_min = -100;
-    public static int timer_load_gpu_max = -100;
+    public string name;
+    public string token;
+    public string upTime;
+    public string versions;
+    public string card;
+    public string temp;
+    public string fan;
+    public int autostart = 60;
+    public int start_timestamp;
+    public int timeOnline = 0;
+    public int reload_temp_min_file;
+    public int reload_time_min_file;
+    public string link;
+    public string pathreload;
+    public string filename;
+    public string dir;
+    public string pathreload2;
+    public string filename2;
+    public string dir2;
+    public string reload_file;
+    public string reboot_temp_max;
+    public string reboot_temp_min;
+    public string load;
+    public int counts;
 
-    public static int time_temp_min;
-    public static int time_temp_max;
-    public static int time_fan_min;
-    public static int time_fan_max;
-    public static int time_load_GPU_min;
-    public static int time_load_GPU_max;
-    public static int time_clock_min;
-    public static int time_clock_max;
-    public static int time_mem_min;
-    public static int time_mem_max;
-    public static int time_lost_gpu;
-    public static int time_lost_inet;
+    public string reboot_max_fan;
+    public string reboot_min_fan;
+    public string reboot_clock;
+    public string reboot_memory;
+    public string reboot_GPU;
+    public string reboot_load_GPU;
+    public string reboot_internet;
+    public int timer_r_min = -100;
+    public int timer_t_min = -100;
+    public int timer_t_max = -100;
+    public int timer_fan_max = -100;
+    public int timer_fan_min = -100;
+    public int timer_clock_min = -100;
+    public int timer_clock_max = -100;
+    public int timer_memory_min = -100;
+    public int timer_memory_max = -100;
+    public int timer_inet = -100;
+    public int timer_gpu_lost = -100;
+    public int timer_load_gpu_min = -100;
+    public int timer_load_gpu_max = -100;
 
 
-    public static bool reboots_temp_min;
-    public static bool reboots_temp_max;
-    public static bool reboots_fan_min;
-    public static bool reboots_fan_max;
-    public static bool reboots_load_min;
-    public static bool reboots_load_max;
-    public static bool reboots_clock_min;
-    public static bool reboots_clock_max;
-    public static bool reboots_mem_min;
-    public static bool reboots_mem_max;
-    public static bool reboots_lost_gpu;
-    public static bool reboots_lost_inet;
+    public int temp_max;
+    public int temp_min;
+    public int mem_min;
+    public int mem_max;
+    public int load_GPU_min;
+    public int load_GPU_max;
+    public int fan_min;
+    public int fan_max;
+    public int clock_min;
+    public int clock_max;
+
+    public int interval = 60;
 
 
-    public static int temp_max;
-    public static int temp_min;
-    public static int mem_min;
-    public static int mem_max;
-    public static int load_GPU_min;
-    public static int load_GPU_max;
-    public static int fan_min;
-    public static int fan_max;
-    public static int clock_min;
-    public static int clock_max;
-
-    public static int interval = 60;
+    public int time_count_GPU;
 
 
-    public static int time_count_GPU;
+    public int count_GPU = 0;
+
+    public string clock;
+    public string mem;
 
 
-    public static int count_GPU = 0;
+    public bool reboot1 = false;
+    public bool reboot2 = false;
+    public bool reboot3 = false;
+    public bool reboot4 = false;
+    public bool reboot5 = false;
+    public bool coreMax = false;
+    public bool reboot6 = false;
+    public bool memMax = false;
+    public bool temp0 = false;
+    public bool gpu_lost = false;
+    public bool firsrun = true;
+    public bool IsRebootStarted = false;
+    public bool rebootDontHaveInternet = false;
+    public bool rebootLoadGPU = false;
+    public bool InternetIsActive = false;
+    public bool mqttIsConnect = false;
+    public int pingCount;
+    public bool ping = false;
 
-    public static string clock;
-    public static string mem;
+    public string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
 
+    public List<Dictionary<string, string>> gpuList = new List<Dictionary<string, string>>();
 
-    public static bool reboot1 = false;
-    public static bool reboot2 = false;
-    public static bool reboot3 = false;
-    public static bool reboot4 = false;
-    public static bool reboot5 = false;
-    public static bool coreMax = false;
-    public static bool reboot6 = false;
-    public static bool memMax = false;
-    public static bool temp0 = false;
-    public static bool gpu_lost = false;
-    public static bool firsrun = true;
-    public static bool IsRebootStarted = false;
-    public static bool rebootDontHaveInternet = false;
-    public static bool rebootLoadGPU = false;
-    public static bool InternetIsActive = false;
-    public static bool mqttIsConnect = false;
-    public static int pingCount;
-    public static bool ping = false;
+    public INIManager _manager;
+    public string fullPath
+    public MqttFactory factory = new MqttFactory();
+    public IMqttClient client;
 
-    public static string[] miners = { "ccminer.exe", "ethminer.exe", "excavator.exe", "nheqminer.exe", "sgminer.exe", "xmr-stak-cpu.exe", "NsGpuCNMiner.exe", "EthDcrMiner64.exe", "ZecMiner64.exe", "miner.exe", "Optiminer.exe", "prospector.exe" };
-   
-    public static List<Dictionary<string, string>> gpuList = new List<Dictionary<string, string>>();
-   
+    public bool tokenMqtt = false;
+    public Computer _pc = new Computer();
 
-    public static string fullPath = Application.StartupPath.ToString();
-    public static INIManager _manager = new INIManager(fullPath + "\\my.ini");
-  
-    public static MqttFactory factory = new MqttFactory();
-    public static IMqttClient client;
-  
-    public static bool tokenMqtt = false;
-    public static Computer _pc = new Computer();
-    
-    public static List<bool> problemPing = new List<bool>();
-  
+    public List<bool> problemPing = new List<bool>();
+
+    public GlobalVars()
+    {
+        fullPath = Application.StartupPath.ToString();
+        _manager = new INIManager(fullPath + "\\my.ini");
+    }
+
+    public void Save()
+    {
+        var state = JsonConvert.SerializeObject(this);
+        var file = File.Open("state.json", FileMode.Create);
+        var writter = new StreamWriter(file);
+        writter.WriteLine(state);
+    }
+
+    public static GlobalVars Load()
+    {
+        var state = File.ReadAllText("state.json");
+        return JsonConvert.DeserializeObject<GlobalVars>(state);
+    }
 }
