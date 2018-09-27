@@ -48,8 +48,8 @@ namespace Informer
             _log = new LogFile("log");
             _error = new LogFile("error");
 
-            KillDublicate("Informer");
-            KillDublicate("Launcher_informer");
+            KillDublicateProcess("Informer");
+            KillDublicateProcess("Launcher_informer");
             try
             {
                 globalVars._manager.WritePrivateString("main", "version", "1.3.9");
@@ -100,7 +100,7 @@ namespace Informer
 
         }
 
-        private void KillDublicate(string processName)
+        private void KillDublicateProcess(string processName)
         {
             try
             {
