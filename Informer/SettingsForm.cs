@@ -35,20 +35,6 @@ namespace Informer
         private void ZeroingOut()
         {
 
-            GlobalVars.timer_r_min = -100;
-            GlobalVars.timer_t_min = -100;
-            GlobalVars.timer_t_max = -100;
-            GlobalVars.timer_fan_max = -100;
-            GlobalVars.timer_fan_min = -100;
-            GlobalVars.timer_clock_min = -100;
-            GlobalVars.timer_clock_max = -100;
-            GlobalVars.timer_memory_min = -100;
-            GlobalVars.timer_memory_max = -100;
-            GlobalVars.timer_inet = -100;
-            GlobalVars.timer_gpu_lost = -100;
-            GlobalVars.timer_load_gpu_min = -100;
-            GlobalVars.timer_load_gpu_max = -100;
-
         }
        
         private void BtSaveClick(object sender, EventArgs e)
@@ -57,59 +43,6 @@ namespace Informer
             {
 
                 
-                manager.WritePrivateString("main", "temp_max", tbTempMax.Text);
-                GlobalVars.temp_max = Convert.ToInt32(tbTempMax.Text);
-                manager.WritePrivateString("main", "time_temp_max", tbTempMaxSec.Text);
-                GlobalVars.time_temp_max = Convert.ToInt32(tbTempMaxSec.Text);
-
-                manager.WritePrivateString("main", "temp_min", tbTempMin.Text);
-                GlobalVars.temp_min = Convert.ToInt32(tbTempMin.Text);
-                manager.WritePrivateString("main", "time_temp_min", tbTempMinSec.Text);
-                GlobalVars.time_temp_min = Convert.ToInt32(tbTempMinSec.Text);
-
-                manager.WritePrivateString("main", "fan_max", tbFanMax.Text);
-                GlobalVars.fan_max = Convert.ToInt32(tbFanMax.Text);
-                manager.WritePrivateString("main", "time_fan_max", tbFanMaxSec.Text);
-                GlobalVars.time_fan_max = Convert.ToInt32(tbFanMaxSec.Text);
-
-                manager.WritePrivateString("main", "fan_min", tbFanMin.Text);
-                GlobalVars.fan_min = Convert.ToInt32(tbFanMin.Text);
-                manager.WritePrivateString("main", "time_fan_min", tbFanMinSec.Text);
-                GlobalVars.time_fan_min = Convert.ToInt32(tbFanMinSec.Text);
-
-                manager.WritePrivateString("main", "reload_temp_min_file", tbReloadTempFile.Text);
-                GlobalVars.reload_temp_min_file = Convert.ToInt32(tbReloadTempFile.Text);
-                manager.WritePrivateString("main", "reload_time_min_file", tbReloadFileSec.Text);
-                GlobalVars.reload_time_min_file = Convert.ToInt32(tbReloadFileSec.Text);
-
-                manager.WritePrivateString("main", "clock", tbClockMin.Text);
-                GlobalVars.clock_min = Convert.ToInt32(tbClockMin.Text);
-                manager.WritePrivateString("main", "time_clock", tbClockMinSec.Text);
-                GlobalVars.time_clock_min = Convert.ToInt32(tbClockMinSec.Text);
-
-                manager.WritePrivateString("main", "memory", tbMemoryMin.Text);
-                GlobalVars.mem_min = Convert.ToInt32(tbMemoryMin.Text);
-                manager.WritePrivateString("main", "time_memory", tbMemoryMinSec.Text);
-                GlobalVars.time_mem_min = Convert.ToInt32(tbMemoryMinSec.Text);
-
-                manager.WritePrivateString("main", "count_GPU", tbCountGPU.Text);
-                GlobalVars.count_GPU = Convert.ToInt32(tbCountGPU.Text);
-                manager.WritePrivateString("main", "time_count_GPU", tbCountGPUSec.Text);
-                GlobalVars.time_count_GPU = Convert.ToInt32(tbCountGPUSec.Text);
-
-                manager.WritePrivateString("main", "load_GPU", tbLoadGPU.Text);
-                GlobalVars.load_GPU_min = Convert.ToInt32(tbLoadGPU.Text);
-                manager.WritePrivateString("main", "time_load_GPU", tbLoadGPUSec.Text);
-                GlobalVars.time_load_GPU_min = Convert.ToInt32(tbLoadGPUSec.Text);
-
-                manager.WritePrivateString("main", "time_internet", tbInternetOffSec.Text);
-                GlobalVars.time_lost_inet = Convert.ToInt32(tbInternetOffSec.Text);
-
-                manager.WritePrivateString("main", "time_start", combTimeStart.Text);
-                GlobalVars.autostart = Convert.ToInt32(combTimeStart.Text);
-
-                
-
                 ZeroingOut();
 
                 this.Close();
@@ -302,13 +235,13 @@ namespace Informer
             if (cbTempMaxGPU.Checked)
             {
                 manager.WritePrivateString("main", "reboot_temp_max", "1");
-                GlobalVars.reboot_temp_max = "1";
+              
                 ZeroingOut();
             }
             else
             {
                 manager.WritePrivateString("main", "reboot_temp_max", "0");
-                GlobalVars.reboot_temp_max = "0";
+               
               
             }
         }
@@ -320,14 +253,14 @@ namespace Informer
             {
               
                 manager.WritePrivateString("main", "reboot_temp_min", "1");
-                GlobalVars.reboot_temp_min = "1";
+              
                 ZeroingOut();
             }
             else
             {
              
                 manager.WritePrivateString("main", "reboot_temp_min", "0");
-                GlobalVars.reboot_temp_min = "0";
+               
               
             }
         }
@@ -342,7 +275,7 @@ namespace Informer
             {
              
                 manager.WritePrivateString("main", "reboot_max_fan", "1");
-                GlobalVars.reboot_max_fan = "1";
+              
                 ZeroingOut();
 
             }
@@ -350,7 +283,7 @@ namespace Informer
             {
               
                 manager.WritePrivateString("main", "reboot_max_fan", "0");
-                GlobalVars.reboot_max_fan = "0";
+              
               
             }
         }
@@ -361,14 +294,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_min_fan", "1");
-                GlobalVars.reboot_min_fan = "1";
+               
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_min_fan", "0");
-                GlobalVars.reboot_min_fan = "0";
+               
                
             }
         }
@@ -379,13 +312,13 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reload_file", "1");
-                GlobalVars.reload_file = "1";
+               
                 ZeroingOut();
             }
             else
             {
                 manager.WritePrivateString("main", "reload_file", "0");
-                GlobalVars.reload_file = "0";
+               
                
             }
         }
@@ -396,14 +329,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_clock", "1");
-                GlobalVars.reboot_clock = "1";
+               
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_clock", "0");
-                GlobalVars.reboot_clock = "0";
+                
               
             }
         }
@@ -414,14 +347,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_memory", "1");
-                GlobalVars.reboot_memory = "1";
+                
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_memory", "0");
-                GlobalVars.reboot_memory = "0";
+               // GlobalVars.reboot_memory = "0";
                
             }
         }
@@ -435,14 +368,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_load_GPU", "1");
-                GlobalVars.reboot_load_GPU = "1";
+               // GlobalVars.reboot_load_GPU = "1";
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_load_GPU", "0");
-                GlobalVars.reboot_load_GPU = "0";
+               // GlobalVars.reboot_load_GPU = "0";
                 ZeroingOut();
             }
 
@@ -454,14 +387,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_GPU", "1");
-                GlobalVars.reboot_GPU = "1";
+              //  GlobalVars.reboot_GPU = "1";
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_GPU", "0");
-                GlobalVars.reboot_GPU = "0";
+              //  GlobalVars.reboot_GPU = "0";
             }
         }
 
@@ -471,14 +404,14 @@ namespace Informer
             {
 
                 manager.WritePrivateString("main", "reboot_internet", "1");
-                GlobalVars.reboot_internet = "1";
+              //  GlobalVars.reboot_internet = "1";
                 ZeroingOut();
             }
             else
             {
 
                 manager.WritePrivateString("main", "reboot_internet", "0");
-                GlobalVars.reboot_internet = "0";
+              //  GlobalVars.reboot_internet = "0";
             }
         }
 
@@ -496,9 +429,9 @@ namespace Informer
             manager.WritePrivateString("main", "path", filename);
             manager.WritePrivateString("main", "filename", filename1);
             manager.WritePrivateString("main", "dir", dir);
-            GlobalVars.dir = dir;
-            GlobalVars.pathreload = filename;
-            GlobalVars.filename = filename1;
+          //  GlobalVars.dir = dir;
+          //  GlobalVars.pathreload = filename;
+          //  GlobalVars.filename = filename1;
 
             
             ZeroingOut();
@@ -519,9 +452,9 @@ namespace Informer
             manager.WritePrivateString("main", "path2", filename);
             manager.WritePrivateString("main", "filename2", filename1);
             manager.WritePrivateString("main", "dir2", dir);
-            GlobalVars.dir2 = dir;
-            GlobalVars.pathreload2 = filename;
-            GlobalVars.filename2 = filename1;
+           // GlobalVars.dir2 = dir;
+          // GlobalVars.pathreload2 = filename;
+           // GlobalVars.filename2 = filename1;
 
            
             ZeroingOut();
@@ -711,7 +644,7 @@ namespace Informer
         private void combTimeStart_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             manager.WritePrivateString("main", "time_start", combTimeStart.GetItemText(combTimeStart.SelectedItem));
-            int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.autostart);
+          //  int.TryParse(combTimeStart.GetItemText(combTimeStart.SelectedItem), out GlobalVars.autostart);
             ZeroingOut();
            
         }

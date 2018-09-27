@@ -17,7 +17,7 @@ public class GlobalVars
 {
     public string host = "http://www.allminer.ru";
 
-    public Informer.Timers Timer;
+    public Timers Timer;
     public Reboots Reboots;
     public Data_ranges Ranges;
 
@@ -115,7 +115,7 @@ public class GlobalVars
     public List<Dictionary<string, string>> gpuList = new List<Dictionary<string, string>>();
 
     public INIManager _manager;
-    public string fullPath
+    public string fullPath;
     public MqttFactory factory = new MqttFactory();
     public IMqttClient client;
 
