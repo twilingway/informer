@@ -36,28 +36,20 @@ namespace Informer
 {
     public partial class MainForm : Form
     {
-
         private static List<string> hosts = new List<string>();
-
         private static Http _http = new Http();
         private LogFile _log, _error;
         private GlobalVars globalVars = new GlobalVars();
 
-      
         public MainForm()
         {
-
-            if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
-            {
-                System.Threading.Thread.CurrentThread.CurrentUICulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
-                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo(Properties.Settings.Default.Language);
-            }
-
-
             InitializeComponent();
 
+            _log = new LogFile("log");
+            _error = new LogFile("error");
 
-
+            KillDublicate("Informer");
+            KillDublicate("Launcher_informer");
             try
             {
                 globalVars._manager.WritePrivateString("main", "version", "1.3.9");
@@ -67,27 +59,11 @@ namespace Informer
                 _error.writeLogLine("Write version: " + e.Message, "error");
             }
 
-            MyIDProcess();
-            try
-            {
-                Process psiwer;
-                psiwer = Process.Start("cmd", @"/c taskkill /f /im launcher_informer.exe");
-                
-                psiwer.Close();
-            }
-            catch (Exception ex)
-            {
-                _error.writeLogLine("Kill launcher: " + ex.Message, "error");
-            }
+            СheckForNewVersion();
 
             globalVars._pc.CPUEnabled = true;
             globalVars._pc.GPUEnabled = true;
             globalVars._pc.Open();
-            
-            _log = new LogFile("log");
-            _error = new LogFile("error");
-
-            СheckForNewVersion();
 
             //Инициализация компонентов
             InitFromIni.onInitFromIni(globalVars);
@@ -124,18 +100,18 @@ namespace Informer
 
         }
 
-        private void MyIDProcess()
+        private void KillDublicate(string processName)
         {
             try
             {
                 int myId = Process.GetCurrentProcess().Id;
                 Process.GetProcesses()
-                    .Where(p => p.ProcessName == "Informer" && p.Id != myId)
+                    .Where(p => p.ProcessName.ToLower() == processName.ToLower() && p.Id != myId)
                     .Count(p => { p.Kill(); return true; });
             }
             catch (Exception e)
             {
-                Debug.WriteLine("KILL Informer: " + e);
+                Debug.WriteLine($"KILL {processName}: " + e);
             }  
           
            
@@ -207,8 +183,6 @@ namespace Informer
                 tbRigName.Text = globalVars.name;
             }
 
-            
-
             try
             {
                 btStart.Enabled = false;
@@ -252,8 +226,6 @@ namespace Informer
             InformationLabel.Text = MyStrings.labelStatusStarted;
             InformationLabel.ForeColor = Color.Green;
             Hide();
-            
-            
         }
 
         private void AutoStart_Tick(object sender, EventArgs e)
@@ -399,8 +371,6 @@ namespace Informer
                                         labelCounterTempMax.Text = globalVars.timer_t_max.ToString();
                                         labelCounterTempMax.ForeColor = Color.Red;
                                         tempMaxCount++;
-
-
                                     }
                                     
 
@@ -412,8 +382,6 @@ namespace Informer
                                         labelStatusTempMax.Text = MyStrings.labelStatusTempOK;
                                         labelStatusTempMax.ForeColor = Color.Green;
                                         globalVars.timer_t_max = -100;
-
-
                                     }
                                 }
 
@@ -939,11 +907,14 @@ namespace Informer
             }
         }
 
+        public void CheckForLauncher()
+        {
+        
+        }
+
         public void СheckForNewVersion()
         {
-            if (globalVars.ping == true)
-            {
-                try
+            try
                 {
                     string v = globalVars._manager.GetPrivateString("main", "version");
                     string pack = _http.GetContent(globalVars.host + "/api/?method=version");
@@ -968,19 +939,12 @@ namespace Informer
                             _error.writeLogLine("Start launcher " + ex.Message, "error");
                         }
                     }
-
                 }
-                catch (Exception ex)
+                
+            catch (Exception ex)
                 {
                     _error.writeLogLine("CheckNewVersion " + ex.Message, "error");
                 }
-
-            }
-            else {
-                 linkLabelUpdate.Visible = false;
-                _log.writeLogLine("Internet is Off ", "log");
-            }
-
         }
 
         private void CheckNewVersionTimerTick(object sender, EventArgs e)
