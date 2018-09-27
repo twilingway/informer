@@ -38,13 +38,12 @@ namespace Informer
     {
 
         private static List<string> hosts = new List<string>();
-       // private Computer _pc;
+
         private static Http _http = new Http();
         private LogFile _log, _error;
-        //List<String> gpusList = new List<string>();
-        private GlobalVars globalVars;
+        private GlobalVars globalVars = new GlobalVars();
 
-        private Form f2;
+      
         public MainForm()
         {
 
@@ -93,7 +92,7 @@ namespace Informer
             //Инициализация компонентов
             InitFromIni.onInitFromIni(globalVars);
 
-            f2 = new SettingsForm();
+            //f2 = new SettingsForm();
 
             bool start = false;
 
@@ -1150,7 +1149,7 @@ namespace Informer
         {
             NextAutoStart.Stop();
             AutoStartTimer.Stop();
-            f2.ShowDialog();
+           // f2.ShowDialog();
         }
 
         private void BtnExitClick(object sender, EventArgs e)
@@ -1553,12 +1552,15 @@ namespace Informer
             // В переменную hosts записываем все рабочие станции из файла
             hosts = getComputersListFromTxtFile("pinglist.txt");
             // Создаём Action типизированный string, данный Action будет запускать функцию Pinger
+
             Action<string> asyn = new Action<string>(Pinger);
-            // Для каждой рабочей станции запускаем Pinger'а
-            hosts.ForEach(p =>
-            {
-                asyn.Invoke(p);
-            });
+
+            //hosts.ForEach(Print);
+            
+             hosts.ForEach(p =>
+             {
+                 asyn.Invoke(p);
+             });
 
 
             if (globalVars.pingCount >= 3)
@@ -1575,7 +1577,13 @@ namespace Informer
 
 
         }
-
+        /*
+        private static void Print(string s)
+        {
+            Debug.WriteLine("++++++++++++++++++++++"+s);
+           
+        }
+        */
         private static List<string> getComputersListFromTxtFile(string pathToFile)
         {
             List<string> computersList = new List<string>();
@@ -1607,38 +1615,40 @@ namespace Informer
 
 
         // Наш основной класс, который будет отправлять команду ping
-        async private static void Pinger(string hostAdress, GlobalVars globalVars)
+        private async void Pinger(string hostAdress)
         {
             // Создаём экземпляр класса Ping
             Ping png = new Ping();
-            try
-            {
-                // Пингуем рабочую станцию hostAdress
-                PingReply pr = await png.SendPingAsync(hostAdress);
-               
-                // то такую машину заносим в список
-                if (pr.Status != IPStatus.Success)
+
+                try
+                {
+                    // Пингуем рабочую станцию hostAdress
+                    PingReply pr = await png.SendPingAsync(hostAdress);
+
+                    // то такую машину заносим в список
+                    if (pr.Status != IPStatus.Success)
+                    {
+                        globalVars.pingCount = globalVars.pingCount + 1;
+                    }
+
+                    else if (pr.Status == IPStatus.Success)
+                    {
+                        globalVars.pingCount = globalVars.pingCount - 1;
+                    }
+
+                    // Записываем в файл все проблемные машины
+                    //  writeProblemComputersToFile("D:\\problemsWithAdminShare.txt", problemComputersList);
+                }
+                catch (Exception e)
                 {
                     globalVars.pingCount = globalVars.pingCount + 1;
+                    Debug.WriteLine("Возникла ошибка! " + hostAdress + " " + globalVars.pingCount + " Ex " + e.Message);
+                    globalVars.ping = false;
                 }
-
-                else if (pr.Status == IPStatus.Success)
-                {
-                    globalVars.pingCount = globalVars.pingCount - 1;
-                }
-                
-                // Записываем в файл все проблемные машины
-                //  writeProblemComputersToFile("D:\\problemsWithAdminShare.txt", problemComputersList);
-            }
-            catch (Exception e)
-            {
-                globalVars.pingCount = globalVars.pingCount + 1;
-                Debug.WriteLine("Возникла ошибка! " + hostAdress + " " + globalVars.pingCount + " Ex " +e.Message);
-                globalVars.ping = false;
-            }
+            
         }
 
-        async void MqttConnectTimer_Tick(object sender,GlobalVars globalVars, EventArgs e)
+        async void MqttConnectTimer_Tick(object sender, EventArgs e)
         {
             await MqttConnect.RunAsync(globalVars);
         }

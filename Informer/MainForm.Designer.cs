@@ -520,11 +520,13 @@
             // 
             this.PingTimer.Interval = 10000;
             this.PingTimer.Tick += new System.EventHandler(this.PingTimer_Tick);
+            
             // 
             // MqttConnectTimer
             // 
             this.MqttConnectTimer.Interval = 5000;
             this.MqttConnectTimer.Tick += new System.EventHandler(this.MqttConnectTimer_Tick);
+           
             // 
             // OHMTimer
             // 
@@ -616,6 +618,7 @@
             this.PerformLayout();
 
         }
+
 
         #endregion
         private System.Windows.Forms.TextBox tbRigName;
