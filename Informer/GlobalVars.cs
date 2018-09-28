@@ -67,18 +67,6 @@ public class GlobalVars
     public int timer_load_gpu_min = -100;
     public int timer_load_gpu_max = -100;
 
-
-    public int temp_max;
-    public int temp_min;
-    public int mem_min;
-    public int mem_max;
-    public int load_GPU_min;
-    public int load_GPU_max;
-    public int fan_min;
-    public int fan_max;
-    public int clock_min;
-    public int clock_max;
-
     public int interval = 60;
 
 
