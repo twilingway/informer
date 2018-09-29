@@ -11,7 +11,7 @@ namespace Informer
 {
     public static class MqttConnect
     {
-        public static async Task RunAsync(GlobalVars globalVars)
+        public static async Task RunAsync(GlobalVars globalVars,ApiResponse settings)
         {
             if (globalVars.mqttIsConnect == false)
             {
@@ -19,10 +19,10 @@ namespace Informer
                 {
                     var options = new MqttClientOptionsBuilder()
 
-                            .WithClientId(globalVars.token)
+                            .WithClientId(settings.Params.token)
                             .WithTcpServer("allminer.ru", 1883)
                             .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
-                            .WithCredentials(globalVars.token, globalVars.token)
+                            .WithCredentials(settings.Params.token, settings.Params.token)
                             //.WithTls()
                             .WithCleanSession(true)
                             .Build();
@@ -40,7 +40,7 @@ namespace Informer
                             Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
                             Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
 
-                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic,globalVars);
+                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic,globalVars,settings);
 
                         };
 
@@ -49,7 +49,7 @@ namespace Informer
                        try
                        {
                            await globalVars.client.SubscribeAsync(new TopicFilterBuilder().
-                           WithTopic("devices/" + globalVars.token + "/commands").
+                           WithTopic("devices/" + settings.Params.token + "/commands").
                            Build());
                        }
                        catch (Exception ex)
@@ -73,9 +73,9 @@ namespace Informer
                         await globalVars.client.ConnectAsync(options);
                         globalVars.mqttIsConnect = true;
                         globalVars.firsrun = false;
-                        globalVars._manager.WritePrivateString("main", "token", globalVars.token);
+                       // globalVars._manager.WritePrivateString("main", "token", globalVars.token);
                         var message = new MqttApplicationMessageBuilder()
-                                   .WithTopic("devices/" + globalVars.token + "/init")
+                                   .WithTopic("devices/" + settings.Params.token + "/init")
                                    .WithPayload("1")
                                    .WithAtMostOnceQoS()
                                    .WithRetainFlag()

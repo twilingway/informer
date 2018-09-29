@@ -25,42 +25,36 @@ namespace Informer
 {
     public class ApiResponse
     {
+        public string test { get; set; }
+        public Params Params { get; set; }
+
         /// <summary>
         /// Настройки Informer-а хранящиеся на сервере
         /// </summary>
 
-        public string token { get; set; }
-        public Settings settings { get; set; }
-      
-        public string message { get; set; }
+        // public string Token { get; set; }
+        // public Settings settings { get; set; }
 
-      //  [JsonProperty("params")]
-        public Params Params { get; set; }
+        // public string message { get; set; }
 
-      //  [JsonProperty("commands")]
-        public string command { get; set; }
-    }
-    public class Settings
-    {
-        /// <summary
-        /// Интервал в секундах, как часто отправлять данные
-        /// </summary>
-        public int interval { get; set; }
-        public string name { get; set; }
-        /// <summary>
-        /// </summary>
+        //  [JsonProperty("params")]
 
+
+        //  [JsonProperty("commands")]
+        // public string command { get; set; }
     }
     
 
-    public partial class Params
+    public class Params
     {
         public Timers timers { get; set; }
         public Reboots reboots { get; set; }
         public Data_ranges data_ranges { get; set; }
         public string name { get; set; }
         public int interval { get; set; }
-
+        public string token { get; set; }
+        public string version { get; set; }
+        public string command { get; set; }
     }
 
     public class Timers
@@ -68,7 +62,7 @@ namespace Informer
         public int temp_min { get; set; }
         public int temp_max { get; set; }
         public int fan_min { get; set; }
-        public int interval { get; set; }
+       // public int interval { get; set; }
         public int fan_max { get; set; }
         public int load_min { get; set; }
         public int load_max { get; set; }
@@ -79,7 +73,6 @@ namespace Informer
         public int lost_gpu { get; set; }
         public int lost_inet { get; set; }
         public int autostart { get; set; }
-
     }
 
     public class Reboots
@@ -105,8 +98,6 @@ namespace Informer
         public int[] Load { get; set; }
         public int[] Clock { get; set; }
         public int[] Mem { get; set; }
-
     }
-
 }
 

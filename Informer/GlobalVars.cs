@@ -16,12 +16,11 @@ using System.Windows.Forms;
 public class GlobalVars
 {
     public string host = "http://www.allminer.ru";
-
     public Timers Timer;
     public Reboots Reboots;
     public Data_ranges Ranges;
 
-    public string name;
+    //public string name;
     public string token;
     public string upTime;
     public string versions;
@@ -118,17 +117,46 @@ public class GlobalVars
         _manager = new INIManager(fullPath + "\\my.ini");
     }
 
-    public void Save()
+    public void Save(ApiResponse settings)
     {
-        var state = JsonConvert.SerializeObject(this);
+    
+        var state = JsonConvert.SerializeObject(settings);
+        //var state = settings;
         var file = File.Open("state.json", FileMode.Create);
-        var writter = new StreamWriter(file);
-        writter.WriteLine(state);
+        try
+        {
+            using (StreamWriter writter = new StreamWriter(file))
+            {
+                writter.WriteLine(state);
+                Debug.WriteLine("SAVE OK:" + state);
+            }
+        }
+        catch(Exception e)
+        {
+            Debug.WriteLine("SAVE WRONG:"+e.Message);
+        }
     }
 
-    public static GlobalVars Load()
+
+    //public static GlobalVars Load()
+     public ApiResponse Load2()
     {
-        var state = File.ReadAllText("state.json");
-        return JsonConvert.DeserializeObject<GlobalVars>(state);
+        try
+        {
+            using (StreamReader sr = new StreamReader("state.json"))
+            {
+                var state = sr.ReadToEnd();
+                //return JsonConvert.DeserializeObject<GlobalVars>(state);
+                var response = JsonConvert.DeserializeObject<ApiResponse>(state);
+                Debug.WriteLine("***************** "+ response.Params.version);
+                return response;
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine("&&&&&&&&&&&&&&&"+e.Message);
+            return null;
+        }
     }
+    
 }

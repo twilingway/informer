@@ -40,6 +40,7 @@ namespace Informer
         private static Http _http = new Http();
         private LogFile _log, _error;
         private GlobalVars globalVars = new GlobalVars();
+        public ApiResponse settings;
 
         public MainForm()
         {
@@ -47,9 +48,32 @@ namespace Informer
 
             _log = new LogFile("log");
             _error = new LogFile("error");
+           
+            settings = new ApiResponse();
 
             KillDublicateProcess("Informer");
             KillDublicateProcess("Launcher_informer");
+
+
+            settings.Params = new Params
+            {
+                timers = new Timers(),
+                reboots = new Reboots(),
+                data_ranges = new Data_ranges(),
+                version = "1.3.9"
+            };
+
+            settings.Params.data_ranges.Temp = new int[2];
+            settings.Params.data_ranges.Fan = new int[2];
+            settings.Params.data_ranges.Load = new int[2];
+            settings.Params.data_ranges.Clock = new int[2];
+            settings.Params.data_ranges.Fan = new int[2];
+            settings.Params.data_ranges.Mem = new int[2];
+
+            Debug.WriteLine(settings.Params.version);
+            // apiResponse.Params.Version = "1.3.9";
+
+            /*
             try
             {
                 globalVars._manager.WritePrivateString("main", "version", "1.3.9");
@@ -58,7 +82,7 @@ namespace Informer
             {
                 _error.writeLogLine("Write version: " + e.Message, "error");
             }
-
+            */
             СheckForNewVersion();
 
             globalVars._pc.CPUEnabled = true;
@@ -66,23 +90,26 @@ namespace Informer
             globalVars._pc.Open();
 
             //Инициализация компонентов
-            InitFromIni.onInitFromIni(globalVars);
-
+            //InitFromIni.onInitFromIni(globalVars);
+            
+            var resp = LoadSettings();
+           
             //f2 = new SettingsForm();
 
             bool start = false;
-
-            if (!string.IsNullOrEmpty(globalVars.token))
+            if (resp != null)
             {
-                start = true;
-              
-                tbRigName.ReadOnly = true;
-                tbToken.ReadOnly = true;
-                tbRigName.Text = globalVars.name;
-                tbToken.Text = globalVars.token;
-            }
+                if (!string.IsNullOrEmpty(resp.Params.token))
+                {
+                    start = true;
 
-            if (string.IsNullOrEmpty(globalVars.name) && string.IsNullOrEmpty(globalVars.token))
+                    tbRigName.ReadOnly = true;
+                    tbToken.ReadOnly = true;
+                    tbRigName.Text = settings.Params.name;
+                    tbToken.Text = settings.Params.token;
+                }
+            }
+            if (string.IsNullOrEmpty(settings.Params.name) && string.IsNullOrEmpty(settings.Params.token))
             {
                 start = false;
                 tbRigName.ReadOnly = true;
@@ -98,6 +125,26 @@ namespace Informer
             }
 
 
+        }
+
+        public ApiResponse LoadSettings()
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader("state.json"))
+                {
+                    var state = sr.ReadToEnd();
+                    //return JsonConvert.DeserializeObject<GlobalVars>(state);
+                    var response = JsonConvert.DeserializeObject<ApiResponse>(state);
+                    Debug.WriteLine("***************** " + response.Params.version);
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("&&&&&&&&&&&&&&&" + e.Message);
+                return null;
+            }
         }
 
         private void KillDublicateProcess(string processName)
@@ -121,7 +168,7 @@ namespace Informer
         private void BtStopClick(object sender, EventArgs e)
         {
             _log.writeLogLine("Informer stopped", "log");
-            Message("Informer Stopped!", globalVars);
+            Message("Informer Stopped!", globalVars,settings);
 
             globalVars.firsrun = true;
 
@@ -180,7 +227,7 @@ namespace Informer
                 AutoStartTimer.Enabled = false;
                
                 tbToken.ReadOnly = true;
-                tbRigName.Text = globalVars.name;
+                tbRigName.Text = settings.Params.name;
             }
 
             try
@@ -216,9 +263,9 @@ namespace Informer
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
             OHMTimer.Enabled = true;
-            if (!string.IsNullOrWhiteSpace(globalVars.name))
+            if (!string.IsNullOrWhiteSpace(settings.Params.name))
             {
-                Message("Informer Started!", globalVars);
+                Message("Informer Started!", globalVars,settings);
             }
 
             MqttConnectTimer.Enabled = true;
@@ -253,16 +300,16 @@ namespace Informer
         {
             try
             {
-                labelTempMin.Text = "TEMP MIN(" + globalVars.temp_min + "):";
-                labelTempMax.Text = "TEMP MAX(" + globalVars.temp_max + "):";
-                labelFanMin.Text = "FAN MIN(" + globalVars.fan_min + "):";
-                labelFanMax.Text = "FAN MAX(" + globalVars.fan_max + "):";
-                labelLoadMin.Text = "LOAD MIN(" + globalVars.load_GPU_min + "):";
-                labelLoadMax.Text = "LOAD MAX(" + globalVars.load_GPU_max + "):";
-                labelClockMin.Text = "CLOCK MIN(" + globalVars.clock_min + "):";
-                labelClockMax.Text = "CLOCK MAX(" + globalVars.clock_max + "):";
-                labelMemoryMin.Text = "MEMORY MIN(" + globalVars.mem_min + "):";
-                labelMemoryMax.Text = "MEMORY MAX(" + globalVars.mem_max + "):";
+                labelTempMin.Text = "TEMP MIN(" + settings.Params.data_ranges.Temp[0] + "):";
+                labelTempMax.Text = "TEMP MAX(" + settings.Params.data_ranges.Temp[1] + "):";
+                labelFanMin.Text = "FAN MIN(" + settings.Params.data_ranges.Fan[0] + "):";
+                labelFanMax.Text = "FAN MAX(" + settings.Params.data_ranges.Fan[1] + "):";
+                labelLoadMin.Text = "LOAD MIN(" + settings.Params.data_ranges.Load[0] + "):";
+                labelLoadMax.Text = "LOAD MAX(" + settings.Params.data_ranges.Load[1] + "):";
+                labelClockMin.Text = "CLOCK MIN(" + settings.Params.data_ranges.Clock[0] + "):";
+                labelClockMax.Text = "CLOCK MAX(" + settings.Params.data_ranges.Clock[1] + "):";
+                labelMemoryMin.Text = "MEMORY MIN(" + settings.Params.data_ranges.Mem[0] + "):";
+                labelMemoryMax.Text = "MEMORY MAX(" + settings.Params.data_ranges.Mem[1] + "):";
                 labelFellOffGPU.Text = "GPU LOST(" + globalVars.count_GPU + "):";
 
                 int i = 0;
@@ -299,7 +346,7 @@ namespace Informer
 
 
                                 //temp min
-                                if (globalVars.Reboots.temp_min == false)
+                                if (settings.Params.reboots.temp_min == false)
                                 {
 
                                     labelStatusTempMin.Text = MyStrings.labelEvent;
@@ -309,9 +356,9 @@ namespace Informer
 
 
                                 }
-                                else if (globalVars.Reboots.temp_min == true)
+                                else if (settings.Params.reboots.temp_min == true)
                                 {
-                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.temp_min) && Convert.ToInt32(p.Value) != 0)
+                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.Timer.temp_min) && Convert.ToInt32(p.Value) != 0)
                                     {
 
                                         GPUTempMinTimer.Enabled = true;
@@ -348,7 +395,7 @@ namespace Informer
                                 }
 
                                 //temp max
-                                if (globalVars.Reboots.temp_max == false)
+                                if (settings.Params.reboots.temp_max == false)
                                 {
 
                                     labelStatusTempMax.Text = MyStrings.labelEvent;
@@ -357,9 +404,9 @@ namespace Informer
                                     globalVars.timer_t_max = -100;
 
                                 }
-                                else if (globalVars.Reboots.temp_max == true)
+                                else if (settings.Params.reboots.temp_max == true)
                                 {
-                                    if (Convert.ToInt32(p.Value) >= Convert.ToInt32(globalVars.temp_max))
+                                    if (Convert.ToInt32(p.Value) >= Convert.ToInt32(globalVars.Timer.temp_max))
                                     {
 
                                         GPUTempMaxTimer.Enabled = true;
@@ -397,10 +444,10 @@ namespace Informer
                                    
 
                                     int pc = (int)Math.Floor(bc);
-                                    if (globalVars.Reboots.clock_min == true)
+                                    if (settings.Params.reboots.clock_min == true)
                                     {
 
-                                        if (Convert.ToInt32(pc) <= globalVars.clock_min)
+                                        if (Convert.ToInt32(pc) <= globalVars.Timer.clock_min)
                                         {
                                             GPUCoreMinTimer.Enabled = true;
 
@@ -428,7 +475,7 @@ namespace Informer
 
 
                                     }
-                                    else if (globalVars.Reboots.clock_min == false)
+                                    else if (settings.Params.reboots.clock_min == false)
                                     {
                                         labelStatusClockMin.Visible = true;
                                         labelStatusClockMin.Text = MyStrings.labelEvent;
@@ -438,9 +485,9 @@ namespace Informer
                                         GPUCoreMinTimer.Enabled = false;
                                     }
 
-                                    if (globalVars.Reboots.clock_max == true)
+                                    if (settings.Params.reboots.clock_max == true)
                                     {
-                                        if (Convert.ToInt32(pc) >= Convert.ToInt32(globalVars.clock_max))
+                                        if (Convert.ToInt32(pc) >= Convert.ToInt32(globalVars.Timer.clock_max))
                                         {
                                             GPUCoreMaxTimer.Enabled = true;
 
@@ -497,7 +544,7 @@ namespace Informer
 
                                     if (globalVars.Reboots.mem_min == true)
                                     {
-                                        if (Convert.ToInt32(pm) <= Convert.ToInt32(globalVars.mem_min))
+                                        if (Convert.ToInt32(pm) <= Convert.ToInt32(globalVars.Timer.mem_min))
                                         {
                                             GPUMemMinTimer.Enabled = true;
 
@@ -537,7 +584,7 @@ namespace Informer
 
                                     if (globalVars.Reboots.mem_max == true)
                                     {
-                                        if (Convert.ToInt32(pm) >= Convert.ToInt32(globalVars.mem_max))
+                                        if (Convert.ToInt32(pm) >= Convert.ToInt32(globalVars.Timer.mem_max))
                                         {
                                             GPUMemMaxTimer.Enabled = true;
 
@@ -590,7 +637,7 @@ namespace Informer
 
                                 if (globalVars.Reboots.load_min == true)
                                 {
-                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.load_GPU_min))
+                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.Timer.load_min))
                                     {
                                         GPULoadMinTimer.Enabled = true;
 
@@ -630,7 +677,7 @@ namespace Informer
 
                                 if (globalVars.Reboots.load_max == true)
                                 {
-                                    if (Convert.ToInt32(p.Value) > Convert.ToInt32(globalVars.load_GPU_max))
+                                    if (Convert.ToInt32(p.Value) > Convert.ToInt32(globalVars.Timer.load_max))
                                     {
                                         GPULoadMaxTimer.Enabled = true;
 
@@ -684,7 +731,7 @@ namespace Informer
                                 }
                                 else if (globalVars.Reboots.fan_min == true)
                                 {
-                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.fan_min))
+                                    if (Convert.ToInt32(p.Value) <= Convert.ToInt32(globalVars.Timer.fan_min))
                                     {
 
                                         GPUFanMinTimer.Enabled = true;
@@ -726,7 +773,7 @@ namespace Informer
                                 {
 
 
-                                    if (Convert.ToInt32(p.Value) >= Convert.ToInt32(globalVars.fan_max))
+                                    if (Convert.ToInt32(p.Value) >= Convert.ToInt32(globalVars.Timer.fan_max))
                                     {
 
                                         GPUFanMaxTimer.Enabled = true;
@@ -865,7 +912,7 @@ namespace Informer
 
         }
 
-        public static async Task SendData(GlobalVars globalVars)
+        public static async Task SendData(GlobalVars globalVars,ApiResponse settings)
         {
             
             if (globalVars.mqttIsConnect == true)
@@ -895,12 +942,12 @@ namespace Informer
                 {
                     // MqttConnect();
                     Debug.WriteLine("Send data MqttCommunicationException: " + ex.Message);
-                    Message("Send data MqttCommunicationException: " + ex.Message, globalVars);
+                    Message("Send data MqttCommunicationException: " + ex.Message, globalVars,settings);
                 }
                 catch (Exception ex)
                 {
 
-                    Message("Send data Ex: " + ex.Message, globalVars);
+                    Message("Send data Ex: " + ex.Message, globalVars,settings);
 
                 }
 
@@ -916,7 +963,7 @@ namespace Informer
         {
             try
                 {
-                    string v = globalVars._manager.GetPrivateString("main", "version");
+                string v = settings.Params.version;
                     string pack = _http.GetContent(globalVars.host + "/api/?method=version");
                     VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
                     string ver = m.version;
@@ -979,11 +1026,11 @@ namespace Informer
                     globalVars.host +
                     "/api.php?token=" + globalVars.token +
                     "&event=" + "reboot" +
-                    "&reason="  + globalVars.name + " " + msg
+                    "&reason="  + settings.Params.name + " " + msg
                    
                     );
 
-                _log.writeLogLine("Reboot rig " + globalVars.name + " " + msg, "log");
+                _log.writeLogLine("Reboot rig " + settings.Params.name + " " + msg, "log");
 
                  Process.Start(bat);
             }
@@ -996,7 +1043,7 @@ namespace Informer
 
         //send event message
       
-        public static void Message(string msg, GlobalVars globalVars)
+        public static void Message(string msg, GlobalVars globalVars, ApiResponse settings)
         {
             
             try
@@ -1005,7 +1052,7 @@ namespace Informer
                     globalVars.host +
                     "/api.php?token=" + globalVars.token +
                     "&event=" + "message" +
-                    "&reason=" + globalVars.name + " " + msg
+                    "&reason=" + settings.Params.name + " " + msg
                     );
             }
 
@@ -1058,7 +1105,7 @@ namespace Informer
                 Process.Start(rpsi);
 
                 string pack = _http.GetContent(globalVars.host + 
-                    "/api.php?&worker=" + globalVars.name + 
+                    "/api.php?&worker=" + settings.Params.name + 
                     "&gpu=" + globalVars.card + 
                     "&temp=" + globalVars.temp + 
                     "&fan=" + globalVars.fan + 
@@ -1086,16 +1133,18 @@ namespace Informer
                 GetTempretureTimer.Enabled = true;
                 GPUStatusTimer.Enabled = true;
                 SendDataTimer.Enabled = true;
-                globalVars.token = tbToken.Text;
+                //globalVars.token = tbToken.Text;
+                settings.Params.token = tbToken.Text;
+                //apiResponse.Token = tbToken.Text;
                 tbToken.ReadOnly = true;
 
                 OHMTimer.Enabled = true;
                 PingTimer.Enabled = true;
                 
                 
-                if (!string.IsNullOrWhiteSpace(globalVars.name))
+                if (!string.IsNullOrWhiteSpace(settings.Params.name))
                 {
-                    Message("Informer Started!",globalVars);
+                    Message("Informer Started!",globalVars, settings);
                 }
 
                 InformationLabel.Visible = true;
@@ -1234,7 +1283,7 @@ namespace Informer
                     SendDataTimer.Interval = globalVars.interval * 1000;
                 }
              //   Debug.WriteLine("Interval: " + SendDataTimer.Interval);
-                await SendData(globalVars);
+                await SendData(globalVars, settings);
             }
             
         }
@@ -1539,7 +1588,7 @@ namespace Informer
                 globalVars.ping = true;
             }
 
-
+            Debug.WriteLine(globalVars.token);
         }
         /*
         private static void Print(string s)
@@ -1614,7 +1663,7 @@ namespace Informer
 
         async void MqttConnectTimer_Tick(object sender, EventArgs e)
         {
-            await MqttConnect.RunAsync(globalVars);
+            await MqttConnect.RunAsync(globalVars,settings);
         }
 
         async private void OHMTimer_Tick(object sender, EventArgs e)
