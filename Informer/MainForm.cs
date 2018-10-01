@@ -71,6 +71,7 @@ namespace Informer
             settings.Params.data_ranges.Mem = new int[2];
 
             Debug.WriteLine(settings.Params.version);
+            //
             // apiResponse.Params.Version = "1.3.9";
 
             /*
