@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Net;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
 using MQTTnet.Client;
 using MQTTnet;
-using System.Threading;
 using Informer;
 using System.Windows.Forms;
 
@@ -116,47 +112,4 @@ public class GlobalVars
         fullPath = Application.StartupPath.ToString();
         _manager = new INIManager(fullPath + "\\my.ini");
     }
-
-    public void Save(ApiResponse settings)
-    {
-    
-        var state = JsonConvert.SerializeObject(settings);
-        //var state = settings;
-        var file = File.Open("state.json", FileMode.Create);
-        try
-        {
-            using (StreamWriter writter = new StreamWriter(file))
-            {
-                writter.WriteLine(state);
-                Debug.WriteLine("SAVE OK:" + state);
-            }
-        }
-        catch(Exception e)
-        {
-            Debug.WriteLine("SAVE WRONG:"+e.Message);
-        }
-    }
-
-
-    //public static GlobalVars Load()
-     public ApiResponse Load2()
-    {
-        try
-        {
-            using (StreamReader sr = new StreamReader("state.json"))
-            {
-                var state = sr.ReadToEnd();
-                //return JsonConvert.DeserializeObject<GlobalVars>(state);
-                var response = JsonConvert.DeserializeObject<ApiResponse>(state);
-                Debug.WriteLine("***************** "+ response.Params.version);
-                return response;
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine("&&&&&&&&&&&&&&&"+e.Message);
-            return null;
-        }
-    }
-    
 }

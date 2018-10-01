@@ -1,30 +1,29 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Informer
 {
     public static class CommandProcesser
     {
 
-        public static void onMessage(string payload, string topic, GlobalVars globalVars,ApiResponse settings)
+        public static void onMessage(string payload, string topic, ApiResponse apiResponse)
         {
 
-            if (topic == "devices/" + settings.Params.token + "/commands")
+            if (topic == "devices/" + apiResponse.Params.Token + "/commands")
             {
-
+                
                 // Debug.WriteLine(message);
                 var response = JsonConvert.DeserializeObject<ApiResponse>(payload);
-                string command = response.Params.command;
+                string command = response.Command;
+                response.Params.Token = apiResponse.Params.Token;
+                response.Params.Version = apiResponse.Params.Version;
+                Debug.WriteLine("COMMAND: "+ command);
                 switch (command)
                 {
 
                     case "reboot":
-                        MainForm.Message("Informer Reboot from Allminer.ru!", globalVars,settings);
+                      //  MainForm.Message("Informer Reboot from Allminer.ru!", settings);
                         Process psiwer;
                         psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
                         psiwer.Close();
@@ -32,13 +31,14 @@ namespace Informer
 
                     case "settings":
                         try
-                        { 
+                        {
+                            Debug.WriteLine("SETTINGS");
                             //response.Params.timers = response.Params.timers;
-                            settings.Params.timers = response.Params.timers;
-                            settings.Params.reboots = response.Params.reboots;
-                            settings.Params.data_ranges = response.Params.data_ranges;
-                            globalVars.Save(response);
-                            Debug.WriteLine("#############" + response.Params.timers.temp_min);
+                            apiResponse.Params = response.Params;
+                           // settings.Params.reboots = response.Params.reboots;
+                           // settings.Params.data_ranges = response.Params.data_ranges;
+                            apiResponse.Save(response);
+                            Debug.WriteLine("#############" + response.Params.Timers.temp_min);
                         }
                         catch (Exception ex)
                         {
@@ -51,7 +51,7 @@ namespace Informer
                     case "interval":
                         try
                         {
-                            settings.Params.interval = response.Params.interval;
+                            apiResponse.Params.Interval = response.Params.Interval;
                         }
                         catch (Exception ex)
                         {

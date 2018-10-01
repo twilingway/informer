@@ -1,21 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using System.Net;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using OpenHardwareMonitor.Hardware;
 using System.IO;
-using System.Globalization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 /// <summary>
 /// Класс представляет собой описание ответа от allminer.ru
@@ -25,9 +11,10 @@ namespace Informer
 {
     public class ApiResponse
     {
-        public string test { get; set; }
+       // public string test { get; set; }
         public Params Params { get; set; }
 
+        public string Command { get; set; }
         /// <summary>
         /// Настройки Informer-а хранящиеся на сервере
         /// </summary>
@@ -42,19 +29,59 @@ namespace Informer
 
         //  [JsonProperty("commands")]
         // public string command { get; set; }
+        public void Save(ApiResponse settings)
+        {
+
+            var state = JsonConvert.SerializeObject(settings);
+            //var state = settings;
+            var file = File.Open("state.json", FileMode.Create);
+            try
+            {
+                using (StreamWriter writter = new StreamWriter(file))
+                {
+                    writter.WriteLine(state);
+                    Debug.WriteLine("SAVE OK:" + state);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("SAVE WRONG:" + e.Message);
+            }
+        }
+
+        public ApiResponse Load()
+        {
+            try
+            {
+                using (StreamReader sr = new StreamReader("state.json"))
+                {
+                    var state = sr.ReadToEnd();
+                    //return JsonConvert.DeserializeObject<GlobalVars>(state);
+                    var response = JsonConvert.DeserializeObject<ApiResponse>(state);
+                    Debug.WriteLine("***************** " + response.Params.Version);
+                    return response;
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("&&&&&&&&&&&&&&&" + e.Message);
+                return null;
+            }
+        }
+
     }
     
 
     public class Params
     {
-        public Timers timers { get; set; }
-        public Reboots reboots { get; set; }
-        public Data_ranges data_ranges { get; set; }
-        public string name { get; set; }
-        public int interval { get; set; }
-        public string token { get; set; }
-        public string version { get; set; }
-        public string command { get; set; }
+        public Timers Timers { get; set; }
+        public Reboots Reboots { get; set; }
+        public Data_ranges Data_ranges { get; set; }
+        public string Name { get; set; }
+        public int Interval { get; set; }
+        public string Token { get; set; }
+        public string Version { get; set; }
+       
     }
 
     public class Timers

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using MQTTnet;
 using MQTTnet.Client;
-using MQTTnet.Protocol;
 
 namespace Informer
 {
@@ -19,17 +17,15 @@ namespace Informer
                 {
                     var options = new MqttClientOptionsBuilder()
 
-                            .WithClientId(settings.Params.token)
+                            .WithClientId(settings.Params.Token)
                             .WithTcpServer("allminer.ru", 1883)
                             .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
-                            .WithCredentials(settings.Params.token, settings.Params.token)
+                            .WithCredentials(settings.Params.Token, settings.Params.Token)
                             //.WithTls()
                             .WithCleanSession(true)
                             .Build();
 
-
-                    globalVars.client = globalVars.factory.CreateMqttClient();
-
+                            globalVars.client = globalVars.factory.CreateMqttClient();
 
                     // Create TCP based options using the builder.
                     globalVars.client.ApplicationMessageReceived += (s, e) =>
@@ -40,16 +36,15 @@ namespace Informer
                             Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
                             Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
 
-                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic,globalVars,settings);
-
-                        };
+                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic,settings);
+                         };
 
                     globalVars.client.Connected += async (s, e) =>
                    {
                        try
                        {
                            await globalVars.client.SubscribeAsync(new TopicFilterBuilder().
-                           WithTopic("devices/" + settings.Params.token + "/commands").
+                           WithTopic("devices/" + settings.Params.Token + "/commands").
                            Build());
                        }
                        catch (Exception ex)
@@ -58,15 +53,12 @@ namespace Informer
                        }
                    };
 
-
                     globalVars.client.Disconnected += async (s, e) =>
                     {
                         Debug.WriteLine("### DISCONNECTED FROM SERVER ###");
                         globalVars.mqttIsConnect = false;
                         await Task.Delay(TimeSpan.FromSeconds(5));
                     };
-
-
 
                     try
                     {
@@ -75,18 +67,17 @@ namespace Informer
                         globalVars.firsrun = false;
                        // globalVars._manager.WritePrivateString("main", "token", globalVars.token);
                         var message = new MqttApplicationMessageBuilder()
-                                   .WithTopic("devices/" + settings.Params.token + "/init")
+                                   .WithTopic("devices/" + settings.Params.Token + "/init")
                                    .WithPayload("1")
                                    .WithAtMostOnceQoS()
                                    .WithRetainFlag()
                                    .Build();
 
                         await globalVars.client.PublishAsync(message);
-
-
                     }
                     catch (MQTTnet.Adapter.MqttConnectingFailedException ex )
                     {
+                        Debug.WriteLine("### MqttConnectingFailedException ###" + Environment.NewLine + ex);
                         globalVars.mqttIsConnect = false;
                         globalVars.firsrun = false;
                     }
@@ -101,12 +92,7 @@ namespace Informer
                 {
                     Debug.WriteLine("### EXCEPTION ###" + exception);
                 }
-
-
-            }
-                     
+            }      
         }
-       
-
     }
 }
