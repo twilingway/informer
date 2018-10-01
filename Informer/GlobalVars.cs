@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
-using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
-using System.IO;
 using MQTTnet.Client;
 using MQTTnet;
 using Informer;
@@ -16,7 +13,6 @@ public class GlobalVars
     public Reboots Reboots;
     public Data_ranges Ranges;
 
-    //public string name;
     public string token;
     public string upTime;
     public string versions;
@@ -103,7 +99,7 @@ public class GlobalVars
     public IMqttClient client;
 
     public bool tokenMqtt = false;
-    public Computer _pc = new Computer();
+    //public Computer _pc = new Computer();
 
     public List<bool> problemPing = new List<bool>();
 

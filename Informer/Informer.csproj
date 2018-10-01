@@ -76,7 +76,6 @@
     <Compile Include="ApiResponse.cs" />
     <Compile Include="ApiEWBF.cs" />
     <Compile Include="GPUTemp.cs" />
-    <Compile Include="InitFromIni.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

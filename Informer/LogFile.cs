@@ -19,7 +19,6 @@ class LogFile
 {
     private StreamWriter sw;
 
-
     public LogFile(string path)
     {
         try
@@ -35,9 +34,9 @@ class LogFile
             System.Windows.Forms.MessageBox.Show(e.ToString());
         }
     }
+
     ~LogFile()
     {
-
          sw.Close();
     }
 
@@ -58,6 +57,5 @@ class LogFile
         {
             System.Windows.Forms.MessageBox.Show(e.ToString());
         }
-
     }
 }

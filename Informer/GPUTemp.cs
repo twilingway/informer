@@ -2,16 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Informer
 {
 
     public partial class GPUTemp
     {
-        public static void GetGPU(GlobalVars globalVars)
+        public static void GetGPU(GlobalVars globalVars,Computer PC)
         {
             try
             {
@@ -24,7 +21,7 @@ namespace Informer
                 globalVars.mem = "";
                 int count = 0;
 
-                foreach (var hard in globalVars._pc.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
+                foreach (var hard in PC.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
                 {
 
                     hard.Update();
@@ -32,28 +29,20 @@ namespace Informer
 
                     if (hard.HardwareType == HardwareType.GpuAti || hard.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
                     {
-
-
                         globalVars.card += hard.Name + ",";
                         globalVars.gpuList.Add(new Dictionary<string, string>());
                         globalVars.gpuList[count].Add("name", hard.Name);
 
                         foreach (var sensor in hard.Sensors)//ИДЕМ по сенсорам
                         {
-
-
                             if (sensor.SensorType == SensorType.Clock)
                             {//ЧАСТОТЫ
-
 
                                 if (sensor.Name == "GPU Core")//ЯДРО
                                 {
                                     globalVars.gpuList[count].Add("core", Convert.ToString(sensor.Value.GetValueOrDefault()));
                                     globalVars.clock += sensor.Value.GetValueOrDefault() + ";";
-
-
                                 }
-
 
 
                                 if (hard.HardwareType == HardwareType.GpuAti)
@@ -62,15 +51,12 @@ namespace Informer
                                     {
                                         globalVars.mem += sensor.Value.GetValueOrDefault() + ";";
                                         globalVars.gpuList[count].Add("memory", Convert.ToString(sensor.Value.GetValueOrDefault()));
-
                                     }
-
                                 }
                                 else if (hard.HardwareType == HardwareType.GpuNvidia)
                                 {
                                     if (sensor.Name == "GPU Memory")//ПАМЯТЬ
                                     {
-
                                         globalVars.mem += sensor.Value.GetValueOrDefault() + ";";
                                         globalVars.gpuList[count].Add("memory", Convert.ToString(sensor.Value.GetValueOrDefault()));
 

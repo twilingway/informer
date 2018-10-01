@@ -138,7 +138,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;tbRigName.ZOrder" xml:space="preserve">
-    <value>55</value>
+    <value>53</value>
   </data>
   <data name="labelRigName.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -165,7 +165,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelRigName.ZOrder" xml:space="preserve">
-    <value>54</value>
+    <value>52</value>
   </data>
   <data name="btStart.Location" type="System.Drawing.Point, System.Drawing">
     <value>83, 320</value>
@@ -189,7 +189,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btStart.ZOrder" xml:space="preserve">
-    <value>53</value>
+    <value>51</value>
   </data>
   <data name="btStop.Location" type="System.Drawing.Point, System.Drawing">
     <value>83, 349</value>
@@ -213,7 +213,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btStop.ZOrder" xml:space="preserve">
-    <value>52</value>
+    <value>50</value>
   </data>
   <data name="InfoLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -240,7 +240,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;InfoLabel.ZOrder" xml:space="preserve">
-    <value>51</value>
+    <value>49</value>
   </data>
   <data name="labelTimeWork.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -267,7 +267,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTimeWork.ZOrder" xml:space="preserve">
-    <value>50</value>
+    <value>48</value>
   </data>
   <data name="linkLabelUpdate.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -294,7 +294,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;linkLabelUpdate.ZOrder" xml:space="preserve">
-    <value>49</value>
+    <value>47</value>
   </data>
   <metadata name="GetTempretureTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>138, 14</value>
@@ -311,33 +311,6 @@
   <metadata name="TimeWorkTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>753, 14</value>
   </metadata>
-  <data name="btSettings.Enabled" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="btSettings.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 378</value>
-  </data>
-  <data name="btSettings.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 25</value>
-  </data>
-  <data name="btSettings.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="btSettings.Text" xml:space="preserve">
-    <value>Настройки</value>
-  </data>
-  <data name="&gt;&gt;btSettings.Name" xml:space="preserve">
-    <value>btSettings</value>
-  </data>
-  <data name="&gt;&gt;btSettings.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;btSettings.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;btSettings.ZOrder" xml:space="preserve">
-    <value>48</value>
-  </data>
   <metadata name="GPUTempMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>794, 53</value>
   </metadata>
@@ -372,7 +345,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;InformationLabel.ZOrder" xml:space="preserve">
-    <value>47</value>
+    <value>46</value>
   </data>
   <data name="labelStatusTempMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 126</value>
@@ -396,7 +369,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusTempMax.ZOrder" xml:space="preserve">
-    <value>46</value>
+    <value>45</value>
   </data>
   <data name="labelTimeWork2.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -423,7 +396,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTimeWork2.ZOrder" xml:space="preserve">
-    <value>45</value>
+    <value>44</value>
   </data>
   <metadata name="GPUFanMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1201, 14</value>
@@ -453,7 +426,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterTempMax.ZOrder" xml:space="preserve">
-    <value>44</value>
+    <value>43</value>
   </data>
   <data name="labelTempMax.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -480,7 +453,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTempMax.ZOrder" xml:space="preserve">
-    <value>43</value>
+    <value>42</value>
   </data>
   <metadata name="SendDataTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>303, 14</value>
@@ -510,7 +483,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelFanMax.ZOrder" xml:space="preserve">
-    <value>42</value>
+    <value>41</value>
   </data>
   <data name="labelStatusTempMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 111</value>
@@ -534,7 +507,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusTempMin.ZOrder" xml:space="preserve">
-    <value>41</value>
+    <value>40</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="labelCounterTempMin.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
@@ -562,7 +535,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterTempMin.ZOrder" xml:space="preserve">
-    <value>40</value>
+    <value>39</value>
   </data>
   <data name="labelTempMin.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -589,7 +562,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTempMin.ZOrder" xml:space="preserve">
-    <value>39</value>
+    <value>38</value>
   </data>
   <data name="labelReloadFile.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -616,7 +589,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelReloadFile.ZOrder" xml:space="preserve">
-    <value>38</value>
+    <value>37</value>
   </data>
   <data name="labelStatusReloadFile.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 291</value>
@@ -640,7 +613,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusReloadFile.ZOrder" xml:space="preserve">
-    <value>37</value>
+    <value>36</value>
   </data>
   <data name="labelCounterReloadFile.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 291</value>
@@ -664,7 +637,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterReloadFile.ZOrder" xml:space="preserve">
-    <value>36</value>
+    <value>35</value>
   </data>
   <data name="labelFanMin.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -691,7 +664,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelFanMin.ZOrder" xml:space="preserve">
-    <value>35</value>
+    <value>34</value>
   </data>
   <data name="labelStatusFanMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -718,7 +691,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusFanMax.ZOrder" xml:space="preserve">
-    <value>34</value>
+    <value>33</value>
   </data>
   <data name="labelCounterFanMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 156</value>
@@ -742,7 +715,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterFanMax.ZOrder" xml:space="preserve">
-    <value>33</value>
+    <value>32</value>
   </data>
   <data name="labelStatusFanMin.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -769,7 +742,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusFanMin.ZOrder" xml:space="preserve">
-    <value>32</value>
+    <value>31</value>
   </data>
   <data name="labelCounterFanMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 141</value>
@@ -793,7 +766,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterFanMin.ZOrder" xml:space="preserve">
-    <value>31</value>
+    <value>30</value>
   </data>
   <metadata name="GPUCoreMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>164, 53</value>
@@ -826,7 +799,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelClockMin.ZOrder" xml:space="preserve">
-    <value>30</value>
+    <value>29</value>
   </data>
   <data name="labelMemoryMin.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -853,7 +826,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelMemoryMin.ZOrder" xml:space="preserve">
-    <value>29</value>
+    <value>28</value>
   </data>
   <data name="labelStatusClockMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 201</value>
@@ -877,7 +850,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusClockMin.ZOrder" xml:space="preserve">
-    <value>28</value>
+    <value>27</value>
   </data>
   <data name="labelCounterClockMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 201</value>
@@ -901,7 +874,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterClockMin.ZOrder" xml:space="preserve">
-    <value>27</value>
+    <value>26</value>
   </data>
   <data name="labelStatusMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 231</value>
@@ -925,7 +898,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusMemoryMin.ZOrder" xml:space="preserve">
-    <value>26</value>
+    <value>25</value>
   </data>
   <data name="labelCounterMemoryMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 231</value>
@@ -949,7 +922,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterMemoryMin.ZOrder" xml:space="preserve">
-    <value>25</value>
+    <value>24</value>
   </data>
   <metadata name="DontHaveInternetTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>472, 53</value>
@@ -982,7 +955,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelFellOffGPU.ZOrder" xml:space="preserve">
-    <value>24</value>
+    <value>23</value>
   </data>
   <data name="labelStatusGPULost.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 261</value>
@@ -1006,7 +979,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusGPULost.ZOrder" xml:space="preserve">
-    <value>23</value>
+    <value>22</value>
   </data>
   <data name="labelCounterGPULost.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 261</value>
@@ -1030,7 +1003,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterGPULost.ZOrder" xml:space="preserve">
-    <value>22</value>
+    <value>21</value>
   </data>
   <data name="labelInternet.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1057,7 +1030,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelInternet.ZOrder" xml:space="preserve">
-    <value>21</value>
+    <value>20</value>
   </data>
   <data name="labelStatusInternet.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 276</value>
@@ -1081,7 +1054,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusInternet.ZOrder" xml:space="preserve">
-    <value>20</value>
+    <value>19</value>
   </data>
   <data name="labelCounterInternet.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 276</value>
@@ -1105,7 +1078,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterInternet.ZOrder" xml:space="preserve">
-    <value>19</value>
+    <value>18</value>
   </data>
   <data name="labelCounterLoadMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 171</value>
@@ -1129,7 +1102,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterLoadMin.ZOrder" xml:space="preserve">
-    <value>16</value>
+    <value>15</value>
   </data>
   <data name="labelStatusLoadMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>140, 171</value>
@@ -1153,7 +1126,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusLoadMin.ZOrder" xml:space="preserve">
-    <value>17</value>
+    <value>16</value>
   </data>
   <data name="labelLoadMin.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1180,7 +1153,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelLoadMin.ZOrder" xml:space="preserve">
-    <value>18</value>
+    <value>17</value>
   </data>
   <metadata name="GPULoadMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>954, 53</value>
@@ -1210,7 +1183,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelTest.ZOrder" xml:space="preserve">
-    <value>15</value>
+    <value>14</value>
   </data>
   <metadata name="GetEWBF_ZcashTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1108, 53</value>
@@ -1240,7 +1213,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelToken.ZOrder" xml:space="preserve">
-    <value>14</value>
+    <value>13</value>
   </data>
   <data name="tbToken.Location" type="System.Drawing.Point, System.Drawing">
     <value>98, 38</value>
@@ -1261,7 +1234,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;tbToken.ZOrder" xml:space="preserve">
-    <value>13</value>
+    <value>12</value>
   </data>
   <data name="btExit.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -1288,7 +1261,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;btExit.ZOrder" xml:space="preserve">
-    <value>12</value>
+    <value>11</value>
   </data>
   <data name="cbLocalize.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 464</value>
@@ -1312,7 +1285,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;cbLocalize.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>10</value>
   </data>
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>1277, 53</value>
@@ -5798,7 +5771,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelClockMax.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="labelLoadMax.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -5828,7 +5801,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelLoadMax.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="labelStatusMemoryMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -5855,7 +5828,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusMemoryMax.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="labelMemoryMax.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -5885,7 +5858,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelMemoryMax.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="labelStatusClockMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -5912,7 +5885,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusClockMax.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="labelStatusLoadMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -5939,7 +5912,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelStatusLoadMax.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="labelCounterMemoryMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -5966,7 +5939,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterMemoryMax.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="labelCounterClockMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -5993,7 +5966,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterClockMax.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="labelCounterLoadMax.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -6020,7 +5993,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;labelCounterLoadMax.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <metadata name="GPULoadMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>331, 92</value>
@@ -6037,36 +6010,6 @@
   <metadata name="GPUStatusTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>860, 92</value>
   </metadata>
-  <data name="labelListGPU.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="labelListGPU.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 320</value>
-  </data>
-  <data name="labelListGPU.Size" type="System.Drawing.Size, System.Drawing">
-    <value>12, 13</value>
-  </data>
-  <data name="labelListGPU.TabIndex" type="System.Int32, mscorlib">
-    <value>63</value>
-  </data>
-  <data name="labelListGPU.Text" xml:space="preserve">
-    <value>/</value>
-  </data>
-  <data name="labelListGPU.Visible" type="System.Boolean, mscorlib">
-    <value>False</value>
-  </data>
-  <data name="&gt;&gt;labelListGPU.Name" xml:space="preserve">
-    <value>labelListGPU</value>
-  </data>
-  <data name="&gt;&gt;labelListGPU.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;labelListGPU.Parent" xml:space="preserve">
-    <value>$this</value>
-  </data>
-  <data name="&gt;&gt;labelListGPU.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="labelTestGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>

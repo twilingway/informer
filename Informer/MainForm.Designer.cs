@@ -42,7 +42,6 @@
             this.AutoStartTimer = new System.Windows.Forms.Timer(this.components);
             this.CheckNewVersionTimer = new System.Windows.Forms.Timer(this.components);
             this.TimeWorkTimer = new System.Windows.Forms.Timer(this.components);
-            this.btSettings = new System.Windows.Forms.Button();
             this.GPUTempMaxTimer = new System.Windows.Forms.Timer(this.components);
             this.GPUTempMinTimer = new System.Windows.Forms.Timer(this.components);
             this.ReloadMinerTimer = new System.Windows.Forms.Timer(this.components);
@@ -109,7 +108,6 @@
             this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
             this.OHMTimer = new System.Windows.Forms.Timer(this.components);
             this.GPUStatusTimer = new System.Windows.Forms.Timer(this.components);
-            this.labelListGPU = new System.Windows.Forms.Label();
             this.labelTestGPU = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -184,13 +182,6 @@
             this.TimeWorkTimer.Interval = 60000;
             this.TimeWorkTimer.Tag = "time active";
             this.TimeWorkTimer.Tick += new System.EventHandler(this.UptimeTimerTick);
-            // 
-            // btSettings
-            // 
-            resources.ApplyResources(this.btSettings, "btSettings");
-            this.btSettings.Name = "btSettings";
-            this.btSettings.UseVisualStyleBackColor = true;
-            this.btSettings.Click += new System.EventHandler(this.BtnOpenSettingsFormClick);
             // 
             // GPUTempMaxTimer
             // 
@@ -536,11 +527,6 @@
             this.GPUStatusTimer.Interval = 1000;
             this.GPUStatusTimer.Tick += new System.EventHandler(this.GPUStatusTimer_Tick);
             // 
-            // labelListGPU
-            // 
-            resources.ApplyResources(this.labelListGPU, "labelListGPU");
-            this.labelListGPU.Name = "labelListGPU";
-            // 
             // labelTestGPU
             // 
             resources.ApplyResources(this.labelTestGPU, "labelTestGPU");
@@ -551,7 +537,6 @@
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.labelTestGPU);
-            this.Controls.Add(this.labelListGPU);
             this.Controls.Add(this.labelCounterLoadMax);
             this.Controls.Add(this.labelCounterClockMax);
             this.Controls.Add(this.labelCounterMemoryMax);
@@ -598,7 +583,6 @@
             this.Controls.Add(this.labelTimeWork2);
             this.Controls.Add(this.labelStatusTempMax);
             this.Controls.Add(this.InformationLabel);
-            this.Controls.Add(this.btSettings);
             this.Controls.Add(this.linkLabelUpdate);
             this.Controls.Add(this.labelTimeWork);
             this.Controls.Add(this.InfoLabel);
@@ -631,7 +615,6 @@
         private System.Windows.Forms.Timer AutoStartTimer;
         private System.Windows.Forms.Timer CheckNewVersionTimer;
         private System.Windows.Forms.Timer TimeWorkTimer;
-        private System.Windows.Forms.Button btSettings;
         private System.Windows.Forms.Timer GPUTempMaxTimer;
         private System.Windows.Forms.Timer GPUTempMinTimer;
         private System.Windows.Forms.Timer ReloadMinerTimer;
@@ -698,7 +681,6 @@
         private System.Windows.Forms.Timer MqttConnectTimer;
         private System.Windows.Forms.Timer OHMTimer;
         private System.Windows.Forms.Timer GPUStatusTimer;
-        private System.Windows.Forms.Label labelListGPU;
         private System.Windows.Forms.Label labelTestGPU;
     }
 }

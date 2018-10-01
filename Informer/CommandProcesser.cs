@@ -11,9 +11,7 @@ namespace Informer
         {
 
             if (topic == "devices/" + apiResponse.Params.Token + "/commands")
-            {
-                
-                // Debug.WriteLine(message);
+            { 
                 var response = JsonConvert.DeserializeObject<ApiResponse>(payload);
                 string command = response.Command;
                 response.Params.Token = apiResponse.Params.Token;
@@ -21,9 +19,8 @@ namespace Informer
                 Debug.WriteLine("COMMAND: "+ command);
                 switch (command)
                 {
-
                     case "reboot":
-                      //  MainForm.Message("Informer Reboot from Allminer.ru!", settings);
+                       // MainForm.Message("Informer Reboot from Allminer.ru!", apiResponse);
                         Process psiwer;
                         psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
                         psiwer.Close();
@@ -52,9 +49,11 @@ namespace Informer
                         try
                         {
                             apiResponse.Params.Interval = response.Params.Interval;
+                            apiResponse.Save(response);
                         }
                         catch (Exception ex)
                         {
+                       
                           //  Debug.WriteLine("Interval " + ex);
                         }
 

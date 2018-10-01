@@ -25,12 +25,17 @@ namespace Informer
         private LogFile _log, _error;
         private GlobalVars globalVars;
         public ApiResponse apiResponse;
-
+        public Computer PC;
         public MainForm()
         {
             InitializeComponent();
-
             globalVars = new GlobalVars();
+            PC = new Computer();
+
+            PC.CPUEnabled = true;
+            PC.GPUEnabled = true;
+            PC.Open();
+
             _log = new LogFile("log");
             _error = new LogFile("error");
             _http = new Http();
@@ -54,16 +59,8 @@ namespace Informer
             apiResponse.Params.Data_ranges.Fan = new int[2];
             apiResponse.Params.Data_ranges.Mem = new int[2];
 
-
             СheckForNewVersion();
 
-            globalVars._pc.CPUEnabled = true;
-            globalVars._pc.GPUEnabled = true;
-            globalVars._pc.Open();
-
-            //Инициализация компонентов
-            //InitFromIni.onInitFromIni(globalVars);
-            
             var response = apiResponse.Load();
 
             bool start = false;
@@ -78,13 +75,13 @@ namespace Informer
                     tbRigName.Text = response.Params.Name;
                     tbToken.Text = response.Params.Token;
                 }
+
             }
             if (string.IsNullOrEmpty(response.Params.Name) && string.IsNullOrEmpty(response.Params.Token))
             {
                 start = false;
                 tbRigName.ReadOnly = true;
             }
-
 
             if (start)
             {
@@ -108,9 +105,6 @@ namespace Informer
             {
                 Debug.WriteLine($"KILL {processName}: " + e);
             }  
-          
-           
-          
         }
 
         private void BtStopClick(object sender, EventArgs e)
@@ -161,7 +155,6 @@ namespace Informer
             globalVars.timer_load_gpu_max = -100;
             globalVars.timer_inet = -100;
             tbToken.ReadOnly = false;
-
         }
 
         async private void GetTempretureTimerTick(object sender, EventArgs e)
@@ -184,7 +177,7 @@ namespace Informer
                 NextAutoStart.Enabled = false;
                 AutoStartTimer.Enabled = false;
                 btStop.Visible = true;
-                GPUTemp.GetGPU(globalVars);
+                GPUTemp.GetGPU(globalVars,PC);
             }
             catch (Exception ex)
             {
@@ -268,7 +261,7 @@ namespace Informer
                 int clockMaxCount = 0;
                 int memoryMinCount = 0;
                 int memoryMaxCount = 0;
-                labelListGPU.Text =  Convert.ToString(globalVars.gpuList.Count);
+                
                 foreach (var list in globalVars.gpuList)
                 {
                     i++;
@@ -277,12 +270,9 @@ namespace Informer
                     foreach (var p in list)
                         {
                         Debug.WriteLine("GPU STATUS: "+ string.Format("{0} {1}", p.Key, p.Value));
-                        labelListGPU.Text = labelListGPU.Text + string.Format("{0} {1}", p.Key, p.Value) + "\n";
-
-
+                
                     switch (p.Key)
                         {
-
                             case "name":
                                
 
@@ -982,16 +972,16 @@ namespace Informer
 
         //send event message
       
-        public static void Message(string msg, GlobalVars globalVars, ApiResponse settings)
+        public static void Message(string msg, GlobalVars globalVars, ApiResponse apiResponse)
         {
             
             try
             {
                 _http.GetContent(
                     globalVars.host +
-                    "/api.php?token=" + globalVars.token +
+                    "/api.php?token=" + apiResponse.Params.Token +
                     "&event=" + "message" +
-                    "&reason=" + settings.Params.Name + " " + msg
+                    "&reason=" + apiResponse.Params.Name + " " + msg
                     );
             }
 
@@ -1460,13 +1450,11 @@ namespace Informer
 
             cbLocalize.DisplayMember = "NativeName";
             cbLocalize.ValueMember = "Name";
-
             
             if (!String.IsNullOrEmpty(Properties.Settings.Default.Language))
             {
                 cbLocalize.SelectedValue = Properties.Settings.Default.Language;
             }
-
         }
 
         async private void GPULoadMaxTimer_Tick(object sender, EventArgs e)
@@ -1503,39 +1491,27 @@ namespace Informer
             globalVars.pingCount = 0;
             // В переменную hosts записываем все рабочие станции из файла
             hosts = getComputersListFromTxtFile("pinglist.txt");
+
+            Debug.WriteLine("COUNT: "+hosts.Count);
             // Создаём Action типизированный string, данный Action будет запускать функцию Pinger
 
             Action<string> asyn = new Action<string>(Pinger);
-
-            //hosts.ForEach(Print);
             
              hosts.ForEach(p =>
              {
                  asyn.Invoke(p);
              });
 
-
-            if (globalVars.pingCount >= 3)
+            if (globalVars.pingCount >= hosts.Count)
             {
-
                 globalVars.ping = false;
-
             }
-            else if (globalVars.pingCount < 3)
+            else if (globalVars.pingCount < hosts.Count)
             {
-
                 globalVars.ping = true;
             }
-
-            Debug.WriteLine("TOKEN:" + apiResponse.Params.Token);
         }
-        /*
-        private static void Print(string s)
-        {
-            Debug.WriteLine("++++++++++++++++++++++"+s);
-           
-        }
-        */
+       
         private static List<string> getComputersListFromTxtFile(string pathToFile)
         {
             List<string> computersList = new List<string>();
@@ -1552,7 +1528,7 @@ namespace Informer
                 }
                 return computersList;
             }
-            catch (System.IO.FileNotFoundException e)
+            catch (FileNotFoundException e)
             {
                 computersList.Add("google.com");
                 return computersList;
@@ -1608,13 +1584,13 @@ namespace Informer
         async private void OHMTimer_Tick(object sender, EventArgs e)
         {
 
-            globalVars._pc.Close();
-            globalVars._pc = null;
-            globalVars._pc = new Computer();
-            globalVars._pc.CPUEnabled = true;
-            globalVars._pc.GPUEnabled = true;
-            globalVars._pc.Open();
-            GPUTemp.GetGPU(globalVars);
+            PC.Close();
+            PC = null;
+            PC = new Computer();
+            PC.CPUEnabled = true;
+            PC.GPUEnabled = true;
+            PC.Open();
+            GPUTemp.GetGPU(globalVars,PC);
 
             await Task.Delay(1);
 

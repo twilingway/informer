@@ -13,25 +13,10 @@ namespace Informer
     {
        // public string test { get; set; }
         public Params Params { get; set; }
-
         public string Command { get; set; }
-        /// <summary>
-        /// Настройки Informer-а хранящиеся на сервере
-        /// </summary>
-
-        // public string Token { get; set; }
-        // public Settings settings { get; set; }
-
-        // public string message { get; set; }
-
-        //  [JsonProperty("params")]
-
-
-        //  [JsonProperty("commands")]
-        // public string command { get; set; }
+       
         public void Save(ApiResponse settings)
         {
-
             var state = JsonConvert.SerializeObject(settings);
             //var state = settings;
             var file = File.Open("state.json", FileMode.Create);
@@ -56,7 +41,6 @@ namespace Informer
                 using (StreamReader sr = new StreamReader("state.json"))
                 {
                     var state = sr.ReadToEnd();
-                    //return JsonConvert.DeserializeObject<GlobalVars>(state);
                     var response = JsonConvert.DeserializeObject<ApiResponse>(state);
                     Debug.WriteLine("***************** " + response.Params.Version);
                     return response;
@@ -68,7 +52,6 @@ namespace Informer
                 return null;
             }
         }
-
     }
     
 
@@ -81,7 +64,6 @@ namespace Informer
         public int Interval { get; set; }
         public string Token { get; set; }
         public string Version { get; set; }
-       
     }
 
     public class Timers
@@ -89,7 +71,6 @@ namespace Informer
         public int temp_min { get; set; }
         public int temp_max { get; set; }
         public int fan_min { get; set; }
-       // public int interval { get; set; }
         public int fan_max { get; set; }
         public int load_min { get; set; }
         public int load_max { get; set; }
