@@ -88,11 +88,11 @@ namespace Informer {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Не отслеживается.
+        ///   Ищет локализованную строку, похожую на Опасность.
         /// </summary>
-        internal static string labelEvent {
+        internal static string labelAlert {
             get {
-                return ResourceManager.GetString("labelEvent", resourceCulture);
+                return ResourceManager.GetString("labelAlert", resourceCulture);
             }
         }
         
@@ -120,6 +120,24 @@ namespace Informer {
         internal static string labelInformationStop {
             get {
                 return ResourceManager.GetString("labelInformationStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Не отслеживается.
+        /// </summary>
+        internal static string labelNotTracked {
+            get {
+                return ResourceManager.GetString("labelNotTracked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на OK.
+        /// </summary>
+        internal static string labelOK {
+            get {
+                return ResourceManager.GetString("labelOK", resourceCulture);
             }
         }
         
@@ -255,15 +273,6 @@ namespace Informer {
         internal static string labelStatusTempMin {
             get {
                 return ResourceManager.GetString("labelStatusTempMin", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Ищет локализованную строку, похожую на OK.
-        /// </summary>
-        internal static string labelStatusTempOK {
-            get {
-                return ResourceManager.GetString("labelStatusTempOK", resourceCulture);
             }
         }
     }

@@ -68,19 +68,19 @@ namespace Informer
 
     public class Timers
     {
-        public int temp_min { get; set; }
-        public int temp_max { get; set; }
-        public int fan_min { get; set; }
-        public int fan_max { get; set; }
-        public int load_min { get; set; }
-        public int load_max { get; set; }
-        public int clock_min { get; set; }
-        public int clock_max { get; set; }
-        public int mem_min { get; set; }
-        public int mem_max { get; set; }
-        public int lost_gpu { get; set; }
-        public int lost_inet { get; set; }
-        public int autostart { get; set; }
+        public int temp_min { get; set; } = 300;
+        public int temp_max { get; set; } = 300;
+        public int fan_min { get; set; } = 300;
+        public int fan_max { get; set; } = 300;
+        public int load_min { get; set; } = 300;
+        public int load_max { get; set; } = 300;
+        public int clock_min { get; set; } = 300;
+        public int clock_max { get; set; } = 300;
+        public int mem_min { get; set; } = 300;
+        public int mem_max { get; set; } = 300;
+        public int lost_gpu { get; set; } = 300;
+        public int lost_inet { get; set; } = 300;
+        public int autostart { get; set; } = 300;
     }
 
     public class Reboots

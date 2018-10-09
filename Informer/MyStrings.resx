@@ -126,7 +126,7 @@
   <data name="ExitTitle" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="labelEvent" xml:space="preserve">
+  <data name="labelNotTracked" xml:space="preserve">
     <value>Не отслеживается</value>
   </data>
   <data name="labelInformationStop" xml:space="preserve">
@@ -165,7 +165,7 @@
   <data name="labelInformationAuthorizationOK" xml:space="preserve">
     <value>Authorized</value>
   </data>
-  <data name="labelStatusTempOK" xml:space="preserve">
+  <data name="labelOK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="labelStatusFanOK" xml:space="preserve">
@@ -185,5 +185,8 @@
   </data>
   <data name="labelStatusStarted" xml:space="preserve">
     <value>Started</value>
+  </data>
+  <data name="labelAlert" xml:space="preserve">
+    <value>Опасность</value>
   </data>
 </root>

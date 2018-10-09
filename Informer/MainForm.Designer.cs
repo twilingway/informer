@@ -197,9 +197,9 @@
             // 
             // ReloadMinerTimer
             // 
-            this.ReloadMinerTimer.Interval = 1000;
-            this.ReloadMinerTimer.Tag = "r_min";
-            this.ReloadMinerTimer.Tick += new System.EventHandler(this.RerunTimerTick);
+            //this.ReloadMinerTimer.Interval = 1000;
+            //this.ReloadMinerTimer.Tag = "r_min";
+            //this.ReloadMinerTimer.Tick += new System.EventHandler(this.RerunTimerTick);
             // 
             // InformationLabel
             // 

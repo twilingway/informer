@@ -75,7 +75,7 @@
   <ItemGroup>
     <Compile Include="ApiResponse.cs" />
     <Compile Include="ApiEWBF.cs" />
-    <Compile Include="GPUTemp.cs" />
+    <Compile Include="GPUParams.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
