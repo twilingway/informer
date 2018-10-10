@@ -95,6 +95,7 @@
       <DependentUpon>MyStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="CommandProcesser.cs" />
+    <Compile Include="SensorForDanger.cs" />
     <Compile Include="SettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>

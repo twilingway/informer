@@ -195,12 +195,6 @@
             this.GPUTempMinTimer.Tag = "t_min";
             this.GPUTempMinTimer.Tick += new System.EventHandler(this.LowTempretureTimerTick);
             // 
-            // ReloadMinerTimer
-            // 
-            //this.ReloadMinerTimer.Interval = 1000;
-            //this.ReloadMinerTimer.Tag = "r_min";
-            //this.ReloadMinerTimer.Tick += new System.EventHandler(this.RerunTimerTick);
-            // 
             // InformationLabel
             // 
             resources.ApplyResources(this.InformationLabel, "InformationLabel");

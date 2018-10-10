@@ -5,8 +5,7 @@ using System.Diagnostics;
 
 namespace Informer
 {
-
-    public class GPUParams
+    class GPUParams
     {
         Computer PC;
         public string[] Name { get; private set; }
@@ -17,7 +16,7 @@ namespace Informer
         public int[] Load { get; private set; }
         public int CountGPU { get; private set; } = 0;
 
-    public GPUParams(Computer pc)
+        public GPUParams(Computer pc)
         {
             PC = pc;
             foreach (var hardware in PC.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
@@ -37,52 +36,78 @@ namespace Informer
             Load = new int[CountGPU];
         }
 
+        public void UpdateParams(SensorForDanger[] dangers)
+        {
+            foreach (var hardware in PC.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
+            {
+                hardware.Update();
+                if (hardware.HardwareType == HardwareType.GpuAti || hardware.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
+                {
+                    foreach (var sensor in hardware.Sensors)//ИДЕМ по сенсорам
+                    {
+                        foreach (var danger in dangers)
+                        {
+                            if (danger.IsTargetSensor(sensor.Name, sensor.SensorType))
+                            {
+                                danger.AddSensor(Convert.ToInt32(sensor.Value.GetValueOrDefault()));
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var danger in dangers)
+            {
+                danger.UpdateValue();
+            }
+        }
+
         public void SetParams()
         {
             int step = 0;
             foreach (var hardware in PC.Hardware)// ВЫБИРАЕМ ЖЕЛЕЗО
             {
-             hardware.Update();
+                hardware.Update();
 
                 if (hardware.HardwareType == HardwareType.GpuAti || hardware.HardwareType == HardwareType.GpuNvidia)//КАРТЫ
                 {
-                        Name[step] = hardware.Name;
+                    Name[step] = hardware.Name;
 
-                        foreach (var sensor in hardware.Sensors)//ИДЕМ по сенсорам
-                        {
-                            if (sensor.SensorType == SensorType.Clock)
-                            {//ЧАСТОТЫ
-                                if (sensor.Name == "GPU Core")//ЯДРО
-                                {
-                                    Clock[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                }
-                                
-                                if (sensor.Name == "GPU Memory")//ПАМЯТЬ
-                                    {
-                                    Memory[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                    }
+                    foreach (var sensor in hardware.Sensors)//ИДЕМ по сенсорам
+                    {
+                        if (sensor.SensorType == SensorType.Clock)
+                        {//ЧАСТОТЫ
+                            if (sensor.Name == "GPU Core")//ЯДРО
+                            {
+                                Clock[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                             }
 
-                            if (sensor.SensorType == SensorType.Temperature)//Температура
+                            if (sensor.Name == "GPU Memory")//ПАМЯТЬ
                             {
-                                if (sensor.Name == "GPU Core")//ЯДРО
-                                {
-                                    Temperature[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                }
-                                //_temperature[i] = sensor.Value.GetValueOrDefault();
-                            }
-                            if (sensor.SensorType == SensorType.Load)//LOAD
-                            {
-                                if (sensor.Name == "GPU Core")
-                                {
-                                   Load[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
-                                }
-                            }                      
-                            if (sensor.SensorType == SensorType.Control)// FAN
-                            {
-                            FanSpeed[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                                Memory[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
                             }
                         }
+
+                        if (sensor.SensorType == SensorType.Temperature)//Температура
+                        {
+                            if (sensor.Name == "GPU Core")//ЯДРО
+                            {
+                                Temperature[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+                            //_temperature[i] = sensor.Value.GetValueOrDefault();
+                        }
+                        if (sensor.SensorType == SensorType.Load)//LOAD
+                        {
+                            if (sensor.Name == "GPU Core")
+                            {
+                                Load[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                            }
+                        }
+                        if (sensor.SensorType == SensorType.Control)// FAN
+                        {
+                            FanSpeed[step] = Convert.ToInt32(sensor.Value.GetValueOrDefault());
+                        }
+                    }
                 }
                 step++;
             }
@@ -96,7 +121,7 @@ namespace Informer
             }
         }
 
-            public static void GetGPU(GlobalVars globalVars,Computer PC)
+        public static void GetGPU(GlobalVars globalVars, Computer PC)
         {
             try
             {

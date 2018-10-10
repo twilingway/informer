@@ -33,16 +33,18 @@ namespace Informer
 
         TimerOnForm tempMinTimer, tempMaxTimer, fanMinTimer,fanMaxTimer,loadMinTimer, loadMaxTimer,
                     clockMinTimer,clockMaxTimer,memoryMinTimer,memoryMaxTimer,NotInternetTimer;
-        Danger danger;
+
+        Danger tempMin;
+        Danger[] dangers;
 
         bool checkPing;
         public MainForm()
         {
             InitializeComponent();
-           
+
 
             globalVars = new GlobalVars();
-            danger = new Danger();
+
             PC = new Computer();
 
            // PC.CPUEnabled = true;
@@ -135,10 +137,24 @@ namespace Informer
                 TimeWorkTimer.Enabled = true;
             }
 
-            
+            tempMin = new Danger(apiResponse.Params.Reboots.temp_min,
+                gpuParams.Temperature,
+                apiResponse.Params.Data_ranges.Temp,
+                tempMinLabel,
+                tempMinTimer,
+                apiResponse.Params.Timers.temp_min,
+                Danger.Predicate.Min,
+                "GPU Core",
+                SensorType.Clock);
+
+            dangers = new Danger[] {
+                tempMin
+            };
+
+
         }
 
-        
+
         private void KillDublicateProcess(string processName)
         {
             try
@@ -252,82 +268,83 @@ namespace Informer
                 labelMemoryMax.Text = "MEMORY MAX(" + apiResponse.Params.Data_ranges.Mem[1] + "):";
                 labelFellOffGPU.Text = "GPU LOST(" + globalVars.count_GPU + "):";
 
-                //temp min
-                danger.GetStatusMin(apiResponse.Params.Reboots.temp_min,
-                    gpuParams.Temperature,
-                    apiResponse.Params.Data_ranges.Temp,
-                    tempMinLabel,
-                    tempMinTimer,
-                    apiResponse.Params.Timers.temp_min);
-                //temp max
-                danger.GetStatusMax(apiResponse.Params.Reboots.temp_max,
-                    gpuParams.Temperature,
-                    apiResponse.Params.Data_ranges.Temp,
-                    tempMaxLabel,
-                    tempMaxTimer,
-                    apiResponse.Params.Timers.temp_max);
-                //fan min
-                danger.GetStatusMin(apiResponse.Params.Reboots.fan_min,
-                   gpuParams.FanSpeed,
-                   apiResponse.Params.Data_ranges.Fan,
-                   fanMinLabel,
-                   fanMinTimer,
-                   apiResponse.Params.Timers.fan_min);
-                //fan max
-                danger.GetStatusMax(apiResponse.Params.Reboots.fan_max,
-                    gpuParams.FanSpeed,
-                    apiResponse.Params.Data_ranges.Fan,
-                    fanMaxLabel,
-                    fanMaxTimer,
-                    apiResponse.Params.Timers.fan_max);
-                //load min
-                danger.GetStatusMin(apiResponse.Params.Reboots.load_min,
-                   gpuParams.Load,
-                   apiResponse.Params.Data_ranges.Load,
-                   loadMinLabel,
-                   loadMinTimer,
-                   apiResponse.Params.Timers.load_min);
-                //load max
-                danger.GetStatusMax(apiResponse.Params.Reboots.load_max,
-                    gpuParams.Load,
-                    apiResponse.Params.Data_ranges.Load,
-                    loadMaxLabel,
-                    loadMaxTimer,
-                    apiResponse.Params.Timers.load_max);
-                //clock min
-                danger.GetStatusMin(apiResponse.Params.Reboots.clock_min,
-                   gpuParams.Clock,
-                   apiResponse.Params.Data_ranges.Clock,
-                   clockMinLabel,
-                   clockMinTimer,
-                   apiResponse.Params.Timers.clock_min);
-                //clock max
-                danger.GetStatusMax(apiResponse.Params.Reboots.clock_max,
-                    gpuParams.Clock,
-                    apiResponse.Params.Data_ranges.Clock,
-                    clockMaxLabel,
-                    clockMaxTimer,
-                    apiResponse.Params.Timers.clock_max);
-                //memory min
-                danger.GetStatusMin(apiResponse.Params.Reboots.mem_min,
-                   gpuParams.Memory,
-                   apiResponse.Params.Data_ranges.Mem,
-                   memoryMinLabel,
-                   memoryMinTimer,
-                   apiResponse.Params.Timers.mem_min);
-                //memory max
-                danger.GetStatusMax(apiResponse.Params.Reboots.mem_max,
-                    gpuParams.Memory,
-                    apiResponse.Params.Data_ranges.Mem,
-                    memoryMaxLabel,
-                    memoryMaxTimer,
-                    apiResponse.Params.Timers.mem_max);
 
-                //dont have internet
-                 danger.GetStatusInternet(apiResponse.Params.Reboots.lost_inet,
-                    NotInternetLabel,
-                    NotInternetTimer,
-                    apiResponse.Params.Timers.lost_inet,checkPing);
+                ////temp min
+                //danger.GetStatusMin(apiResponse.Params.Reboots.temp_min,
+                //    gpuParams.Temperature,
+                //    apiResponse.Params.Data_ranges.Temp,
+                //    tempMinLabel,
+                //    tempMinTimer,
+                //    apiResponse.Params.Timers.temp_min);
+                ////temp max
+                //danger.GetStatusMax(apiResponse.Params.Reboots.temp_max,
+                //    gpuParams.Temperature,
+                //    apiResponse.Params.Data_ranges.Temp,
+                //    tempMaxLabel,
+                //    tempMaxTimer,
+                //    apiResponse.Params.Timers.temp_max);
+                ////fan min
+                //danger.GetStatusMin(apiResponse.Params.Reboots.fan_min,
+                //   gpuParams.FanSpeed,
+                //   apiResponse.Params.Data_ranges.Fan,
+                //   fanMinLabel,
+                //   fanMinTimer,
+                //   apiResponse.Params.Timers.fan_min);
+                ////fan max
+                //danger.GetStatusMax(apiResponse.Params.Reboots.fan_max,
+                //    gpuParams.FanSpeed,
+                //    apiResponse.Params.Data_ranges.Fan,
+                //    fanMaxLabel,
+                //    fanMaxTimer,
+                //    apiResponse.Params.Timers.fan_max);
+                ////load min
+                //danger.GetStatusMin(apiResponse.Params.Reboots.load_min,
+                //   gpuParams.Load,
+                //   apiResponse.Params.Data_ranges.Load,
+                //   loadMinLabel,
+                //   loadMinTimer,
+                //   apiResponse.Params.Timers.load_min);
+                ////load max
+                //danger.GetStatusMax(apiResponse.Params.Reboots.load_max,
+                //    gpuParams.Load,
+                //    apiResponse.Params.Data_ranges.Load,
+                //    loadMaxLabel,
+                //    loadMaxTimer,
+                //    apiResponse.Params.Timers.load_max);
+                ////clock min
+                //danger.GetStatusMin(apiResponse.Params.Reboots.clock_min,
+                //   gpuParams.Clock,
+                //   apiResponse.Params.Data_ranges.Clock,
+                //   clockMinLabel,
+                //   clockMinTimer,
+                //   apiResponse.Params.Timers.clock_min);
+                ////clock max
+                //danger.GetStatusMax(apiResponse.Params.Reboots.clock_max,
+                //    gpuParams.Clock,
+                //    apiResponse.Params.Data_ranges.Clock,
+                //    clockMaxLabel,
+                //    clockMaxTimer,
+                //    apiResponse.Params.Timers.clock_max);
+                ////memory min
+                //danger.GetStatusMin(apiResponse.Params.Reboots.mem_min,
+                //   gpuParams.Memory,
+                //   apiResponse.Params.Data_ranges.Mem,
+                //   memoryMinLabel,
+                //   memoryMinTimer,
+                //   apiResponse.Params.Timers.mem_min);
+                ////memory max
+                //danger.GetStatusMax(apiResponse.Params.Reboots.mem_max,
+                //    gpuParams.Memory,
+                //    apiResponse.Params.Data_ranges.Mem,
+                //    memoryMaxLabel,
+                //    memoryMaxTimer,
+                //    apiResponse.Params.Timers.mem_max);
+
+                ////dont have internet
+                // danger.GetStatusInternet(apiResponse.Params.Reboots.lost_inet,
+                //    NotInternetLabel,
+                //    NotInternetTimer,
+                //    apiResponse.Params.Timers.lost_inet,checkPing);
 
 
 
@@ -1153,7 +1170,7 @@ namespace Informer
         async private void GPUStatusTimer_Tick(object sender, EventArgs e)
         {
             GpuStatus();
-
+            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
             await Task.Delay(1);
         }
 
@@ -1184,40 +1201,43 @@ namespace Informer
 
 class Danger
 {
-    public void GetStatusMin(bool paramReboot,int[] sensors,int[] dataRanges, LabelOnForm labelOnForm, TimerOnForm timerOnForm,int timers)
+    private bool paramReboot;
+    private int[] sensors;
+    private int[] dataRanges;
+    private LabelOnForm labelOnForm;
+    private TimerOnForm timerOnForm;
+    private int timers;
+    private Predicate predicate;
+    public string SensorName { get; private set; }
+    public SensorType Type { get; private set; }
+
+    public Danger(bool paramReboot, int[] sensors, int[] dataRanges, LabelOnForm labelOnForm, TimerOnForm timerOnForm, int timers, Predicate predicate, string sensorName, SensorType type)
     {
-        bool sensorAlarm = false;
-        if (paramReboot)
-        {
-            foreach (var sensor in sensors)
-            {
-                if (sensor < dataRanges[0])
-                {
-                    labelOnForm.UpdateLable("true",timeReboot: timers);
-                    timerOnForm.Enabled(true);
-                    sensorAlarm = true;
-                }
-            }
-            if (sensorAlarm == false)
-            {
-                labelOnForm.UpdateLable("ok", timeReboot: timers);
-                timerOnForm.Enabled(false);
-            }
-        }
-        else
-        {
-            labelOnForm.UpdateLable("false", timeReboot: timers);
-            timerOnForm.Enabled(false);
-        }
+        this.paramReboot = paramReboot;
+        this.sensors = sensors;
+        this.dataRanges = dataRanges;
+        this.labelOnForm = labelOnForm;
+        this.timerOnForm = timerOnForm;
+        this.timers = timers;
+        this.predicate = predicate;
+        this.SensorName = sensorName;
+        this.Type = type;
     }
-    public void GetStatusMax(bool paramReboot, int[] sensors, int[] dataRanges, LabelOnForm labelOnForm, TimerOnForm timerOnForm, int timers)
+
+    public enum Predicate
+    {
+        Min,
+        Max
+    }
+
+    private void UpdateStatus()
     {
         bool sensorAlarm = false;
         if (paramReboot)
         {
             foreach (var sensor in sensors)
             {
-                if (sensor > dataRanges[1])
+                if (Check(sensor))
                 {
                     labelOnForm.UpdateLable("true", timeReboot: timers);
                     timerOnForm.Enabled(true);
@@ -1236,6 +1256,29 @@ class Danger
             timerOnForm.Enabled(false);
         }
     }
+
+    public void UpdateSensors(int[] sensors)
+    {
+        this.sensors = sensors;
+        UpdateStatus();
+    }
+
+    private bool Check(int sensor)
+    {
+        switch (predicate)
+        {
+            case Predicate.Min:
+                return sensor < dataRanges[0];
+                break;
+            case Predicate.Max:
+                return sensor > dataRanges[0];
+                break;
+            default:
+                return false;
+                break;
+        }
+    }
+
     public void GetStatusInternet(bool paramReboot, LabelOnForm labelOnForm, TimerOnForm timerOnForm, int timers, bool checkPing)
     {
         if (paramReboot)
