@@ -13,6 +13,8 @@ using System.IO;
 using System.Net.NetworkInformation;
 using MQTTnet;
 using System.Globalization;
+using System.Management;
+using System.Management.Instrumentation;
 using Informer;
 
 namespace Informer
@@ -56,6 +58,7 @@ namespace Informer
             _error = new LogFile("error");
             _http = new Http();
             apiResponse = new ApiResponse();
+
 
             
 
@@ -131,6 +134,8 @@ namespace Informer
                 AutoStartTimer.Enabled = true;
                 TimeWorkTimer.Enabled = true;
             }
+
+            
         }
 
         
@@ -148,6 +153,8 @@ namespace Informer
                 Debug.WriteLine($"KILL {processName}: " + e);
             }
         }
+        
+        
 
         // нужно разобраться с автостартом
         async private void GetTempretureTimerTick(object sender, EventArgs e)
@@ -471,13 +478,13 @@ namespace Informer
 
         public static async Task SendData(GlobalVars globalVars, ApiResponse apiResponse)
         {
-
+            
             if (globalVars.mqttIsConnect == true)
             {
                 try
                 {
-                    globalVars.upTime = UpTime.ToString(@"dd\.hh\:mm\:ss");
-
+                    //globalVars.upTime = UpTime.ToString(@"dd\.hh\:mm\:ss");
+                    globalVars.upTime = GetUptime().ToString(@"dd\.hh\:mm\:ss");
                     var send_data = new MqttApplicationMessageBuilder()
                          .WithTopic("devices/" + apiResponse.Params.Token + "/data")
                          .WithPayload("token=" + apiResponse.Params.Token +
@@ -1164,6 +1171,13 @@ namespace Informer
                 }
             }
         }
+
+        public static TimeSpan GetUptime()
+        {
+            ManagementObject mo = new ManagementObject(@"\\.\root\cimv2:Win32_OperatingSystem=@");
+            DateTime lastBootUp = ManagementDateTimeConverter.ToDateTime(mo["LastBootUpTime"].ToString());
+            return DateTime.Now.ToUniversalTime() - lastBootUp.ToUniversalTime();
+        }
     }
 
 }
@@ -1177,7 +1191,7 @@ class Danger
         {
             foreach (var sensor in sensors)
             {
-                if (sensor <= dataRanges[0])
+                if (sensor < dataRanges[0])
                 {
                     labelOnForm.UpdateLable("true",timeReboot: timers);
                     timerOnForm.Enabled(true);
@@ -1203,7 +1217,7 @@ class Danger
         {
             foreach (var sensor in sensors)
             {
-                if (sensor >= dataRanges[1])
+                if (sensor > dataRanges[1])
                 {
                     labelOnForm.UpdateLable("true", timeReboot: timers);
                     timerOnForm.Enabled(true);
