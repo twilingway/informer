@@ -38,7 +38,7 @@ namespace Informer
         TimerOnForm tempMinTimer, tempMaxTimer, fanMinTimer,fanMaxTimer,loadMinTimer, loadMaxTimer,
                     clockMinTimer,clockMaxTimer,memoryMinTimer,memoryMaxTimer,NotInternetTimer;
 
-        Danger tempMin,tempMax;
+        Danger tempMin,tempMax, fanMin,fanMax, loadMin,loadMax, clockMin,clockMax, memoryMin, memoryMax, internetOff;
         Danger[] dangers;
         
         bool checkPing;
@@ -146,30 +146,111 @@ namespace Informer
             commandProcesser = new CommandProcesser(response);
             mqttConnect = new MqttConnect();
            
-                tempMin = new Danger(response,response.Params.Reboots.temp_min,
-                    gpuParams.Temperature,
-                    response.Params.Data_ranges.Temp,
-                    tempMinLabel,
-                    tempMinTimer,
-                    response.Params.Timers.temp_min,
-                    Danger.Predicate.Min,
-                    "GPU Core",
-                    SensorType.Temperature,Danger.ParamsList.tempMin);
+            tempMin = new Danger(response,response.Params.Reboots.temp_min,
+                        gpuParams.Temperature,
+                        response.Params.Data_ranges.Temp,
+                        tempMinLabel,
+                        tempMinTimer,
+                        response.Params.Timers.temp_min,
+                        Danger.Predicate.Min,
+                        "GPU Core",
+                        SensorType.Temperature,Danger.ParamsList.tempMin);
 
             tempMax = new Danger(response, response.Params.Reboots.temp_max,
-           gpuParams.Temperature,
-           response.Params.Data_ranges.Temp,
-           tempMaxLabel,
-           tempMaxTimer,
-           response.Params.Timers.temp_max,
+                       gpuParams.Temperature,
+                       response.Params.Data_ranges.Temp,
+                       tempMaxLabel,
+                       tempMaxTimer,
+                       response.Params.Timers.temp_max,
+                       Danger.Predicate.Max,
+                       "GPU Core",
+                       SensorType.Temperature, Danger.ParamsList.tempMax);
+
+            fanMin = new Danger(response, response.Params.Reboots.fan_min,
+                   gpuParams.FanSpeed,
+                   response.Params.Data_ranges.Fan,
+                   fanMinLabel,
+                   fanMinTimer,
+                   response.Params.Timers.fan_min,
+                   Danger.Predicate.Min,
+                   "GPU Fan",
+                   SensorType.Control, Danger.ParamsList.fanMin);
+
+            fanMax = new Danger(response, response.Params.Reboots.fan_max,
+                    gpuParams.FanSpeed,
+                    response.Params.Data_ranges.Fan,
+                    fanMaxLabel,
+                    fanMaxTimer,
+                    response.Params.Timers.fan_max,
+                    Danger.Predicate.Max,
+                    "GPU Fan",
+                    SensorType.Control, Danger.ParamsList.fanMax);
+
+            loadMin = new Danger(response, response.Params.Reboots.load_min,
+           gpuParams.Load,
+           response.Params.Data_ranges.Load,
+           loadMinLabel,
+           loadMinTimer,
+           response.Params.Timers.load_min,
+           Danger.Predicate.Min,
+           "GPU Core",
+           SensorType.Load, Danger.ParamsList.loadMin);
+
+            loadMax = new Danger(response, response.Params.Reboots.load_max,
+           gpuParams.Load,
+           response.Params.Data_ranges.Load,
+           loadMaxLabel,
+           loadMaxTimer,
+           response.Params.Timers.load_max,
            Danger.Predicate.Max,
            "GPU Core",
-           SensorType.Temperature, Danger.ParamsList.tempMax);
+           SensorType.Load, Danger.ParamsList.loadMax);
+
+            clockMin = new Danger(response, response.Params.Reboots.clock_min,
+          gpuParams.Clock,
+          response.Params.Data_ranges.Clock,
+          clockMinLabel,
+          clockMinTimer,
+          response.Params.Timers.clock_min,
+          Danger.Predicate.Min,
+          "GPU Core",
+          SensorType.Clock, Danger.ParamsList.clockMin);
+
+            clockMax = new Danger(response, response.Params.Reboots.clock_max,
+          gpuParams.Clock,
+          response.Params.Data_ranges.Clock,
+          clockMaxLabel,
+          clockMaxTimer,
+          response.Params.Timers.clock_max,
+          Danger.Predicate.Max,
+          "GPU Core",
+          SensorType.Clock, Danger.ParamsList.clockMax);
+
+
+            memoryMin = new Danger(response, response.Params.Reboots.mem_min,
+            gpuParams.Memory,
+            response.Params.Data_ranges.Mem,
+            memoryMinLabel,
+            memoryMinTimer,
+            response.Params.Timers.mem_min,
+            Danger.Predicate.Min,
+            "GPU Memory",
+            SensorType.Clock, Danger.ParamsList.memoryMin);
+
+            memoryMax = new Danger(response, response.Params.Reboots.mem_max,
+            gpuParams.Memory,
+            response.Params.Data_ranges.Mem,
+            memoryMaxLabel,
+            memoryMaxTimer,
+            response.Params.Timers.mem_max,
+            Danger.Predicate.Max,
+            "GPU Memory",
+            SensorType.Clock, Danger.ParamsList.memoryMax);
 
 
             dangers = new Danger[] {
-                tempMin,
-                tempMax
+                tempMin, tempMax, fanMin, fanMax, loadMin,loadMax,
+                clockMin,clockMax, memoryMin, memoryMax
             };
         }
 
@@ -1130,7 +1211,15 @@ class Danger
         tempMin,
         tempMax,
         fanMin,
-        fanMax
+        fanMax,
+        loadMin,
+        loadMax,
+        clockMin,
+        clockMax,
+        memoryMin,
+        memoryMax,
+        internetOff
+
     }
 
     private void UpdateStatus()
