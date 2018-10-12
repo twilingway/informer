@@ -75,7 +75,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApiResponse.cs" />
-    <Compile Include="ApiEWBF.cs" />
     <Compile Include="GPUParams.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -83,6 +82,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Movie.cs" />
     <Compile Include="MqttConnect.cs" />
     <Compile Include="MyStrings.en-US.Designer.cs">
       <DependentUpon>MyStrings.en-US.resx</DependentUpon>
@@ -106,7 +106,6 @@
     <Compile Include="Http.cs" />
     <Compile Include="INIManager.cs" />
     <Compile Include="LogFile.cs" />
-    <Compile Include="Movie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.en-US.resx">

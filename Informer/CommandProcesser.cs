@@ -4,23 +4,35 @@ using System.Diagnostics;
 
 namespace Informer
 {
-    public static class CommandProcesser
+    public class CommandProcesser
     {
+        ApiResponse apiResponse;
 
-        public static void onMessage(string payload, string topic, ApiResponse apiResponse)
+        public CommandProcesser(ApiResponse apiResponse)
         {
+            this.apiResponse = apiResponse;
+        }
+
+        public ApiResponse GetApiResponse()
+        {
+            return apiResponse;
+        }
+        public void onMessage(string payload, string topic)
+        {
+            string token = apiResponse.Params.Token;
+            string version = apiResponse.Params.Version;
+
 
             if (topic == "devices/" + apiResponse.Params.Token + "/commands")
             { 
                 var response = JsonConvert.DeserializeObject<ApiResponse>(payload);
                 string command = response.Command;
-                response.Params.Token = apiResponse.Params.Token;
-                response.Params.Version = apiResponse.Params.Version;
+                response.Params.Token = token;
+                response.Params.Version = version;
                 Debug.WriteLine("COMMAND: "+ command);
                 switch (command)
                 {
                     case "reboot":
-                       // MainForm.Message("Informer Reboot from Allminer.ru!", apiResponse);
                         Process psiwer;
                         psiwer = Process.Start("cmd.exe", "/c shutdown /r /f /t 0");
                         psiwer.Close();
@@ -30,12 +42,12 @@ namespace Informer
                         try
                         {
                             Debug.WriteLine("SETTINGS");
-                            //response.Params.timers = response.Params.timers;
-                            apiResponse.Params = response.Params;
-                           // settings.Params.reboots = response.Params.reboots;
-                           // settings.Params.data_ranges = response.Params.data_ranges;
-                            apiResponse.Save(response);
-                            Debug.WriteLine("#############" + response.Params.Timers.temp_min);
+                            response.Save();
+                            Debug.WriteLine(apiResponse.Params.Data_ranges.Temp[0]);
+                            apiResponse = response;
+                            Debug.WriteLine(apiResponse.Params.Data_ranges.Temp[0]);
+                            Debug.WriteLine("#############" + response.Params.Data_ranges.Temp[0]);
+                           
                         }
                         catch (Exception ex)
                         {
@@ -48,8 +60,8 @@ namespace Informer
                     case "interval":
                         try
                         {
-                            apiResponse.Params.Interval = response.Params.Interval;
-                            apiResponse.Save(response);
+                            response.Save();
+                            apiResponse = response;
                         }
                         catch (Exception ex)
                         {

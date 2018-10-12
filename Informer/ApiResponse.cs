@@ -15,9 +15,9 @@ namespace Informer
         public Params Params { get; set; }
         public string Command { get; set; }
        
-        public void Save(ApiResponse settings)
+        public void Save()
         {
-            var state = JsonConvert.SerializeObject(settings);
+            var state = JsonConvert.SerializeObject(this);
             //var state = settings;
             var file = File.Open("state.json", FileMode.Create);
             try
@@ -49,7 +49,7 @@ namespace Informer
             catch (Exception e)
             {
                 Debug.WriteLine("&&&&&&&&&&&&&&&" + e.Message);
-                return null;
+                return this;
             }
         }
     }
@@ -61,9 +61,9 @@ namespace Informer
         public Reboots Reboots { get; set; }
         public Data_ranges Data_ranges { get; set; }
         public string Name { get; set; }
-        public int Interval { get; set; }
+        public int Interval { get; set; } = 60;
         public string Token { get; set; }
-        public string Version { get; set; }
+        public string Version { get; set; } = "1.3.9";
     }
 
     public class Timers
@@ -85,27 +85,27 @@ namespace Informer
 
     public class Reboots
     {
-        public bool temp_min { get; set; }
-        public bool temp_max { get; set; }
-        public bool fan_min { get; set; }
-        public bool fan_max { get; set; }
-        public bool load_min { get; set; }
-        public bool load_max { get; set; }
-        public bool clock_min { get; set; }
-        public bool clock_max { get; set; }
-        public bool mem_min { get; set; }
-        public bool mem_max { get; set; }
-        public bool lost_gpu { get; set; }
-        public bool lost_inet { get; set; }
+        public bool temp_min { get; set; } = false;
+        public bool temp_max { get; set; } = false;
+        public bool fan_min { get; set; } = false;
+        public bool fan_max { get; set; } = false;
+        public bool load_min { get; set; } = false;
+        public bool load_max { get; set; } = false;
+        public bool clock_min { get; set; } = false;
+        public bool clock_max { get; set; } = false;
+        public bool mem_min { get; set; } = false;
+        public bool mem_max { get; set; } = false;
+        public bool lost_gpu { get; set; } = false;
+        public bool lost_inet { get; set; } = false;
     }
 
     public class Data_ranges
     {
-        public int[] Temp { get; set; }
-        public int[] Fan { get; set; }
-        public int[] Load { get; set; }
-        public int[] Clock { get; set; }
-        public int[] Mem { get; set; }
+        public int[] Temp { get; set; } = { 0, 100 };
+        public int[] Fan { get; set; } = { 0, 100 };
+        public int[] Load { get; set; } = { 0, 100 };
+        public int[] Clock { get; set; } = { 0, 5000 };
+        public int[] Mem { get; set; } = { 0, 10000 };
     }
 }
 

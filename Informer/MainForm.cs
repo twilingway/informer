@@ -25,24 +25,27 @@ namespace Informer
         private static Http _http;
         private LogFile _log, _error;
         private GlobalVars globalVars;
-        public ApiResponse apiResponse;
+        public ApiResponse apiResponse ,response;
         public Computer PC;
+        public MqttConnect mqttConnect;
+        public CommandProcesser commandProcesser;
+
         GPUParams gpuParams;
+
         LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel,fanMaxLabel,loadMinLabel, loadMaxLabel,
                     clockMinLabel, clockMaxLabel,memoryMinLabel, memoryMaxLabel, NotInternetLabel;
 
         TimerOnForm tempMinTimer, tempMaxTimer, fanMinTimer,fanMaxTimer,loadMinTimer, loadMaxTimer,
                     clockMinTimer,clockMaxTimer,memoryMinTimer,memoryMaxTimer,NotInternetTimer;
 
-        Danger tempMin;
+        Danger tempMin,tempMax;
         Danger[] dangers;
-
+        
         bool checkPing;
         public MainForm()
         {
             InitializeComponent();
-
-
+           
             globalVars = new GlobalVars();
 
             PC = new Computer();
@@ -61,9 +64,6 @@ namespace Informer
             _http = new Http();
             apiResponse = new ApiResponse();
 
-
-            
-
             KillDublicateProcess("Informer");
             KillDublicateProcess("Launcher_informer");
 
@@ -74,17 +74,20 @@ namespace Informer
                 Data_ranges = new Data_ranges(),
                 Version = "1.3.9"
             };
-
+            /*
             apiResponse.Params.Data_ranges.Temp = new int[2];
             apiResponse.Params.Data_ranges.Fan = new int[2];
             apiResponse.Params.Data_ranges.Load = new int[2];
             apiResponse.Params.Data_ranges.Clock = new int[2];
             apiResponse.Params.Data_ranges.Fan = new int[2];
             apiResponse.Params.Data_ranges.Mem = new int[2];
+            */
 
             СheckForNewVersion();
+            response = apiResponse.Load();
 
-            var response = apiResponse.Load();
+            //костыли 
+            apiResponse = response;
 
             tempMinLabel = new LabelOnForm(labelStatusTempMin, labelCounterTempMin, response);
             tempMaxLabel = new LabelOnForm(labelStatusTempMax, labelCounterTempMax, response);
@@ -97,6 +100,8 @@ namespace Informer
             memoryMinLabel = new LabelOnForm(labelStatusMemoryMin, labelCounterMemoryMin, response);
             memoryMaxLabel = new LabelOnForm(labelStatusMemoryMax, labelCounterMemoryMax, response);
             NotInternetLabel = new LabelOnForm(labelStatusInternet, labelCounterInternet, response);
+
+            
 
             tempMinTimer = new TimerOnForm(GPUTempMinTimer);
             tempMaxTimer = new TimerOnForm(GPUTempMaxTimer);
@@ -111,8 +116,8 @@ namespace Informer
             NotInternetTimer = new TimerOnForm(DontHaveInternetTimer);
             bool start = false;
 
-            if (response != null)
-            {
+           // if (apiResponse != null)
+           // {
                 if (!string.IsNullOrEmpty(response.Params.Token))
                 {
                     start = true;
@@ -121,12 +126,14 @@ namespace Informer
                     tbRigName.Text = response.Params.Name;
                     tbToken.Text = response.Params.Token;
                 }
-            }
-            else 
-            {
+
+                else
+                {
                     start = false;
                     tbRigName.ReadOnly = true;
-            }
+                }
+           // }
+            
             
 
             if (start)
@@ -136,22 +143,34 @@ namespace Informer
                 AutoStartTimer.Enabled = true;
                 TimeWorkTimer.Enabled = true;
             }
+            commandProcesser = new CommandProcesser(response);
+            mqttConnect = new MqttConnect();
+           
+                tempMin = new Danger(response,response.Params.Reboots.temp_min,
+                    gpuParams.Temperature,
+                    response.Params.Data_ranges.Temp,
+                    tempMinLabel,
+                    tempMinTimer,
+                    response.Params.Timers.temp_min,
+                    Danger.Predicate.Min,
+                    "GPU Core",
+                    SensorType.Temperature,Danger.ParamsList.tempMin);
 
-            tempMin = new Danger(apiResponse.Params.Reboots.temp_min,
-                gpuParams.Temperature,
-                apiResponse.Params.Data_ranges.Temp,
-                tempMinLabel,
-                tempMinTimer,
-                apiResponse.Params.Timers.temp_min,
-                Danger.Predicate.Min,
-                "GPU Core",
-                SensorType.Clock);
+            tempMax = new Danger(response, response.Params.Reboots.temp_max,
+           gpuParams.Temperature,
+           response.Params.Data_ranges.Temp,
+           tempMaxLabel,
+           tempMaxTimer,
+           response.Params.Timers.temp_max,
+           Danger.Predicate.Max,
+           "GPU Core",
+           SensorType.Temperature, Danger.ParamsList.tempMax);
+
 
             dangers = new Danger[] {
-                tempMin
+                tempMin,
+                tempMax
             };
-
-
         }
 
 
@@ -184,7 +203,7 @@ namespace Informer
                 AutoStartTimer.Enabled = false;
 
                 tbToken.ReadOnly = true;
-                tbRigName.Text = apiResponse.Params.Name;
+                tbRigName.Text = response.Params.Name;
             }
 
             try
@@ -217,9 +236,9 @@ namespace Informer
             tbRigName.ReadOnly = true;
             tbToken.ReadOnly = true;
             OHMTimer.Enabled = true;
-            if (!string.IsNullOrWhiteSpace(apiResponse.Params.Name))
+            if (!string.IsNullOrWhiteSpace(response.Params.Name))
             {
-                Message("Informer Started!", globalVars, apiResponse);
+                Message("Informer Started!", globalVars, response);
             }
 
             MqttConnectTimer.Enabled = true;
@@ -256,97 +275,18 @@ namespace Informer
         {
             try
             {
-                labelTempMin.Text = "TEMP MIN(" + apiResponse.Params.Data_ranges.Temp[0] + "):";
-                labelTempMax.Text = "TEMP MAX(" + apiResponse.Params.Data_ranges.Temp[1] + "):";
-                labelFanMin.Text = "FAN MIN(" + apiResponse.Params.Data_ranges.Fan[0] + "):";
-                labelFanMax.Text = "FAN MAX(" + apiResponse.Params.Data_ranges.Fan[1] + "):";
-                labelLoadMin.Text = "LOAD MIN(" + apiResponse.Params.Data_ranges.Load[0] + "):";
-                labelLoadMax.Text = "LOAD MAX(" + apiResponse.Params.Data_ranges.Load[1] + "):";
-                labelClockMin.Text = "CLOCK MIN(" + apiResponse.Params.Data_ranges.Clock[0] + "):";
-                labelClockMax.Text = "CLOCK MAX(" + apiResponse.Params.Data_ranges.Clock[1] + "):";
-                labelMemoryMin.Text = "MEMORY MIN(" + apiResponse.Params.Data_ranges.Mem[0] + "):";
-                labelMemoryMax.Text = "MEMORY MAX(" + apiResponse.Params.Data_ranges.Mem[1] + "):";
-                labelFellOffGPU.Text = "GPU LOST(" + globalVars.count_GPU + "):";
-
-
-                ////temp min
-                //danger.GetStatusMin(apiResponse.Params.Reboots.temp_min,
-                //    gpuParams.Temperature,
-                //    apiResponse.Params.Data_ranges.Temp,
-                //    tempMinLabel,
-                //    tempMinTimer,
-                //    apiResponse.Params.Timers.temp_min);
-                ////temp max
-                //danger.GetStatusMax(apiResponse.Params.Reboots.temp_max,
-                //    gpuParams.Temperature,
-                //    apiResponse.Params.Data_ranges.Temp,
-                //    tempMaxLabel,
-                //    tempMaxTimer,
-                //    apiResponse.Params.Timers.temp_max);
-                ////fan min
-                //danger.GetStatusMin(apiResponse.Params.Reboots.fan_min,
-                //   gpuParams.FanSpeed,
-                //   apiResponse.Params.Data_ranges.Fan,
-                //   fanMinLabel,
-                //   fanMinTimer,
-                //   apiResponse.Params.Timers.fan_min);
-                ////fan max
-                //danger.GetStatusMax(apiResponse.Params.Reboots.fan_max,
-                //    gpuParams.FanSpeed,
-                //    apiResponse.Params.Data_ranges.Fan,
-                //    fanMaxLabel,
-                //    fanMaxTimer,
-                //    apiResponse.Params.Timers.fan_max);
-                ////load min
-                //danger.GetStatusMin(apiResponse.Params.Reboots.load_min,
-                //   gpuParams.Load,
-                //   apiResponse.Params.Data_ranges.Load,
-                //   loadMinLabel,
-                //   loadMinTimer,
-                //   apiResponse.Params.Timers.load_min);
-                ////load max
-                //danger.GetStatusMax(apiResponse.Params.Reboots.load_max,
-                //    gpuParams.Load,
-                //    apiResponse.Params.Data_ranges.Load,
-                //    loadMaxLabel,
-                //    loadMaxTimer,
-                //    apiResponse.Params.Timers.load_max);
-                ////clock min
-                //danger.GetStatusMin(apiResponse.Params.Reboots.clock_min,
-                //   gpuParams.Clock,
-                //   apiResponse.Params.Data_ranges.Clock,
-                //   clockMinLabel,
-                //   clockMinTimer,
-                //   apiResponse.Params.Timers.clock_min);
-                ////clock max
-                //danger.GetStatusMax(apiResponse.Params.Reboots.clock_max,
-                //    gpuParams.Clock,
-                //    apiResponse.Params.Data_ranges.Clock,
-                //    clockMaxLabel,
-                //    clockMaxTimer,
-                //    apiResponse.Params.Timers.clock_max);
-                ////memory min
-                //danger.GetStatusMin(apiResponse.Params.Reboots.mem_min,
-                //   gpuParams.Memory,
-                //   apiResponse.Params.Data_ranges.Mem,
-                //   memoryMinLabel,
-                //   memoryMinTimer,
-                //   apiResponse.Params.Timers.mem_min);
-                ////memory max
-                //danger.GetStatusMax(apiResponse.Params.Reboots.mem_max,
-                //    gpuParams.Memory,
-                //    apiResponse.Params.Data_ranges.Mem,
-                //    memoryMaxLabel,
-                //    memoryMaxTimer,
-                //    apiResponse.Params.Timers.mem_max);
-
-                ////dont have internet
-                // danger.GetStatusInternet(apiResponse.Params.Reboots.lost_inet,
-                //    NotInternetLabel,
-                //    NotInternetTimer,
-                //    apiResponse.Params.Timers.lost_inet,checkPing);
-
-
+                Debug.WriteLine("TEMP MIN(" + response.Params.Data_ranges.Temp[0]);
+                labelTempMin.Text = "TEMP MIN(" + response.Params.Data_ranges.Temp[0] + "):";
+                labelTempMax.Text = "TEMP MAX(" + response.Params.Data_ranges.Temp[1] + "):";
+                labelFanMin.Text = "FAN MIN(" + response.Params.Data_ranges.Fan[0] + "):";
+                labelFanMax.Text = "FAN MAX(" + response.Params.Data_ranges.Fan[1] + "):";
+                labelLoadMin.Text = "LOAD MIN(" + response.Params.Data_ranges.Load[0] + "):";
+                labelLoadMax.Text = "LOAD MAX(" + response.Params.Data_ranges.Load[1] + "):";
+                labelClockMin.Text = "CLOCK MIN(" + response.Params.Data_ranges.Clock[0] + "):";
+                labelClockMax.Text = "CLOCK MAX(" + response.Params.Data_ranges.Clock[1] + "):";
+                labelMemoryMin.Text = "MEMORY MIN(" + response.Params.Data_ranges.Mem[0] + "):";
+                labelMemoryMax.Text = "MEMORY MAX(" + response.Params.Data_ranges.Mem[1] + "):";
+               
 
                 //autorization
                 if (globalVars.mqttIsConnect == false && globalVars.firsrun == false)
@@ -362,7 +302,7 @@ namespace Informer
 
 
                 // gpu lost
-                if (apiResponse.Params.Reboots.lost_gpu == false)
+                if (response.Params.Reboots.lost_gpu == false)
                 {
                     labelStatusGPULost.Visible = true;
                     labelCounterGPULost.Visible = false;
@@ -372,7 +312,7 @@ namespace Informer
                     OHMTimer.Enabled = false;
 
                 }
-                else if (apiResponse.Params.Reboots.lost_gpu == true && globalVars.count_GPU > 0)
+                else if (response.Params.Reboots.lost_gpu == true && globalVars.count_GPU > 0)
                 {
 
                     labelStatusGPULost.Text = MyStrings.labelStatusOK;
@@ -415,7 +355,7 @@ namespace Informer
         {
             try
             {
-                string v = apiResponse.Params.Version;
+                string v = response.Params.Version;
                 string pack = _http.GetContent(globalVars.host + "/api/?method=version");
                 VersionResponse m = JsonConvert.DeserializeObject<VersionResponse>(pack);
                 string ver = m.version;
@@ -478,11 +418,11 @@ namespace Informer
                     globalVars.host +
                     "/api.php?token=" + globalVars.token +
                     "&event=" + "reboot" +
-                    "&reason=" + apiResponse.Params.Name + " " + msg
+                    "&reason=" + response.Params.Name + " " + msg
 
                     );
 
-                _log.writeLogLine("Reboot rig " + apiResponse.Params.Name + " " + msg, "log");
+                _log.writeLogLine("Reboot rig " + response.Params.Name + " " + msg, "log");
 
                 Process.Start(bat);
             }
@@ -559,65 +499,6 @@ namespace Informer
 
         }
 
-        /*
-        public void Reload(string msg)
-        {
-            try
-            {
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-                var ppsi = Process.Start("cmd", @"/c taskkill /f /im " + globalVars.filename);
-                ppsi.Close();
-                System.Threading.Thread.Sleep(1000);
-
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-                var psiw = Process.Start("cmd", @"/c taskkill /f /im conhost.exe");
-                psiw.Close();
-                System.Threading.Thread.Sleep(1000);
-
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-                var psi = Process.Start("cmd", @"/c taskkill /f /im cmd.exe");
-                psi.Close();
-                System.Threading.Thread.Sleep(1000);
-
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-                System.Threading.Thread.Sleep(1000);
-                Process.Start("nice.bat");
-
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-                System.Threading.Thread.Sleep(1500);
-                ProcessStartInfo rpsi;
-
-                rpsi = new ProcessStartInfo
-                {
-                    WorkingDirectory = globalVars.dir2,
-                    FileName = globalVars.pathreload2
-                };
-                System.Threading.Thread.Sleep(1000);
-
-                Process.Start(rpsi);
-
-                string pack = _http.GetContent(globalVars.host +
-                    "/api.php?&worker=" + apiResponse.Params.Name +
-                    "&gpu=" + globalVars.card +
-                    "&temp=" + globalVars.temp +
-                    "&fan=" + globalVars.fan +
-                    "&status=reload" +
-                    "&msg=" + msg);
-                ReloadMinerTimer.Enabled = false;
-                globalVars.timer_r_min = -100;
-            }
-            catch (Exception ex)
-            {
-                _error.writeLogLine("Reload: " + ex.Message, "error");
-            }
-        }
-        */
-
         private void BtStartClick(object sender, EventArgs e)
         {
 
@@ -632,7 +513,7 @@ namespace Informer
                 GPUStatusTimer.Enabled = true;
                 SendDataTimer.Enabled = true;
                 //globalVars.token = tbToken.Text;
-                apiResponse.Params.Token = tbToken.Text;
+                response.Params.Token = tbToken.Text;
                 //apiResponse.Token = tbToken.Text;
                 tbToken.ReadOnly = true;
 
@@ -640,9 +521,9 @@ namespace Informer
                 PingTimer.Enabled = true;
 
 
-                if (!string.IsNullOrWhiteSpace(apiResponse.Params.Name))
+                if (!string.IsNullOrWhiteSpace(response.Params.Name))
                 {
-                    Message("Informer Started!", globalVars, apiResponse);
+                    Message("Informer Started!", globalVars, response);
                 }
 
                 InformationLabel.Visible = true;
@@ -658,7 +539,7 @@ namespace Informer
         private void BtStopClick(object sender, EventArgs e)
         {
             _log.writeLogLine("Informer stopped", "log");
-            Message("Informer Stopped!", globalVars, apiResponse);
+            Message("Informer Stopped!", globalVars, response);
 
             globalVars.firsrun = true;
 
@@ -847,7 +728,7 @@ namespace Informer
                     SendDataTimer.Interval = globalVars.interval * 1000;
                 }
                 //   Debug.WriteLine("Interval: " + SendDataTimer.Interval);
-                await SendData(globalVars, apiResponse);
+                await SendData(globalVars, response);
             }
 
         }
@@ -1124,7 +1005,7 @@ namespace Informer
 
         async void MqttConnectTimer_Tick(object sender, EventArgs e)
         {
-            await MqttConnect.RunAsync(globalVars, apiResponse);
+            await mqttConnect.RunAsync(globalVars, response,commandProcesser);
         }
 
         async private void OHMTimer_Tick(object sender, EventArgs e)
@@ -1168,14 +1049,24 @@ namespace Informer
         }
 
         async private void GPUStatusTimer_Tick(object sender, EventArgs e)
+        //private void GPUStatusTimer_Tick(object sender, EventArgs e)
         {
+            response = commandProcesser.GetApiResponse();
+
+            //костыли 
+            apiResponse.Params.Data_ranges = response.Params.Data_ranges;
+            apiResponse.Params.Reboots = response.Params.Reboots;
+            apiResponse.Params.Timers = response.Params.Timers;
+
+
             GpuStatus();
             gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
             await Task.Delay(1);
+           
         }
 
         //System Uptime
-
+        /*
         public static TimeSpan UpTime
         {
             get
@@ -1188,7 +1079,7 @@ namespace Informer
                 }
             }
         }
-
+        */
         public static TimeSpan GetUptime()
         {
             ManagementObject mo = new ManagementObject(@"\\.\root\cimv2:Win32_OperatingSystem=@");
@@ -1201,6 +1092,7 @@ namespace Informer
 
 class Danger
 {
+    ApiResponse apiResponse;
     private bool paramReboot;
     private int[] sensors;
     private int[] dataRanges;
@@ -1210,9 +1102,11 @@ class Danger
     private Predicate predicate;
     public string SensorName { get; private set; }
     public SensorType Type { get; private set; }
+    private ParamsList paramsList;
 
-    public Danger(bool paramReboot, int[] sensors, int[] dataRanges, LabelOnForm labelOnForm, TimerOnForm timerOnForm, int timers, Predicate predicate, string sensorName, SensorType type)
+    public Danger(ApiResponse apiResponse, bool paramReboot, int[] sensors, int[] dataRanges, LabelOnForm labelOnForm, TimerOnForm timerOnForm, int timers, Predicate predicate, string sensorName, SensorType type,ParamsList paramsList)
     {
+        this.apiResponse = apiResponse;
         this.paramReboot = paramReboot;
         this.sensors = sensors;
         this.dataRanges = dataRanges;
@@ -1222,6 +1116,7 @@ class Danger
         this.predicate = predicate;
         this.SensorName = sensorName;
         this.Type = type;
+        this.paramsList = paramsList;
     }
 
     public enum Predicate
@@ -1230,9 +1125,17 @@ class Danger
         Max
     }
 
+    public enum ParamsList
+    {
+        tempMin,
+        tempMax,
+        fanMin,
+        fanMax
+    }
+
     private void UpdateStatus()
     {
-        bool sensorAlarm = false;
+     //   bool sensorAlarm = false;
         if (paramReboot)
         {
             foreach (var sensor in sensors)
@@ -1241,13 +1144,13 @@ class Danger
                 {
                     labelOnForm.UpdateLable("true", timeReboot: timers);
                     timerOnForm.Enabled(true);
-                    sensorAlarm = true;
+                 //   sensorAlarm = true;
                 }
-            }
-            if (sensorAlarm == false)
-            {
-                labelOnForm.UpdateLable("ok", timeReboot: timers);
-                timerOnForm.Enabled(false);
+                else if(!Check(sensor))
+                {
+                    labelOnForm.UpdateLable("ok", timeReboot: timers);
+                    timerOnForm.Enabled(false);
+                }
             }
         }
         else
@@ -1256,10 +1159,28 @@ class Danger
             timerOnForm.Enabled(false);
         }
     }
+    //костыли 
+    public void UpdateParams()
+    {
+        switch (paramsList)
+        {
+            case ParamsList.tempMin:
+                dataRanges[0] = apiResponse.Params.Data_ranges.Temp[0];
+                paramReboot = apiResponse.Params.Reboots.temp_min;
+                timers = apiResponse.Params.Timers.temp_min;
+                break;
+            case ParamsList.tempMax:
+                dataRanges[1] = apiResponse.Params.Data_ranges.Temp[1];
+                paramReboot = apiResponse.Params.Reboots.temp_max;
+                timers = apiResponse.Params.Timers.temp_max;
+                break;
+        }
+    }
 
     public void UpdateSensors(int[] sensors)
     {
         this.sensors = sensors;
+        UpdateParams();
         UpdateStatus();
     }
 
@@ -1269,13 +1190,13 @@ class Danger
         {
             case Predicate.Min:
                 return sensor < dataRanges[0];
-                break;
+             //   break;
             case Predicate.Max:
-                return sensor > dataRanges[0];
-                break;
+                return sensor > dataRanges[1];
+             //   break;
             default:
                 return false;
-                break;
+           //     break;
         }
     }
 

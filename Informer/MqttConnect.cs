@@ -7,9 +7,9 @@ using MQTTnet.Client;
 
 namespace Informer
 {
-    public static class MqttConnect
+    public class MqttConnect
     {
-        public static async Task RunAsync(GlobalVars globalVars,ApiResponse settings)
+        public async Task RunAsync(GlobalVars globalVars,ApiResponse apiResponse, CommandProcesser commandProcesser)
         {
             if (globalVars.mqttIsConnect == false)
             {
@@ -17,10 +17,10 @@ namespace Informer
                 {
                     var options = new MqttClientOptionsBuilder()
 
-                            .WithClientId(settings.Params.Token)
+                            .WithClientId(apiResponse.Params.Token)
                             .WithTcpServer("allminer.ru", 1883)
                             .WithKeepAlivePeriod(TimeSpan.FromSeconds(90))
-                            .WithCredentials(settings.Params.Token, settings.Params.Token)
+                            .WithCredentials(apiResponse.Params.Token, apiResponse.Params.Token)
                             //.WithTls()
                             .WithCleanSession(true)
                             .Build();
@@ -36,7 +36,7 @@ namespace Informer
                             Debug.WriteLine($"+ QoS = {e.ApplicationMessage.QualityOfServiceLevel}");
                             Debug.WriteLine($"+ Retain = {e.ApplicationMessage.Retain}");
 
-                            CommandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic,settings);
+                            commandProcesser.onMessage(Encoding.UTF8.GetString(e.ApplicationMessage.Payload), e.ApplicationMessage.Topic);
                          };
 
                     globalVars.client.Connected += async (s, e) =>
@@ -44,7 +44,7 @@ namespace Informer
                        try
                        {
                            await globalVars.client.SubscribeAsync(new TopicFilterBuilder().
-                           WithTopic("devices/" + settings.Params.Token + "/commands").
+                           WithTopic("devices/" + apiResponse.Params.Token + "/commands").
                            Build());
                        }
                        catch (Exception ex)
@@ -67,7 +67,7 @@ namespace Informer
                         globalVars.firsrun = false;
                        // globalVars._manager.WritePrivateString("main", "token", globalVars.token);
                         var message = new MqttApplicationMessageBuilder()
-                                   .WithTopic("devices/" + settings.Params.Token + "/init")
+                                   .WithTopic("devices/" + apiResponse.Params.Token + "/init")
                                    .WithPayload("1")
                                    .WithAtMostOnceQoS()
                                    .WithRetainFlag()
