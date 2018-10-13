@@ -297,28 +297,19 @@
     <value>47</value>
   </data>
   <metadata name="GetTempretureTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>138, 14</value>
+    <value>146, 17</value>
   </metadata>
   <metadata name="NextAutoStart.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <metadata name="AutoStartTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>438, 14</value>
+    <value>446, 17</value>
   </metadata>
   <metadata name="CheckNewVersionTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>572, 14</value>
+    <value>580, 17</value>
   </metadata>
   <metadata name="TimeWorkTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>753, 14</value>
-  </metadata>
-  <metadata name="GPUTempMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>794, 53</value>
-  </metadata>
-  <metadata name="GPUTempMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>891, 14</value>
-  </metadata>
-  <metadata name="ReloadMinerTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1049, 14</value>
+    <value>761, 17</value>
   </metadata>
   <data name="InformationLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -398,12 +389,6 @@
   <data name="&gt;&gt;labelTimeWork2.ZOrder" xml:space="preserve">
     <value>44</value>
   </data>
-  <metadata name="GPUFanMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1201, 14</value>
-  </metadata>
-  <metadata name="GPUFanMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 53</value>
-  </metadata>
   <data name="labelCounterTempMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>266, 126</value>
   </data>
@@ -456,7 +441,7 @@
     <value>42</value>
   </data>
   <metadata name="SendDataTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>303, 14</value>
+    <value>311, 17</value>
   </metadata>
   <data name="labelFanMax.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -768,12 +753,6 @@
   <data name="&gt;&gt;labelCounterFanMin.ZOrder" xml:space="preserve">
     <value>30</value>
   </data>
-  <metadata name="GPUCoreMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>164, 53</value>
-  </metadata>
-  <metadata name="GPUMemMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 92</value>
-  </metadata>
   <data name="labelClockMin.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -925,10 +904,7 @@
     <value>24</value>
   </data>
   <metadata name="DontHaveInternetTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>472, 53</value>
-  </metadata>
-  <metadata name="FellOffGPUTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>652, 53</value>
+    <value>899, 17</value>
   </metadata>
   <data name="labelFellOffGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1155,9 +1131,6 @@
   <data name="&gt;&gt;labelLoadMin.ZOrder" xml:space="preserve">
     <value>17</value>
   </data>
-  <metadata name="GPULoadMinTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>954, 53</value>
-  </metadata>
   <data name="labelTest.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1185,9 +1158,6 @@
   <data name="&gt;&gt;labelTest.ZOrder" xml:space="preserve">
     <value>14</value>
   </data>
-  <metadata name="GetEWBF_ZcashTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1108, 53</value>
-  </metadata>
   <data name="labelToken.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1288,7 +1258,7 @@
     <value>10</value>
   </data>
   <metadata name="notifyIcon1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1277, 53</value>
+    <value>17, 56</value>
   </metadata>
   <data name="notifyIcon1.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -5737,12 +5707,6 @@
   <data name="notifyIcon1.Visible" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <metadata name="GPUCoreMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>317, 53</value>
-  </metadata>
-  <metadata name="GPUMemMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>173, 92</value>
-  </metadata>
   <data name="labelClockMax.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -5995,20 +5959,14 @@
   <data name="&gt;&gt;labelCounterLoadMax.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="GPULoadMaxTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>331, 92</value>
-  </metadata>
   <metadata name="PingTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>487, 92</value>
+    <value>130, 56</value>
   </metadata>
   <metadata name="MqttConnectTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>594, 92</value>
-  </metadata>
-  <metadata name="OHMTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>748, 92</value>
+    <value>237, 56</value>
   </metadata>
   <metadata name="GPUStatusTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>860, 92</value>
+    <value>503, 56</value>
   </metadata>
   <data name="labelTestGPU.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -6044,7 +6002,7 @@
     <value>True</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>203</value>
+    <value>140</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
@@ -10529,52 +10487,10 @@
   <data name="&gt;&gt;TimeWorkTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;GPUTempMaxTimer.Name" xml:space="preserve">
-    <value>GPUTempMaxTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUTempMaxTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUTempMinTimer.Name" xml:space="preserve">
-    <value>GPUTempMinTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUTempMinTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ReloadMinerTimer.Name" xml:space="preserve">
-    <value>ReloadMinerTimer</value>
-  </data>
-  <data name="&gt;&gt;ReloadMinerTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUFanMaxTimer.Name" xml:space="preserve">
-    <value>GPUFanMaxTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUFanMaxTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUFanMinTimer.Name" xml:space="preserve">
-    <value>GPUFanMinTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUFanMinTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;SendDataTimer.Name" xml:space="preserve">
     <value>SendDataTimer</value>
   </data>
   <data name="&gt;&gt;SendDataTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUCoreMinTimer.Name" xml:space="preserve">
-    <value>GPUCoreMinTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUCoreMinTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUMemMinTimer.Name" xml:space="preserve">
-    <value>GPUMemMinTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUMemMinTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;DontHaveInternetTimer.Name" xml:space="preserve">
@@ -10583,47 +10499,11 @@
   <data name="&gt;&gt;DontHaveInternetTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;FellOffGPUTimer.Name" xml:space="preserve">
-    <value>FellOffGPUTimer</value>
-  </data>
-  <data name="&gt;&gt;FellOffGPUTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPULoadMinTimer.Name" xml:space="preserve">
-    <value>GPULoadMinTimer</value>
-  </data>
-  <data name="&gt;&gt;GPULoadMinTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GetEWBF_ZcashTimer.Name" xml:space="preserve">
-    <value>GetEWBF_ZcashTimer</value>
-  </data>
-  <data name="&gt;&gt;GetEWBF_ZcashTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;notifyIcon1.Name" xml:space="preserve">
     <value>notifyIcon1</value>
   </data>
   <data name="&gt;&gt;notifyIcon1.Type" xml:space="preserve">
     <value>System.Windows.Forms.NotifyIcon, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUCoreMaxTimer.Name" xml:space="preserve">
-    <value>GPUCoreMaxTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUCoreMaxTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPUMemMaxTimer.Name" xml:space="preserve">
-    <value>GPUMemMaxTimer</value>
-  </data>
-  <data name="&gt;&gt;GPUMemMaxTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;GPULoadMaxTimer.Name" xml:space="preserve">
-    <value>GPULoadMaxTimer</value>
-  </data>
-  <data name="&gt;&gt;GPULoadMaxTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;PingTimer.Name" xml:space="preserve">
     <value>PingTimer</value>
@@ -10635,12 +10515,6 @@
     <value>MqttConnectTimer</value>
   </data>
   <data name="&gt;&gt;MqttConnectTimer.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;OHMTimer.Name" xml:space="preserve">
-    <value>OHMTimer</value>
-  </data>
-  <data name="&gt;&gt;OHMTimer.Type" xml:space="preserve">
     <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;GPUStatusTimer.Name" xml:space="preserve">

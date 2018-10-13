@@ -42,14 +42,9 @@
             this.AutoStartTimer = new System.Windows.Forms.Timer(this.components);
             this.CheckNewVersionTimer = new System.Windows.Forms.Timer(this.components);
             this.TimeWorkTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUTempMaxTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUTempMinTimer = new System.Windows.Forms.Timer(this.components);
-            this.ReloadMinerTimer = new System.Windows.Forms.Timer(this.components);
             this.InformationLabel = new System.Windows.Forms.Label();
             this.labelStatusTempMax = new System.Windows.Forms.Label();
             this.labelTimeWork2 = new System.Windows.Forms.Label();
-            this.GPUFanMaxTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUFanMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelCounterTempMax = new System.Windows.Forms.Label();
             this.labelTempMax = new System.Windows.Forms.Label();
             this.SendDataTimer = new System.Windows.Forms.Timer(this.components);
@@ -65,8 +60,6 @@
             this.labelCounterFanMax = new System.Windows.Forms.Label();
             this.labelStatusFanMin = new System.Windows.Forms.Label();
             this.labelCounterFanMin = new System.Windows.Forms.Label();
-            this.GPUCoreMinTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUMemMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelClockMin = new System.Windows.Forms.Label();
             this.labelMemoryMin = new System.Windows.Forms.Label();
             this.labelStatusClockMin = new System.Windows.Forms.Label();
@@ -74,7 +67,6 @@
             this.labelStatusMemoryMin = new System.Windows.Forms.Label();
             this.labelCounterMemoryMin = new System.Windows.Forms.Label();
             this.DontHaveInternetTimer = new System.Windows.Forms.Timer(this.components);
-            this.FellOffGPUTimer = new System.Windows.Forms.Timer(this.components);
             this.labelFellOffGPU = new System.Windows.Forms.Label();
             this.labelStatusGPULost = new System.Windows.Forms.Label();
             this.labelCounterGPULost = new System.Windows.Forms.Label();
@@ -84,16 +76,12 @@
             this.labelCounterLoadMin = new System.Windows.Forms.Label();
             this.labelStatusLoadMin = new System.Windows.Forms.Label();
             this.labelLoadMin = new System.Windows.Forms.Label();
-            this.GPULoadMinTimer = new System.Windows.Forms.Timer(this.components);
             this.labelTest = new System.Windows.Forms.Label();
-            this.GetEWBF_ZcashTimer = new System.Windows.Forms.Timer(this.components);
             this.labelToken = new System.Windows.Forms.Label();
             this.tbToken = new System.Windows.Forms.TextBox();
             this.btExit = new System.Windows.Forms.Button();
             this.cbLocalize = new System.Windows.Forms.ComboBox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.GPUCoreMaxTimer = new System.Windows.Forms.Timer(this.components);
-            this.GPUMemMaxTimer = new System.Windows.Forms.Timer(this.components);
             this.labelClockMax = new System.Windows.Forms.Label();
             this.labelLoadMax = new System.Windows.Forms.Label();
             this.labelStatusMemoryMax = new System.Windows.Forms.Label();
@@ -103,10 +91,8 @@
             this.labelCounterMemoryMax = new System.Windows.Forms.Label();
             this.labelCounterClockMax = new System.Windows.Forms.Label();
             this.labelCounterLoadMax = new System.Windows.Forms.Label();
-            this.GPULoadMaxTimer = new System.Windows.Forms.Timer(this.components);
             this.PingTimer = new System.Windows.Forms.Timer(this.components);
             this.MqttConnectTimer = new System.Windows.Forms.Timer(this.components);
-            this.OHMTimer = new System.Windows.Forms.Timer(this.components);
             this.GPUStatusTimer = new System.Windows.Forms.Timer(this.components);
             this.labelTestGPU = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -183,18 +169,6 @@
             this.TimeWorkTimer.Tag = "time active";
             this.TimeWorkTimer.Tick += new System.EventHandler(this.UptimeTimerTick);
             // 
-            // GPUTempMaxTimer
-            // 
-            this.GPUTempMaxTimer.Interval = 1000;
-            this.GPUTempMaxTimer.Tag = "t_max";
-            this.GPUTempMaxTimer.Tick += new System.EventHandler(this.TempretureTimerTick);
-            // 
-            // GPUTempMinTimer
-            // 
-            this.GPUTempMinTimer.Interval = 1000;
-            this.GPUTempMinTimer.Tag = "t_min";
-            this.GPUTempMinTimer.Tick += new System.EventHandler(this.LowTempretureTimerTick);
-            // 
             // InformationLabel
             // 
             resources.ApplyResources(this.InformationLabel, "InformationLabel");
@@ -204,24 +178,11 @@
             // 
             resources.ApplyResources(this.labelStatusTempMax, "labelStatusTempMax");
             this.labelStatusTempMax.Name = "labelStatusTempMax";
-            this.labelStatusTempMax.Click += new System.EventHandler(this.GPUMemoryMaxHzTimer_Tick);
             // 
             // labelTimeWork2
             // 
             resources.ApplyResources(this.labelTimeWork2, "labelTimeWork2");
             this.labelTimeWork2.Name = "labelTimeWork2";
-            // 
-            // GPUFanMaxTimer
-            // 
-            this.GPUFanMaxTimer.Interval = 1000;
-            this.GPUFanMaxTimer.Tag = "fan_max";
-            this.GPUFanMaxTimer.Tick += new System.EventHandler(this.FanMaxTimerTick);
-            // 
-            // GPUFanMinTimer
-            // 
-            this.GPUFanMinTimer.Interval = 1000;
-            this.GPUFanMinTimer.Tag = "fan_min";
-            this.GPUFanMinTimer.Tick += new System.EventHandler(this.FanMinTimerTick);
             // 
             // labelCounterTempMax
             // 
@@ -299,18 +260,6 @@
             resources.ApplyResources(this.labelCounterFanMin, "labelCounterFanMin");
             this.labelCounterFanMin.Name = "labelCounterFanMin";
             // 
-            // GPUCoreMinTimer
-            // 
-            this.GPUCoreMinTimer.Interval = 1000;
-            this.GPUCoreMinTimer.Tag = "clock";
-            this.GPUCoreMinTimer.Tick += new System.EventHandler(this.GpuCoreMinHzTimerTick);
-            // 
-            // GPUMemMinTimer
-            // 
-            this.GPUMemMinTimer.Interval = 1000;
-            this.GPUMemMinTimer.Tag = "memory";
-            this.GPUMemMinTimer.Tick += new System.EventHandler(this.GpuMemoryMinHzTimerTick);
-            // 
             // labelClockMin
             // 
             resources.ApplyResources(this.labelClockMin, "labelClockMin");
@@ -346,12 +295,6 @@
             this.DontHaveInternetTimer.Interval = 1000;
             this.DontHaveInternetTimer.Tag = "internet_r";
             this.DontHaveInternetTimer.Tick += new System.EventHandler(this.InternetInactiveTimerTick);
-            // 
-            // FellOffGPUTimer
-            // 
-            this.FellOffGPUTimer.Interval = 1000;
-            this.FellOffGPUTimer.Tag = "card leave";
-            this.FellOffGPUTimer.Tick += new System.EventHandler(this.FellOffTimerTick);
             // 
             // labelFellOffGPU
             // 
@@ -398,12 +341,6 @@
             resources.ApplyResources(this.labelLoadMin, "labelLoadMin");
             this.labelLoadMin.Name = "labelLoadMin";
             // 
-            // GPULoadMinTimer
-            // 
-            this.GPULoadMinTimer.Interval = 1000;
-            this.GPULoadMinTimer.Tag = "load";
-            this.GPULoadMinTimer.Tick += new System.EventHandler(this.GPULoadMin_Tick);
-            // 
             // labelTest
             // 
             resources.ApplyResources(this.labelTest, "labelTest");
@@ -437,18 +374,6 @@
             // 
             resources.ApplyResources(this.notifyIcon1, "notifyIcon1");
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
-            // 
-            // GPUCoreMaxTimer
-            // 
-            this.GPUCoreMaxTimer.Interval = 1000;
-            this.GPUCoreMaxTimer.Tag = "clock";
-            this.GPUCoreMaxTimer.Tick += new System.EventHandler(this.GpuCoreMaxHzTimerTick);
-            // 
-            // GPUMemMaxTimer
-            // 
-            this.GPUMemMaxTimer.Interval = 1000;
-            this.GPUMemMaxTimer.Tag = "memory";
-            this.GPUMemMaxTimer.Tick += new System.EventHandler(this.GPUMemoryMaxHzTimer_Tick);
             // 
             // labelClockMax
             // 
@@ -495,12 +420,6 @@
             resources.ApplyResources(this.labelCounterLoadMax, "labelCounterLoadMax");
             this.labelCounterLoadMax.Name = "labelCounterLoadMax";
             // 
-            // GPULoadMaxTimer
-            // 
-            this.GPULoadMaxTimer.Interval = 1000;
-            this.GPULoadMaxTimer.Tag = "load";
-            this.GPULoadMaxTimer.Tick += new System.EventHandler(this.GPULoadMaxTimer_Tick);
-            // 
             // PingTimer
             // 
             this.PingTimer.Interval = 10000;
@@ -510,11 +429,6 @@
             // 
             this.MqttConnectTimer.Interval = 5000;
             this.MqttConnectTimer.Tick += new System.EventHandler(this.MqttConnectTimer_Tick);
-            // 
-            // OHMTimer
-            // 
-            this.OHMTimer.Interval = 5000;
-            this.OHMTimer.Tick += new System.EventHandler(this.OHMTimer_Tick);
             // 
             // GPUStatusTimer
             // 
@@ -609,14 +523,9 @@
         private System.Windows.Forms.Timer AutoStartTimer;
         private System.Windows.Forms.Timer CheckNewVersionTimer;
         private System.Windows.Forms.Timer TimeWorkTimer;
-        private System.Windows.Forms.Timer GPUTempMaxTimer;
-        private System.Windows.Forms.Timer GPUTempMinTimer;
-        private System.Windows.Forms.Timer ReloadMinerTimer;
         private System.Windows.Forms.Label InformationLabel;
         private System.Windows.Forms.Label labelStatusTempMax;
         private System.Windows.Forms.Label labelTimeWork2;
-        private System.Windows.Forms.Timer GPUFanMaxTimer;
-        private System.Windows.Forms.Timer GPUFanMinTimer;
         private System.Windows.Forms.Label labelCounterTempMax;
         private System.Windows.Forms.Label labelTempMax;
         private System.Windows.Forms.Timer SendDataTimer;
@@ -632,8 +541,6 @@
         private System.Windows.Forms.Label labelCounterFanMax;
         private System.Windows.Forms.Label labelStatusFanMin;
         private System.Windows.Forms.Label labelCounterFanMin;
-        private System.Windows.Forms.Timer GPUCoreMinTimer;
-        private System.Windows.Forms.Timer GPUMemMinTimer;
         private System.Windows.Forms.Label labelClockMin;
         private System.Windows.Forms.Label labelMemoryMin;
         private System.Windows.Forms.Label labelStatusClockMin;
@@ -641,7 +548,6 @@
         private System.Windows.Forms.Label labelStatusMemoryMin;
         private System.Windows.Forms.Label labelCounterMemoryMin;
         private System.Windows.Forms.Timer DontHaveInternetTimer;
-        private System.Windows.Forms.Timer FellOffGPUTimer;
         private System.Windows.Forms.Label labelFellOffGPU;
         private System.Windows.Forms.Label labelStatusGPULost;
         private System.Windows.Forms.Label labelCounterGPULost;
@@ -651,16 +557,12 @@
         private System.Windows.Forms.Label labelCounterLoadMin;
         private System.Windows.Forms.Label labelStatusLoadMin;
         private System.Windows.Forms.Label labelLoadMin;
-        private System.Windows.Forms.Timer GPULoadMinTimer;
         private System.Windows.Forms.Label labelTest;
-        private System.Windows.Forms.Timer GetEWBF_ZcashTimer;
         private System.Windows.Forms.Label labelToken;
         private System.Windows.Forms.TextBox tbToken;
         private System.Windows.Forms.Button btExit;
         private System.Windows.Forms.ComboBox cbLocalize;
         private System.Windows.Forms.NotifyIcon notifyIcon1;
-        private System.Windows.Forms.Timer GPUCoreMaxTimer;
-        private System.Windows.Forms.Timer GPUMemMaxTimer;
         private System.Windows.Forms.Label labelClockMax;
         private System.Windows.Forms.Label labelLoadMax;
         private System.Windows.Forms.Label labelStatusMemoryMax;
@@ -670,10 +572,8 @@
         private System.Windows.Forms.Label labelCounterMemoryMax;
         private System.Windows.Forms.Label labelCounterClockMax;
         private System.Windows.Forms.Label labelCounterLoadMax;
-        private System.Windows.Forms.Timer GPULoadMaxTimer;
         private System.Windows.Forms.Timer PingTimer;
         private System.Windows.Forms.Timer MqttConnectTimer;
-        private System.Windows.Forms.Timer OHMTimer;
         private System.Windows.Forms.Timer GPUStatusTimer;
         private System.Windows.Forms.Label labelTestGPU;
     }
