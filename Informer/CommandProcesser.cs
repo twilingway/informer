@@ -17,6 +17,7 @@ namespace Informer
         {
             return apiResponse;
         }
+
         public void onMessage(string payload, string topic)
         {
             string token = apiResponse.Params.Token;

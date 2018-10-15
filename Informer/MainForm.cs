@@ -25,16 +25,13 @@ namespace Informer
         private static Http _http;
         private LogFile _log, _error;
         private GlobalVars globalVars;
-        public ApiResponse apiResponse ,response;
+        public ApiResponse apiResponse, response;
         public Computer PC;
         public MqttConnect mqttConnect;
         public CommandProcesser commandProcesser;
 
         GPUParams gpuParams;
 
-        LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel,fanMaxLabel,loadMinLabel, loadMaxLabel,
-                    clockMinLabel, clockMaxLabel,memoryMinLabel, memoryMaxLabel, NotInternetLabel;
-        Danger tempMin,tempMax, fanMin,fanMax, loadMin,loadMax, clockMin,clockMax, memoryMin, memoryMax, internetOff;
         Danger[] dangers;
         Reboot reboot;
 
@@ -78,6 +75,38 @@ namespace Informer
             apiResponse = response;
             //
 
+
+            bool start = false;
+      
+            if (!string.IsNullOrEmpty(response.Params.Token))
+            {
+                start = true;
+                tbRigName.ReadOnly = true;
+                tbToken.ReadOnly = true;
+                tbRigName.Text = response.Params.Name;
+                tbToken.Text = response.Params.Token;
+            }
+
+            else
+            {
+                start = false;
+                tbRigName.ReadOnly = true;
+            }
+           
+            if (start)
+            {
+                NextAutoStart.Interval = globalVars.autostart * 1000;
+                NextAutoStart.Enabled = true;
+                AutoStartTimer.Enabled = true;
+                TimeWorkTimer.Enabled = true;
+            }
+            commandProcesser = new CommandProcesser(response);
+            mqttConnect = new MqttConnect();
+
+            LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel, fanMaxLabel, loadMinLabel, loadMaxLabel,
+                           clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel, NotInternetLabel;
+            Danger tempMin, tempMax, fanMin, fanMax, loadMin, loadMax, clockMin, clockMax, memoryMin, memoryMax, internetOff;
+
             tempMinLabel = new LabelOnForm(labelStatusTempMin, labelCounterTempMin, response, "Temp Min, Reboot!", "reboot_t_min.bat", reboot);
             tempMaxLabel = new LabelOnForm(labelStatusTempMax, labelCounterTempMax, response, "Temp Max, Reboot!", "reboot_t_max.bat", reboot);
             fanMinLabel = new LabelOnForm(labelStatusFanMin, labelCounterFanMin, response, "Fan Min, Reboot!", "reboot_fan_min.bat", reboot);
@@ -90,84 +119,11 @@ namespace Informer
             memoryMaxLabel = new LabelOnForm(labelStatusMemoryMax, labelCounterMemoryMax, response, "Memory Max, Reboot!", "reboot_memory_max.bat", reboot);
             NotInternetLabel = new LabelOnForm(labelStatusInternet, labelCounterInternet, response, "Dont Have Internet", "reboot_internet.bat", reboot);
 
-            bool start = false;
-
-           
-                if (!string.IsNullOrEmpty(response.Params.Token))
-                {
-                    start = true;
-                    tbRigName.ReadOnly = true;
-                    tbToken.ReadOnly = true;
-                    tbRigName.Text = response.Params.Name;
-                    tbToken.Text = response.Params.Token;
-                }
-
-                else
-                {
-                    start = false;
-                    tbRigName.ReadOnly = true;
-                }
-           
-            if (start)
-            {
-                NextAutoStart.Interval = globalVars.autostart * 1000;
-                NextAutoStart.Enabled = true;
-                AutoStartTimer.Enabled = true;
-                TimeWorkTimer.Enabled = true;
-            }
-            commandProcesser = new CommandProcesser(response);
-            mqttConnect = new MqttConnect();
-           
-            tempMin = new Danger(response,response.Params.Reboots.temp_min,
-                        gpuParams.Temperature,
-                        response.Params.Data_ranges.Temp,
-                        tempMinLabel,
-                      
-                        response.Params.Timers.temp_min,
-                        Danger.Predicate.Min,
-                        "GPU Core",
-                        SensorType.Temperature,Danger.ParamsList.tempMin);
-
-            tempMax = new Danger(response, response.Params.Reboots.temp_max,
-                       gpuParams.Temperature,
-                       response.Params.Data_ranges.Temp,
-                       tempMaxLabel,
-                      
-                       response.Params.Timers.temp_max,
-                       Danger.Predicate.Max,
-                       "GPU Core",
-                       SensorType.Temperature, Danger.ParamsList.tempMax);
-
-            fanMin = new Danger(response, response.Params.Reboots.fan_min,
-                   gpuParams.FanSpeed,
-                   response.Params.Data_ranges.Fan,
-                   fanMinLabel,
-                  
-                   response.Params.Timers.fan_min,
-                   Danger.Predicate.Min,
-                   "GPU Fan",
-                   SensorType.Control, Danger.ParamsList.fanMin);
-
-            fanMax = new Danger(response, response.Params.Reboots.fan_max,
-                    gpuParams.FanSpeed,
-                    response.Params.Data_ranges.Fan,
-                    fanMaxLabel,
-                  
-                    response.Params.Timers.fan_max,
-                    Danger.Predicate.Max,
-                    "GPU Fan",
-                    SensorType.Control, Danger.ParamsList.fanMax);
-
-            loadMin = new Danger(response, response.Params.Reboots.load_min,
-           gpuParams.Load,
-           response.Params.Data_ranges.Load,
-           loadMinLabel,
-          
-           response.Params.Timers.load_min,
-           Danger.Predicate.Min,
-           "GPU Core",
-           SensorType.Load, Danger.ParamsList.loadMin);
-
+            tempMin = new Danger(tempMinLabel, Danger.Predicate.Min, "GPU Core", SensorType.Temperature);
+            tempMax = new Danger(tempMaxLabel, Danger.Predicate.Max, "GPU Core", SensorType.Temperature);
+            fanMin = new Danger(fanMinLabel, Danger.Predicate.Min, "GPU Fan", SensorType.Control);
+            fanMax = new Danger(fanMaxLabel, Danger.Predicate.Max, "GPU Fan",SensorType.Control);
+            loadMin = new Danger(loadMinLabel, Danger.Predicate.Min, "GPU Core", SensorType.Load);
             loadMax = new Danger(response, response.Params.Reboots.load_max,
            gpuParams.Load,
            response.Params.Data_ranges.Load,
@@ -176,7 +132,7 @@ namespace Informer
            response.Params.Timers.load_max,
            Danger.Predicate.Max,
            "GPU Core",
-           SensorType.Load, Danger.ParamsList.loadMax);
+           SensorType.Load);
 
             clockMin = new Danger(response, response.Params.Reboots.clock_min,
           gpuParams.Clock,
@@ -186,7 +142,7 @@ namespace Informer
           response.Params.Timers.clock_min,
           Danger.Predicate.Min,
           "GPU Core",
-          SensorType.Clock, Danger.ParamsList.clockMin);
+          SensorType.Clock);
 
             clockMax = new Danger(response, response.Params.Reboots.clock_max,
           gpuParams.Clock,
@@ -196,7 +152,7 @@ namespace Informer
           response.Params.Timers.clock_max,
           Danger.Predicate.Max,
           "GPU Core",
-          SensorType.Clock, Danger.ParamsList.clockMax);
+          SensorType.Clock);
 
 
             memoryMin = new Danger(response, response.Params.Reboots.mem_min,
@@ -207,7 +163,7 @@ namespace Informer
             response.Params.Timers.mem_min,
             Danger.Predicate.Min,
             "GPU Memory",
-            SensorType.Clock, Danger.ParamsList.memoryMin);
+            SensorType.Clock);
 
             memoryMax = new Danger(response, response.Params.Reboots.mem_max,
             gpuParams.Memory,
@@ -217,7 +173,7 @@ namespace Informer
             response.Params.Timers.mem_max,
             Danger.Predicate.Max,
             "GPU Memory",
-            SensorType.Clock, Danger.ParamsList.memoryMax);
+            SensorType.Clock);
 
 
             dangers = new Danger[] {
@@ -360,8 +316,6 @@ namespace Informer
             }
 
         }
-
-       
 
         public void СheckForNewVersion()
         {
@@ -570,7 +524,6 @@ namespace Informer
 
         }
 
-
         //timer dont have Internet
         async private void InternetInactiveTimerTick(object sender, EventArgs e)
         {
@@ -584,8 +537,6 @@ namespace Informer
             NotInternetLabel.TimeReboot -=1;
             await Task.Delay(1);
         }
-
-       
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -635,8 +586,7 @@ namespace Informer
 
         // chek ping timer
         private void PingTimer_Tick(object sender, EventArgs e)
-        {
-           
+        {         
             // В переменную hosts записываем все рабочие станции из файла
             hosts = getComputersListFromTxtFile("pinglist.txt");
 
@@ -730,26 +680,19 @@ namespace Informer
 
         }
 
-
         async void MqttConnectTimer_Tick(object sender, EventArgs e)
         {
             await mqttConnect.RunAsync(globalVars, response,commandProcesser);
         }
 
-
-        async private void GPUStatusTimer_Tick(object sender, EventArgs e)
-      
+        async private void GPUStatusTimer_Tick(object sender, EventArgs e)   
         {
             response = commandProcesser.GetApiResponse();
 
-            //костыли 
-            apiResponse.Params.Data_ranges = response.Params.Data_ranges;
-            apiResponse.Params.Reboots = response.Params.Reboots;
-            apiResponse.Params.Timers = response.Params.Timers;
-
+            response.Params.Update(dangers);
+            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
 
             GpuStatus();
-            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
 
            
             await Task.Delay(1);
@@ -766,54 +709,30 @@ namespace Informer
 
 }
 
-class Danger
+public class Danger
 {
     ApiResponse apiResponse;
     private bool paramReboot;
     private int[] sensors;
     private int[] dataRanges;
     private LabelOnForm labelOnForm;
-   // private TimerOnForm timerOnForm;
     private int timers;
     private Predicate predicate;
     public string SensorName { get; private set; }
     public SensorType Type { get; private set; }
-    private ParamsList paramsList;
 
-    public Danger(ApiResponse apiResponse, bool paramReboot, int[] sensors, int[] dataRanges, LabelOnForm labelOnForm,  int timers, Predicate predicate, string sensorName, SensorType type,ParamsList paramsList)
+    public Danger(LabelOnForm labelOnForm, Predicate predicate, string sensorName, SensorType type)
     {
-        this.apiResponse = apiResponse;
-        this.paramReboot = paramReboot;
-        this.sensors = sensors;
-        this.dataRanges = dataRanges;
         this.labelOnForm = labelOnForm;
-        this.timers = timers;
         this.predicate = predicate;
         this.SensorName = sensorName;
         this.Type = type;
-        this.paramsList = paramsList;
     }
 
     public enum Predicate
     {
         Min,
         Max
-    }
-
-    public enum ParamsList
-    {
-        tempMin,
-        tempMax,
-        fanMin,
-        fanMax,
-        loadMin,
-        loadMax,
-        clockMin,
-        clockMax,
-        memoryMin,
-        memoryMax,
-        internetOff
-
     }
 
     private void UpdateStatus()
@@ -834,7 +753,7 @@ class Danger
                     }
                     
                 }
-                else if(!Check(sensor))
+                else
                 {
                     labelOnForm.UpdateLable("ok", timeReboot: timers);
                 }
@@ -845,28 +764,16 @@ class Danger
             labelOnForm.UpdateLable("false", timeReboot: timers);
         }
     }
+    
     //костыли 
-    public void UpdateParams()
+    public void UpdateParams(int[] ranges, bool isTrackReboot, int timers)
     {
-        switch (paramsList)
-        {
-            case ParamsList.tempMin:
-                dataRanges[0] = apiResponse.Params.Data_ranges.Temp[0];
-                paramReboot = apiResponse.Params.Reboots.temp_min;
-                timers = apiResponse.Params.Timers.temp_min;
-                break;
-            case ParamsList.tempMax:
-                dataRanges[1] = apiResponse.Params.Data_ranges.Temp[1];
-                paramReboot = apiResponse.Params.Reboots.temp_max;
-                timers = apiResponse.Params.Timers.temp_max;
-                break;
-        }
+
     }
 
     public void UpdateSensors(int[] sensors)
     {
         this.sensors = sensors;
-        UpdateParams();
         UpdateStatus();
     }
 
@@ -907,7 +814,7 @@ class Danger
 }
 
 
-class Reboot
+public class Reboot
 {
     LogFile _log;
     Http _http;
@@ -943,8 +850,7 @@ class Reboot
     }
 }
 
-
-    class LabelOnForm
+public class LabelOnForm
 {
     Reboot Reboot;
     ApiResponse apiResponse;

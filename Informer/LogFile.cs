@@ -15,7 +15,7 @@ using System.Diagnostics;
 using OpenHardwareMonitor.Hardware;
 using System.IO;
 
-class LogFile
+public class LogFile
 {
     private StreamWriter sw;
 

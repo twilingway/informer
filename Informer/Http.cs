@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Informer
 {
-    internal class Http : IDisposable
+    public class Http : IDisposable
     {
         private HttpClientHandler _httpClientHandler;
         private HttpClient        _httpClient;

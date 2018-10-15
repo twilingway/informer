@@ -9,9 +9,6 @@ using System.Windows.Forms;
 public class GlobalVars
 {
     public string host = "http://www.allminer.ru";
-    public Timers Timer;
-    public Reboots Reboots;
-    public Data_ranges Ranges;
 
     public string token;
     public string upTime;

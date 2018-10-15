@@ -53,7 +53,7 @@ namespace Informer
             }
         }
     }
-    
+
 
     public class Params
     {
@@ -64,6 +64,48 @@ namespace Informer
         public int Interval { get; set; } = 60;
         public string Token { get; set; }
         public string Version { get; set; } = "1.3.9";
+
+        public void Update(Danger[] danger)
+        {
+            for(int i = 0; i < danger.Length; i++)
+            {
+                bool reboot = GetReboot(i);
+                int timer = GetTimer(i);
+                int[] range = GetRanges(i);
+
+                danger[i].UpdateParams(range, reboot, timer);
+            }
+        }
+
+        public bool GetReboot(int i)
+        {
+            switch (i)
+            {
+                case 0: //temp Min
+                    return Reboots.temp_min;
+                    break;
+            }
+        } 
+
+        public int GetTimer(int i)
+        {
+            switch (i)
+            {
+                case 0: //temp Min
+                    return Timers.temp_min;
+                    break;
+            }
+        }
+
+        public int[] GetRanges(int i)
+        {
+            switch (i)
+            {
+                case 0: //temp Min
+                    return Data_ranges.Temp;
+                    break;
+            }
+        }
     }
 
     public class Timers
