@@ -29,8 +29,9 @@ namespace Informer
         public Computer PC;
         public MqttConnect mqttConnect;
         public CommandProcesser commandProcesser;
+        LabelOnForm NotInternetLabel;
 
-        GPUParams gpuParams;
+       GPUParams gpuParams;
 
         Danger[] dangers;
         Reboot reboot;
@@ -104,7 +105,7 @@ namespace Informer
             mqttConnect = new MqttConnect();
 
             LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel, fanMaxLabel, loadMinLabel, loadMaxLabel,
-                           clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel, NotInternetLabel;
+                           clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel;
             Danger tempMin, tempMax, fanMin, fanMax, loadMin, loadMax, clockMin, clockMax, memoryMin, memoryMax, internetOff;
 
             tempMinLabel = new LabelOnForm(labelStatusTempMin, labelCounterTempMin, response, "Temp Min, Reboot!", "reboot_t_min.bat", reboot);
@@ -124,57 +125,11 @@ namespace Informer
             fanMin = new Danger(fanMinLabel, Danger.Predicate.Min, "GPU Fan", SensorType.Control);
             fanMax = new Danger(fanMaxLabel, Danger.Predicate.Max, "GPU Fan",SensorType.Control);
             loadMin = new Danger(loadMinLabel, Danger.Predicate.Min, "GPU Core", SensorType.Load);
-            loadMax = new Danger(response, response.Params.Reboots.load_max,
-           gpuParams.Load,
-           response.Params.Data_ranges.Load,
-           loadMaxLabel,
-         
-           response.Params.Timers.load_max,
-           Danger.Predicate.Max,
-           "GPU Core",
-           SensorType.Load);
-
-            clockMin = new Danger(response, response.Params.Reboots.clock_min,
-          gpuParams.Clock,
-          response.Params.Data_ranges.Clock,
-          clockMinLabel,
-         
-          response.Params.Timers.clock_min,
-          Danger.Predicate.Min,
-          "GPU Core",
-          SensorType.Clock);
-
-            clockMax = new Danger(response, response.Params.Reboots.clock_max,
-          gpuParams.Clock,
-          response.Params.Data_ranges.Clock,
-          clockMaxLabel,
-         
-          response.Params.Timers.clock_max,
-          Danger.Predicate.Max,
-          "GPU Core",
-          SensorType.Clock);
-
-
-            memoryMin = new Danger(response, response.Params.Reboots.mem_min,
-            gpuParams.Memory,
-            response.Params.Data_ranges.Mem,
-            memoryMinLabel,
-           
-            response.Params.Timers.mem_min,
-            Danger.Predicate.Min,
-            "GPU Memory",
-            SensorType.Clock);
-
-            memoryMax = new Danger(response, response.Params.Reboots.mem_max,
-            gpuParams.Memory,
-            response.Params.Data_ranges.Mem,
-            memoryMaxLabel,
-         
-            response.Params.Timers.mem_max,
-            Danger.Predicate.Max,
-            "GPU Memory",
-            SensorType.Clock);
-
+            loadMax = new Danger(loadMaxLabel, Danger.Predicate.Max, "GPU Core", SensorType.Load);
+            clockMin = new Danger(clockMinLabel,Danger.Predicate.Min, "GPU Core",SensorType.Clock);
+            clockMax = new Danger(clockMaxLabel,Danger.Predicate.Max, "GPU Core",SensorType.Clock);
+            memoryMin = new Danger(memoryMinLabel,Danger.Predicate.Min,"GPU Memory",SensorType.Clock);
+            memoryMax = new Danger(memoryMaxLabel,Danger.Predicate.Max,"GPU Memory",SensorType.Clock);
 
             dangers = new Danger[] {
                 tempMin, tempMax, fanMin, fanMax, loadMin,loadMax,
@@ -688,11 +643,11 @@ namespace Informer
         async private void GPUStatusTimer_Tick(object sender, EventArgs e)   
         {
             response = commandProcesser.GetApiResponse();
-
-            response.Params.Update(dangers);
-            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
-
             GpuStatus();
+
+            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
+            response.Params.Update(dangers);
+
 
            
             await Task.Delay(1);

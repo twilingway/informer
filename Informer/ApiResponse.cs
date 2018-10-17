@@ -67,8 +67,9 @@ namespace Informer
 
         public void Update(Danger[] danger)
         {
-            for(int i = 0; i < danger.Length; i++)
+            for (int i = 0; i < danger.Length; i++)
             {
+                Debug.WriteLine(danger.Length);
                 bool reboot = GetReboot(i);
                 int timer = GetTimer(i);
                 int[] range = GetRanges(i);
@@ -84,8 +85,14 @@ namespace Informer
                 case 0: //temp Min
                     return Reboots.temp_min;
                     break;
+                case 1:
+                    return Reboots.temp_max;
+                default:
+                    return false;
+                    break;
             }
-        } 
+
+        }
 
         public int GetTimer(int i)
         {
@@ -93,7 +100,13 @@ namespace Informer
             {
                 case 0: //temp Min
                     return Timers.temp_min;
+                case 1:
+                    return Timers.temp_max;
                     break;
+                default:
+                    return 300;
+                    break;
+
             }
         }
 
@@ -104,6 +117,11 @@ namespace Informer
                 case 0: //temp Min
                     return Data_ranges.Temp;
                     break;
+                case 1:
+                    return Data_ranges.Fan;
+                default:
+                    int[] @default = {0, 100};
+                    return @default;
             }
         }
     }
