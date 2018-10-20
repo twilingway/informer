@@ -16,6 +16,7 @@ using System.Globalization;
 using System.Management;
 using System.Management.Instrumentation;
 using Informer;
+using Informer.Sensors;
 
 namespace Informer
 {
@@ -29,14 +30,10 @@ namespace Informer
         public Computer PC;
         public MqttConnect mqttConnect;
         public CommandProcesser commandProcesser;
-        LabelOnForm NotInternetLabel;
 
-       GPUParams gpuParams;
+        private OHMMonitoringSystem _monitoringSystem;
+        private List<TriggerOnForm> _triggersOnForm = new List<TriggerOnForm>();
 
-        Danger[] dangers;
-        Reboot reboot;
-
-        bool checkPing;
         public MainForm()
         {
             InitializeComponent();
@@ -47,17 +44,11 @@ namespace Informer
             PC.GPUEnabled = true;
             PC.Open();
 
-            gpuParams = new GPUParams(PC);
-
-            gpuParams.SetParams();
-            gpuParams.GetParams();
-
             _log = new LogFile("log");
             _error = new LogFile("error");
             _http = new Http();
             apiResponse = new ApiResponse();
 
-            reboot = new Reboot(_log,_http, globalVars);
             KillDublicateProcess("Informer");
             KillDublicateProcess("Launcher_informer");
 
@@ -101,42 +92,49 @@ namespace Informer
                 AutoStartTimer.Enabled = true;
                 TimeWorkTimer.Enabled = true;
             }
+
             commandProcesser = new CommandProcesser(response);
             mqttConnect = new MqttConnect();
 
-            LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel, fanMaxLabel, loadMinLabel, loadMaxLabel,
-                           clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel;
-            Danger tempMin, tempMax, fanMin, fanMax, loadMin, loadMax, clockMin, clockMax, memoryMin, memoryMax, internetOff;
+            _monitoringSystem = new OHMMonitoringSystem();
+            var tempMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Temperature,  MultiplyHardwareRangeSensor.Predicate.Min),
+                                           new RebootTriggerAction("Temp Min, Reboot!", "reboot_t_min.bat", "token", "rigName", globalVars.host),
+                                           300);
+            var tempMinOnForm = new TriggerOnForm(labelTempMin, tempMin, labelStatusTempMin, labelCounterTempMin);
+            _triggersOnForm.Add(tempMinOnForm);
 
-            tempMinLabel = new LabelOnForm(labelStatusTempMin, labelCounterTempMin, response, "Temp Min, Reboot!", "reboot_t_min.bat", reboot);
-            tempMaxLabel = new LabelOnForm(labelStatusTempMax, labelCounterTempMax, response, "Temp Max, Reboot!", "reboot_t_max.bat", reboot);
-            fanMinLabel = new LabelOnForm(labelStatusFanMin, labelCounterFanMin, response, "Fan Min, Reboot!", "reboot_fan_min.bat", reboot);
-            fanMaxLabel = new LabelOnForm(labelStatusFanMax, labelCounterFanMax, response, "Fan Max, Reboot!", "reboot_fan_max.bat", reboot);
-            loadMinLabel = new LabelOnForm(labelStatusLoadMin, labelCounterLoadMin, response, "Load Min, Reboot!", "reboot_load_min.bat", reboot);
-            loadMaxLabel = new LabelOnForm(labelStatusLoadMax, labelCounterLoadMax, response, "Load Max, Reboot!", "reboot_load_max.bat", reboot);
-            clockMinLabel = new LabelOnForm(labelStatusClockMin, labelCounterClockMin, response, "Clock Min, Reboot!", "reboot_clock_min.bat", reboot);
-            clockMaxLabel = new LabelOnForm(labelStatusClockMax, labelCounterClockMax, response, "Clock Max, Reboot!", "reboot_clock_max.bat", reboot);
-            memoryMinLabel = new LabelOnForm(labelStatusMemoryMin, labelCounterMemoryMin, response, "Memory Min, Reboot!", "reboot_mem_min.bat", reboot);
-            memoryMaxLabel = new LabelOnForm(labelStatusMemoryMax, labelCounterMemoryMax, response, "Memory Max, Reboot!", "reboot_memory_max.bat", reboot);
-            NotInternetLabel = new LabelOnForm(labelStatusInternet, labelCounterInternet, response, "Dont Have Internet", "reboot_internet.bat", reboot);
+            //LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel, fanMaxLabel, loadMinLabel, loadMaxLabel,
+            //               clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel;
+            //Sensor tempMin, tempMax, fanMin, fanMax, loadMin, loadMax, clockMin, clockMax, memoryMin, memoryMax, internetOff;
 
-            tempMin = new Danger(tempMinLabel, Danger.Predicate.Min, "GPU Core", SensorType.Temperature);
-            tempMax = new Danger(tempMaxLabel, Danger.Predicate.Max, "GPU Core", SensorType.Temperature);
-            fanMin = new Danger(fanMinLabel, Danger.Predicate.Min, "GPU Fan", SensorType.Control);
-            fanMax = new Danger(fanMaxLabel, Danger.Predicate.Max, "GPU Fan",SensorType.Control);
-            loadMin = new Danger(loadMinLabel, Danger.Predicate.Min, "GPU Core", SensorType.Load);
-            loadMax = new Danger(loadMaxLabel, Danger.Predicate.Max, "GPU Core", SensorType.Load);
-            clockMin = new Danger(clockMinLabel,Danger.Predicate.Min, "GPU Core",SensorType.Clock);
-            clockMax = new Danger(clockMaxLabel,Danger.Predicate.Max, "GPU Core",SensorType.Clock);
-            memoryMin = new Danger(memoryMinLabel,Danger.Predicate.Min,"GPU Memory",SensorType.Clock);
-            memoryMax = new Danger(memoryMaxLabel,Danger.Predicate.Max,"GPU Memory",SensorType.Clock);
+            //tempMinLabel = new LabelOnForm(labelStatusTempMin, labelCounterTempMin, response, "Temp Min, Reboot!", "reboot_t_min.bat", reboot);
+            //tempMaxLabel = new LabelOnForm(labelStatusTempMax, labelCounterTempMax, response, "Temp Max, Reboot!", "reboot_t_max.bat", reboot);
+            //fanMinLabel = new LabelOnForm(labelStatusFanMin, labelCounterFanMin, response, "Fan Min, Reboot!", "reboot_fan_min.bat", reboot);
+            //fanMaxLabel = new LabelOnForm(labelStatusFanMax, labelCounterFanMax, response, "Fan Max, Reboot!", "reboot_fan_max.bat", reboot);
+            //loadMinLabel = new LabelOnForm(labelStatusLoadMin, labelCounterLoadMin, response, "Load Min, Reboot!", "reboot_load_min.bat", reboot);
+            //loadMaxLabel = new LabelOnForm(labelStatusLoadMax, labelCounterLoadMax, response, "Load Max, Reboot!", "reboot_load_max.bat", reboot);
+            //clockMinLabel = new LabelOnForm(labelStatusClockMin, labelCounterClockMin, response, "Clock Min, Reboot!", "reboot_clock_min.bat", reboot);
+            //clockMaxLabel = new LabelOnForm(labelStatusClockMax, labelCounterClockMax, response, "Clock Max, Reboot!", "reboot_clock_max.bat", reboot);
+            //memoryMinLabel = new LabelOnForm(labelStatusMemoryMin, labelCounterMemoryMin, response, "Memory Min, Reboot!", "reboot_mem_min.bat", reboot);
+            //memoryMaxLabel = new LabelOnForm(labelStatusMemoryMax, labelCounterMemoryMax, response, "Memory Max, Reboot!", "reboot_memory_max.bat", reboot);
+            //NotInternetLabel = new LabelOnForm(labelStatusInternet, labelCounterInternet, response, "Dont Have Internet", "reboot_internet.bat", reboot);
 
-            dangers = new Danger[] {
-                tempMin, tempMax, fanMin, fanMax, loadMin,loadMax,
-                clockMin,clockMax, memoryMin, memoryMax
-            };
+            //tempMin = new Sensor(tempMinLabel, Sensor.Predicate.Min, "GPU Core", SensorType.Temperature);
+            //tempMax = new Sensor(tempMaxLabel, Sensor.Predicate.Max, "GPU Core", SensorType.Temperature);
+            //fanMin = new Sensor(fanMinLabel, Sensor.Predicate.Min, "GPU Fan", SensorType.Control);
+            //fanMax = new Sensor(fanMaxLabel, Sensor.Predicate.Max, "GPU Fan",SensorType.Control);
+            //loadMin = new Sensor(loadMinLabel, Sensor.Predicate.Min, "GPU Core", SensorType.Load);
+            //loadMax = new Sensor(loadMaxLabel, Sensor.Predicate.Max, "GPU Core", SensorType.Load);
+            //clockMin = new Sensor(clockMinLabel,Sensor.Predicate.Min, "GPU Core",SensorType.Clock);
+            //clockMax = new Sensor(clockMaxLabel,Sensor.Predicate.Max, "GPU Core",SensorType.Clock);
+            //memoryMin = new Sensor(memoryMinLabel,Sensor.Predicate.Min,"GPU Memory",SensorType.Clock);
+            //memoryMax = new Sensor(memoryMaxLabel,Sensor.Predicate.Max,"GPU Memory",SensorType.Clock);
+
+            //dangers = new Sensor[] {
+            //    tempMin, tempMax, fanMin, fanMax, loadMin,loadMax,
+            //    clockMin,clockMax, memoryMin, memoryMax
+            //};
         }
-
 
         private void KillDublicateProcess(string processName)
         {
@@ -237,18 +235,10 @@ namespace Informer
         {
             try
             {
-                Debug.WriteLine("TEMP MIN(" + response.Params.Data_ranges.Temp[0]);
-                labelTempMin.Text = "TEMP MIN(" + response.Params.Data_ranges.Temp[0] + "):";
-                labelTempMax.Text = "TEMP MAX(" + response.Params.Data_ranges.Temp[1] + "):";
-                labelFanMin.Text = "FAN MIN(" + response.Params.Data_ranges.Fan[0] + "):";
-                labelFanMax.Text = "FAN MAX(" + response.Params.Data_ranges.Fan[1] + "):";
-                labelLoadMin.Text = "LOAD MIN(" + response.Params.Data_ranges.Load[0] + "):";
-                labelLoadMax.Text = "LOAD MAX(" + response.Params.Data_ranges.Load[1] + "):";
-                labelClockMin.Text = "CLOCK MIN(" + response.Params.Data_ranges.Clock[0] + "):";
-                labelClockMax.Text = "CLOCK MAX(" + response.Params.Data_ranges.Clock[1] + "):";
-                labelMemoryMin.Text = "MEMORY MIN(" + response.Params.Data_ranges.Mem[0] + "):";
-                labelMemoryMax.Text = "MEMORY MAX(" + response.Params.Data_ranges.Mem[1] + "):";
-               
+                foreach (var triggerOnForm in _triggersOnForm)
+                {
+                    triggerOnForm.UpdateLables();
+                }
 
                 //autorization
                 if (globalVars.mqttIsConnect == false && globalVars.firsrun == false)
@@ -331,9 +321,11 @@ namespace Informer
 
         }
 
-        public static async Task SendData(GlobalVars globalVars, ApiResponse apiResponse)
+        public async Task SendData(GlobalVars globalVars, ApiResponse apiResponse)
         {
-            
+
+            var triggers = _monitoringSystem.GetTriggers();
+
             if (globalVars.mqttIsConnect == true)
             {
                 try
@@ -343,7 +335,7 @@ namespace Informer
                          .WithTopic("devices/" + apiResponse.Params.Token + "/data")
                          .WithPayload("token=" + apiResponse.Params.Token +
                             "&gpu=" + globalVars.card +
-                            "&temp=" + globalVars.temp +
+                            "&temp=" + string.Join(",", ((OHMSensor)triggers[0].Sensor).Sensors) +
                             "&fan=" + globalVars.fan +
                             "&start_timestamp=" + globalVars.start_timestamp.ToString() +
                             "&v=" + apiResponse.Params.Version +
@@ -427,6 +419,7 @@ namespace Informer
                 MessageBox.Show("Enter the token!");
             }
         }
+
         private void BtStopClick(object sender, EventArgs e)
         {
             _log.writeLogLine("Informer stopped", "log");
@@ -454,6 +447,7 @@ namespace Informer
            
             tbToken.ReadOnly = false;
         }
+
         private void BtnExitClick(object sender, EventArgs e)
         {
             if (MessageBox.Show(MyStrings.ExitRequest, MyStrings.ExitTitle, MessageBoxButtons.YesNo) == System.Windows.Forms.DialogResult.Yes)
@@ -482,14 +476,14 @@ namespace Informer
         //timer dont have Internet
         async private void InternetInactiveTimerTick(object sender, EventArgs e)
         {
-            const string bat = "reboot_internet.bat";
+            //const string bat = "reboot_internet.bat";
 
-                if (NotInternetLabel.TimeReboot <= 0)
-                {
-                  Process.Start(bat);
-                }
+            //    if (NotInternetLabel.TimeReboot <= 0)
+            //    {
+            //      Process.Start(bat);
+            //    }
 
-            NotInternetLabel.TimeReboot -=1;
+            //NotInternetLabel.TimeReboot -=1;
             await Task.Delay(1);
         }
 
@@ -542,29 +536,29 @@ namespace Informer
         // chek ping timer
         private void PingTimer_Tick(object sender, EventArgs e)
         {         
-            // В переменную hosts записываем все рабочие станции из файла
-            hosts = getComputersListFromTxtFile("pinglist.txt");
+            //// В переменную hosts записываем все рабочие станции из файла
+            //hosts = getComputersListFromTxtFile("pinglist.txt");
 
-            if (globalVars.pingCount >= hosts.Count)
-            {
-                checkPing = false;
-            }
-            else if (globalVars.pingCount < hosts.Count)
-            {
-                checkPing = true;
-            }
-            // Создаём Action типизированный string, данный Action будет запускать функцию Pinger
+            //if (globalVars.pingCount >= hosts.Count)
+            //{
+            //    checkPing = false;
+            //}
+            //else if (globalVars.pingCount < hosts.Count)
+            //{
+            //    checkPing = true;
+            //}
+            //// Создаём Action типизированный string, данный Action будет запускать функцию Pinger
 
-            Action<string> asyn = new Action<string>(Pinger);
+            //Action<string> asyn = new Action<string>(Pinger);
 
-            hosts.ForEach(p =>
-            {
-                asyn.Invoke(p);
+            //hosts.ForEach(p =>
+            //{
+            //    asyn.Invoke(p);
 
-            }
+            //}
             
-            );
-            globalVars.pingCount = hosts.Count;
+            //);
+            //globalVars.pingCount = hosts.Count;
            
         }
 
@@ -645,13 +639,10 @@ namespace Informer
             response = commandProcesser.GetApiResponse();
             GpuStatus();
 
-            gpuParams.UpdateParams(dangers.Select(danger => new SensorForDanger(danger)).ToArray());
-            response.Params.Update(dangers);
+            response.Params.Update(_monitoringSystem);
+            _monitoringSystem.Update();
 
-
-           
-            await Task.Delay(1);
-           
+            await Task.Delay(1);     
         }
 
         public static TimeSpan GetUptime()
@@ -662,224 +653,4 @@ namespace Informer
         }
     }
 
-}
-
-public class Danger
-{
-    ApiResponse apiResponse;
-    private bool paramReboot;
-    private int[] sensors;
-    private int[] dataRanges;
-    private LabelOnForm labelOnForm;
-    private int timers;
-    private Predicate predicate;
-    public string SensorName { get; private set; }
-    public SensorType Type { get; private set; }
-
-    public Danger(LabelOnForm labelOnForm, Predicate predicate, string sensorName, SensorType type)
-    {
-        this.labelOnForm = labelOnForm;
-        this.predicate = predicate;
-        this.SensorName = sensorName;
-        this.Type = type;
-    }
-
-    public enum Predicate
-    {
-        Min,
-        Max
-    }
-
-    private void UpdateStatus()
-    {
-        if (paramReboot)
-        {
-            foreach (var sensor in sensors)
-            {
-                if (Check(sensor))
-                {
-                    labelOnForm.UpdateLable("true", timeReboot: timers);
-
-                    labelOnForm.Tick();
-
-                    if (labelOnForm.IsNeedReboot())
-                    {
-                        labelOnForm.SendRebootMessage();
-                    }
-                    
-                }
-                else
-                {
-                    labelOnForm.UpdateLable("ok", timeReboot: timers);
-                }
-            }
-        }
-        else
-        {
-            labelOnForm.UpdateLable("false", timeReboot: timers);
-        }
-    }
-    
-    //костыли 
-    public void UpdateParams(int[] ranges, bool isTrackReboot, int timers)
-    {
-
-    }
-
-    public void UpdateSensors(int[] sensors)
-    {
-        this.sensors = sensors;
-        UpdateStatus();
-    }
-
-    private bool Check(int sensor)
-    {
-        switch (predicate)
-        {
-            case Predicate.Min:
-                return sensor < dataRanges[0];
-             //   break;
-            case Predicate.Max:
-                return sensor > dataRanges[1];
-             //   break;
-            default:
-                return false;
-           //     break;
-        }
-    }
-
-    public void GetStatusInternet(bool paramReboot, LabelOnForm labelOnForm, int timers, bool checkPing)
-    {
-        if (paramReboot)
-        {
-            if (checkPing)
-            {
-                labelOnForm.UpdateLable("ok", timeReboot: timers);
-            }
-            else
-            {
-                labelOnForm.UpdateLable("true", timeReboot: timers);
-            }
-        }
-        else 
-        {
-            labelOnForm.UpdateLable("false", timeReboot: timers);
-        }
-    }
-}
-
-
-public class Reboot
-{
-    LogFile _log;
-    Http _http;
-    GlobalVars _globalVars;
-
-    public Reboot(LogFile log, Http http, GlobalVars globalVars )
-    {
-        
-        _log = log;
-        _http = http;
-        _globalVars = globalVars;
-    }
-    
-    public void Restart(string msg, string bat,ApiResponse response)
-    {
-        try
-        {
-            _http.GetContent(
-                _globalVars.host +
-                "/api.php?token=" + _globalVars.token +
-                "&event=" + "reboot" +
-                "&reason=" + response.Params.Name + " " + msg
-                );
-
-            _log.writeLogLine("Reboot rig " + response.Params.Name + " " + msg, "log");
-
-            Process.Start(bat);
-        }
-        catch (Exception ex)
-        {
-            _log.writeLogLine("Reboot: " + ex.Message, "error");
-        }
-    }
-}
-
-public class LabelOnForm
-{
-    Reboot Reboot;
-    ApiResponse apiResponse;
-    Label StatusLabel;
-    Label CounterLabel;
-    public int TimeReboot = 300;
-    public string _msg;
-    public string _batFileName;
-
-     public LabelOnForm(Label statusLabel, Label counterLabel, ApiResponse apiResp, string msg, string batFileName ,Reboot reboot)
-    {
-        StatusLabel = statusLabel;
-        CounterLabel = counterLabel;
-        apiResponse = apiResp;
-        _msg = msg;
-        _batFileName = batFileName;
-        Reboot = reboot;
-        if (apiResp != null)
-        {
-            TimeReboot = apiResponse.Params.Timers.temp_min;
-        }
-    }
-
-    public void Tick()
-    {
-        TimeReboot--;
-    }
-
-    public bool IsNeedReboot()
-    {
-        if (TimeReboot <= 0)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void SendRebootMessage()
-    {
-        if (TimeReboot <= 0)
-        {
-            Reboot.Restart(_msg, _batFileName, apiResponse);
-        }
-    }
-
-    public void UpdateLable(string status, int timeReboot = 300)
-    {
-        if (status == "false")
-        {
-            StatusLabel.Text = MyStrings.labelNotTracked;
-            StatusLabel.ForeColor = Color.Blue;
-            CounterLabel.Visible = false;
-            if (apiResponse != null)
-            {
-                TimeReboot = timeReboot;
-            }
-        }
-        else if (status == "true")
-        {   
-            StatusLabel.Text = MyStrings.labelAlert;
-            StatusLabel.ForeColor = Color.Red;
-            CounterLabel.Visible = true;
-            CounterLabel.Text = TimeReboot.ToString();
-            CounterLabel.ForeColor = Color.Red;
-        }
-        else if (status == "ok")
-        {
-            StatusLabel.Text = MyStrings.labelOK;
-            StatusLabel.ForeColor = Color.Green;
-            CounterLabel.Visible = false;
-            if (apiResponse != null)
-            {
-                TimeReboot = timeReboot;
-            }
-        }
-    }
 }

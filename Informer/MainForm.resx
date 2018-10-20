@@ -168,7 +168,7 @@
     <value>52</value>
   </data>
   <data name="btStart.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 320</value>
+    <value>80, 346</value>
   </data>
   <data name="btStart.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 25</value>
@@ -192,7 +192,7 @@
     <value>51</value>
   </data>
   <data name="btStop.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 349</value>
+    <value>80, 375</value>
   </data>
   <data name="btStop.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 25</value>
@@ -521,9 +521,6 @@
   </data>
   <data name="&gt;&gt;labelCounterTempMin.ZOrder" xml:space="preserve">
     <value>39</value>
-  </data>
-  <data name="labelTempMin.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
   </data>
   <data name="labelTempMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>20, 111</value>
@@ -1210,7 +1207,7 @@
     <value>NoControl</value>
   </data>
   <data name="btExit.Location" type="System.Drawing.Point, System.Drawing">
-    <value>83, 407</value>
+    <value>80, 433</value>
   </data>
   <data name="btExit.Size" type="System.Drawing.Size, System.Drawing">
     <value>190, 25</value>
@@ -5972,7 +5969,7 @@
     <value>True</value>
   </data>
   <data name="labelTestGPU.Location" type="System.Drawing.Point, System.Drawing">
-    <value>109, 445</value>
+    <value>140, 502</value>
   </data>
   <data name="labelTestGPU.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 13</value>
@@ -6008,7 +6005,7 @@
     <value>6, 13</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
-    <value>354, 521</value>
+    <value>357, 568</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

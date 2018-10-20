@@ -5,10 +5,10 @@ namespace Informer
 {
     class SensorForDanger
     {
-        private Danger _danger;
+        private OHMSensor _danger;
         private List<int> _hardwers = new List<int>();
 
-        public SensorForDanger(Danger danger)
+        public SensorForDanger(OHMSensor danger)
         {
             _danger = danger;
         }

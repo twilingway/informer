@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
+using Informer.Sensors;
 
 /// <summary>
 /// Класс представляет собой описание ответа от allminer.ru
@@ -65,16 +66,27 @@ namespace Informer
         public string Token { get; set; }
         public string Version { get; set; } = "1.3.9";
 
-        public void Update(Danger[] danger)
+        public void Update(OHMMonitoringSystem monitoringSystem)
         {
-            for (int i = 0; i < danger.Length; i++)
-            {
-                Debug.WriteLine(danger.Length);
-                bool reboot = GetReboot(i);
-                int timer = GetTimer(i);
-                int[] range = GetRanges(i);
+            var triggers = monitoringSystem.GetTriggers();
 
-                danger[i].UpdateParams(range, reboot, timer);
+            for (int i = 0; i < triggers.Count; i++)
+            {
+                if (GetReboot(i))
+                {
+                    triggers[i].Enable();
+                }
+                else
+                {
+                    triggers[i].Disable();
+                }
+
+                triggers[i].WaitTimeInMilleseconds = (GetTimer(i) * 1000f);
+
+                if (triggers[i].Sensor is MultiplyHardwareRangeSensor)
+                {
+                    ((MultiplyHardwareRangeSensor)triggers[i].Sensor).UpdateRange(GetRanges(i));
+                }
             }
         }
 
