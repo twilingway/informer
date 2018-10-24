@@ -140,6 +140,10 @@ namespace Informer
             _triggersOnForm.Add(tempMaxOnForm);
             _triggersOnForm.Add(memoryMinOnForm);
             _triggersOnForm.Add(memoryMaxOnForm);
+           //вместо lost inet и lost gpu
+            _triggersOnForm.Add(memoryMinOnForm);
+            _triggersOnForm.Add(memoryMaxOnForm);
+            //
             _triggersOnForm.Add(loadMinOnForm);
             _triggersOnForm.Add(loadMaxOnForm);
             _triggersOnForm.Add(fanMinOnForm);
