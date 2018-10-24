@@ -12,14 +12,13 @@ namespace Informer
 {
     public class ApiResponse
     {
-       // public string test { get; set; }
+      
         public Params Params { get; set; }
         public string Command { get; set; }
        
         public void Save()
         {
             var state = JsonConvert.SerializeObject(this);
-            //var state = settings;
             var file = File.Open("state.json", FileMode.Create);
             try
             {
@@ -89,6 +88,8 @@ namespace Informer
                 }
             }
         }
+//{"params":{"timers":{"temp_min":230,"temp_max":250,"mem_min":299,"mem_max":299,"lost_inet":266,"lost_gpu":299,"load_min":299,"load_max":299,
+//"fan_min":280,"fan_max":280,"clock_min":299,"clock_max":250,"autostart":25},"reboots":{"temp_min":true,"temp_max":true,"mem_min":true,"mem_max":true,"lost_inet":true,"lost_gpu":false,"load_min":true,"load_max":true,"fan_min":true,"fan_max":true,"clock_min":true,"clock_max":true},"name":"TwilingWay3","interval":60,"data_ranges":{"temp":[40,38],"mem":[4247,4249],"load":[0,100],"fan":[32,80],"clock":[300,2000]
 
         public bool GetReboot(int i)
         {
@@ -96,12 +97,31 @@ namespace Informer
             {
                 case 0: //temp Min
                     return Reboots.temp_min;
-                    break;
                 case 1:
                     return Reboots.temp_max;
+                case 2:
+                    return Reboots.mem_min;
+                case 3:
+                    return Reboots.mem_max;
+                case 4:
+                    return Reboots.lost_inet;
+                case 5:
+                    return Reboots.lost_gpu;
+                case 6:
+                    return Reboots.load_min;
+                case 7:
+                    return Reboots.load_max;
+                case 8:
+                    return Reboots.fan_min;
+                case 9:
+                    return Reboots.fan_max;
+                case 10:
+                    return Reboots.clock_min;
+                case 11:
+                    return Reboots.clock_max;
                 default:
                     return false;
-                    break;
+                  
             }
 
         }
@@ -114,13 +134,36 @@ namespace Informer
                     return Timers.temp_min;
                 case 1:
                     return Timers.temp_max;
-                    break;
+                case 2:
+                    return Timers.mem_min;
+                case 3:
+                    return Timers.mem_max;
+                case 4:
+                    return Timers.lost_inet;
+                case 5:
+                    return Timers.lost_gpu;
+                case 6:
+                    return Timers.load_min;
+                case 7:
+                    return Timers.load_max;
+                case 8:
+                    return Timers.fan_min;
+                case 9:
+                    return Timers.fan_max;
+                case 10:
+                    return Timers.clock_min;
+                case 11:
+                    return Timers.clock_max;
+                case 12:
+                    return Timers.autostart;
                 default:
                     return 300;
-                    break;
+                 
 
             }
         }
+
+//        "data_ranges":{"temp":[40,38],"mem":[4247,4249],"load":[0,100],"fan":[32,80],"clock":[300,2000]
 
         public int[] GetRanges(int i)
         {
@@ -128,11 +171,16 @@ namespace Informer
             {
                 case 0: //temp Min
                     return Data_ranges.Temp;
-                    break;
                 case 1:
+                    return Data_ranges.Mem;
+                case 2:
+                    return Data_ranges.Load;
+                case 3:
                     return Data_ranges.Fan;
+                case 4:
+                    return Data_ranges.Clock;
                 default:
-                    int[] @default = {0, 100};
+                    int[] @default = {0, 10000};
                     return @default;
             }
         }
@@ -169,6 +217,7 @@ namespace Informer
         public bool mem_max { get; set; } = false;
         public bool lost_gpu { get; set; } = false;
         public bool lost_inet { get; set; } = false;
+       
     }
 
     public class Data_ranges

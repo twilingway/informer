@@ -97,11 +97,56 @@ namespace Informer
             mqttConnect = new MqttConnect();
 
             _monitoringSystem = new OHMMonitoringSystem();
-            var tempMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Temperature,  MultiplyHardwareRangeSensor.Predicate.Min),
-                                           new RebootTriggerAction("Temp Min, Reboot!", "reboot_t_min.bat", "token", "rigName", globalVars.host),
-                                           300);
+            var tempMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Temperature, MultiplyHardwareRangeSensor.Predicate.Min),
+                                           new RebootTriggerAction("Temp Min, Reboot!", "reboot_t_min.bat", "token", "rigName", globalVars.host),300);
+            var tempMax = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Temperature, MultiplyHardwareRangeSensor.Predicate.Max),
+                                           new RebootTriggerAction("Temp Max, Reboot!", "reboot_t_max.bat", "token", "rigName", globalVars.host), 300);
+
+            var memoryMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Memory", SensorType.Clock, MultiplyHardwareRangeSensor.Predicate.Min),
+                                           new RebootTriggerAction("Memory Min, Reboot!", "reboot_mem_min.bat", "token", "rigName", globalVars.host), 300);
+            var memoryMax = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Memory", SensorType.Clock, MultiplyHardwareRangeSensor.Predicate.Max),
+            new RebootTriggerAction("Memory Max, Reboot!", "reboot_mem_max.bat", "token", "rigName", globalVars.host), 300);
+
+            var loadMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Load, MultiplyHardwareRangeSensor.Predicate.Min),
+                                          new RebootTriggerAction("Load Min, Reboot!", "reboot_load_min.bat", "token", "rigName", globalVars.host), 300);
+            var loadMax = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Load, MultiplyHardwareRangeSensor.Predicate.Max),
+                                          new RebootTriggerAction("Load Max, Reboot!", "reboot_load_max.bat", "token", "rigName", globalVars.host), 300);
+            
+            var fanMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Fan", SensorType.Control, MultiplyHardwareRangeSensor.Predicate.Min),
+                                           new RebootTriggerAction("Fan Min, Reboot!", "reboot_fan_min.bat", "token", "rigName", globalVars.host), 300);
+            var fanMax = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Fan", SensorType.Control, MultiplyHardwareRangeSensor.Predicate.Max),
+            new RebootTriggerAction("Fan Max, Reboot!", "reboot_fan_max.bat", "token", "rigName", globalVars.host), 300);
+
+            var clockMin = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Clock, MultiplyHardwareRangeSensor.Predicate.Min),
+                                                      new RebootTriggerAction("Clock Min, Reboot!", "reboot_clock_min.bat", "token", "rigName", globalVars.host), 300);
+            var clockMax = _monitoringSystem.BuildTrigger(new MultiplyHardwareRangeSensor("GPU Core", SensorType.Clock, MultiplyHardwareRangeSensor.Predicate.Max),
+                                          new RebootTriggerAction("Clock Max, Reboot!", "reboot_clock_max.bat", "token", "rigName", globalVars.host), 300);
+
+
+
             var tempMinOnForm = new TriggerOnForm(labelTempMin, tempMin, labelStatusTempMin, labelCounterTempMin);
+            var tempMaxOnForm = new TriggerOnForm(labelTempMax, tempMax, labelStatusTempMax, labelCounterTempMax);
+            var memoryMinOnForm = new TriggerOnForm(labelMemoryMin, memoryMin, labelStatusMemoryMin, labelCounterMemoryMin);
+            var memoryMaxOnForm = new TriggerOnForm(labelMemoryMax, memoryMax, labelStatusMemoryMax, labelCounterMemoryMax);
+            var loadMinOnForm = new TriggerOnForm(labelLoadMin, loadMin, labelStatusLoadMin, labelCounterLoadMin);
+            var loadMaxOnForm = new TriggerOnForm(labelLoadMax, loadMax, labelStatusLoadMax, labelCounterLoadMax);
+            var fanMinOnForm = new TriggerOnForm(labelFanMin, fanMin, labelStatusFanMin, labelCounterFanMin);
+            var fanMaxOnForm = new TriggerOnForm(labelFanMax, fanMax, labelStatusFanMax, labelCounterFanMax);
+            var clockMinOnForm = new TriggerOnForm(labelClockMin, clockMin, labelStatusClockMin, labelCounterClockMin);
+            var clockMaxOnForm = new TriggerOnForm(labelClockMax, clockMax, labelStatusClockMax, labelCounterClockMax);
+
+
             _triggersOnForm.Add(tempMinOnForm);
+            _triggersOnForm.Add(tempMaxOnForm);
+            _triggersOnForm.Add(memoryMinOnForm);
+            _triggersOnForm.Add(memoryMaxOnForm);
+            _triggersOnForm.Add(loadMinOnForm);
+            _triggersOnForm.Add(loadMaxOnForm);
+            _triggersOnForm.Add(fanMinOnForm);
+            _triggersOnForm.Add(fanMaxOnForm);
+            _triggersOnForm.Add(clockMinOnForm);
+            _triggersOnForm.Add(clockMaxOnForm);
+
 
             //LabelOnForm tempMinLabel, tempMaxLabel, fanMinLabel, fanMaxLabel, loadMinLabel, loadMaxLabel,
             //               clockMinLabel, clockMaxLabel, memoryMinLabel, memoryMaxLabel;
